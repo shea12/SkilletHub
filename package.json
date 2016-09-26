@@ -24,6 +24,8 @@
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
+    "load-grunt-tasks": "^3.5.2",
     "mocha": "^3.0.2",
     "nodemon": "^1.10.2",
     "watchify": "^3.7.0"
