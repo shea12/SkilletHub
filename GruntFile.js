@@ -11,11 +11,19 @@ module.exports = grunt => {
           expand: true,
           cwd: 'client/source/',
           src: '**/*.jsx',
-          dest: 'client/compiled/'
+          dest: 'client/compiled/',
+          ext: '.js'
         }]
+      }
+    },
+    browserify: {
+      main: {
+        src: 'client/compiled/**/*.js',
+        dest: 'client/deploy/bundle.js'
       }
     }
   });
 
-  grunt.registerTask('default', ['babel']);
+  // grunt.registerTask('default', ['']);
+  grunt.registerTask('compile', ['babel', 'browserify']);
 };
