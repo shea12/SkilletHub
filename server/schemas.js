@@ -23,7 +23,11 @@ let recipeSchema = new Schema({
   servings: {                               //Number of people served
     changed: Boolean,
     value: Number
-  },               
+  }, 
+  cookTime: {                               //Cook time in minutes
+    changed: Boolean,
+    value: Number,                          
+  },             
   skillLevel: {                             //Recipe difficulty [easy, medium, hard]
     changed: Boolean,
     value: String
@@ -39,11 +43,13 @@ let recipeSchema = new Schema({
   }],
   ingredients: [{
     changed: Boolean,
-    ingredientID: Schema.Types.ObjectId,
+    name: String,                 //name of ingredient
+    type: String,                 //type of ingredient (dairy, meat, vegetable, etc)
     position: Number,             //Order of ingredients
     amount: Number,               //OPTIONAL: Amount of ingredient
     unit: String,                 //OPTIONAL: Unit of ingredient (cups, tbsp, etc)
     prep: String,                 //OPTIONAL: Preperation of ingredient (chopped, diced)
+    substitutes: [String]         //Optional: Substitute ingredients for that ingredient
     optional: Boolean             //Whether ingredient is necessary
   }],
   steps: [{
@@ -69,13 +75,7 @@ let recipeSchema = new Schema({
 let userRecipeSchema = new Schema({
   userID: Number,                   //User who owns recipes / forks
   recipes: [Schema.Types.ObjectId], //Forks and created recipes belonging to that user
-}); 
-
-let ingredientSchema = new Schema({
-  name: String,                         //name of ingredient
-  type: String,                         //type of ingredient (dairy, meat, vegetable, etc)
-  substitutes: [Schema.Types.ObjectId]  //Optional: Substitute ingredients for that ingredient
-}); 
+});  
 
 let dependencySchema = new Schema({
   name: String,                         //name of dependency
@@ -96,7 +96,6 @@ let issueSchema = new Schema({
 module.exports = {
   Recipe: mongoose.model('Recipe', recipeSchema),
   UserRecipe: mongoose.model('UserRecipe', userRecipeSchema),
-  Ingredient: mongoose.model('Ingredient', ingredientSchema),
   Dependency: mongoose.model('Dependency', dependencySchema),
   Tag: mongoose.model('Tag', tagSchema),
   Issue: mongoose.model('Issue', issueSchema)
