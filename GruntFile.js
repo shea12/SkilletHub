@@ -16,14 +16,26 @@ module.exports = grunt => {
         }]
       }
     },
+
     browserify: {
       main: {
         src: 'client/compiled/**/*.js',
         dest: 'client/deploy/bundle.js'
       }
-    }
+    },
+
+    watch: {
+      babel: {
+        files: ['client/source/**/*.jsx'],
+        tasks: ['babel']
+      },
+      browserify: {
+        files: ['client/compiled/**/*.js'],
+        tasks: ['browserify']
+      }
+    },
   });
 
   // grunt.registerTask('default', ['']);
-  grunt.registerTask('compile', ['babel', 'browserify']);
+  grunt.registerTask('build', ['babel', 'browserify']);
 };
