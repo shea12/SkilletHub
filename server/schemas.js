@@ -57,7 +57,7 @@ let recipeSchema = new Schema({
     position: Number,             //Step position in order
     description: String,          //Step details
     time: Number,                 //OPTIONAL: Time to complete step
-    ingredients: [Schema.Types.ObjectId],  //OPTIONAL: Ingredients required in step
+    ingredients: [String],  //OPTIONAL: Ingredients required in step
   }],
   tags: [{
     changed: Boolean,
