@@ -7,24 +7,47 @@ class StepsForm extends React.Component {
 		this.state = {
 			steps: [],
 			stepsCount: 1,
-			newStep: []
+			newStep: [],
+			availableIngredients: null
 		}; 
 	}
 
-	componentWillMount() {
-		console.log('Steps Form is mounting!'); 
-		this.setState({
-			steps: [], 
-			newStep: [{
-				changed: true, 
-				description: 'Placeholder',
-				ingredients: [],
-				position: null
-			}]
-		}); 
+	// componentWillMount() {
+		// console.log('Steps Form is mounting!'); 
+		// var availableIngredients = this.props.availableIngredients; 
+		// availableIngredients = availableIngredients.map((ingredient) => {
+		// 	ingredient.name; 
+		// });
+		// console.log('Available ingredients from Steps Form: ', availableIngredients); 
+		// this.setState({
+		// 	steps: [], 
+		// 	newStep: {
+		// 		changed: true, 
+		// 		description: 'Placeholder',
+		// 		ingredients: [],
+		// 		position: null
+		// 	},
+		// 	availableIngredients: availableIngredients
+		// }); 
+	// }
+
+	componentWillReceiveProps() {
+		console.log('Props are changing!'); 
 	}
 
-	handleAddStep (step) {
+	componentWillUpdate() {
+		// console.log('Component is updating!'); 
+		// var availableIngredients = this.props.availableIngredients; 
+		// availableIngredients = availableIngredients.map((ingredient) => {
+		// 	return ingredient.name; 
+		// });
+		// console.log('Available ingredients from Steps Form: ', availableIngredients); 
+		// this.setState({
+		// 	availableIngredients: availableIngredients
+		// }); 
+	}
+
+	handleAddStepForm (step) {
 		event.preventDefault(); 
 		var steps = this.state.steps; 
 		// console.log('Currents steps:', JSON.stringify(steps)); 
@@ -64,12 +87,16 @@ class StepsForm extends React.Component {
 					<div key={'enteredStep' + step.position}>
 					  <h4> Step {step.position} </h4>
 					  <h5> {step.description} </h5>
-					  <h5> {step.ingredients.join(',')} </h5>
+					  <h5> {step.ingredients} </h5>
 					</div>
 				))}
-				{this.state.newStep.map((step) => (
-					<AddStep key={'step' + this.state.stepsCount} stepNumber={this.state.stepsCount} handleAddStep={this.handleAddStep.bind(this)} step={step}/>
-				))}
+				<AddStep 
+					key={'step' + this.state.stepsCount} 
+					stepNumber={this.state.stepsCount} 
+					handleAddStep={this.handleAddStepForm.bind(this)} 
+					step={this.state.newStep}
+					availableIngredients={this.props.availableIngredients}
+				/>
 			</div>
 		); 
 	}

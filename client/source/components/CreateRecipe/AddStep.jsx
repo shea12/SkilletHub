@@ -7,6 +7,7 @@ class AddStep extends React.Component {
 			changed: true, 
 			description: '',
 			ingredients: [],
+			parsedIngredients: [], 
 			position: null
 		}; 
 	}
@@ -17,21 +18,35 @@ class AddStep extends React.Component {
 			description: this.props.step.description,
 			ingredients: this.props.step.ingredients,
 			position: this.props.stepNumber
+			// availableIngredients: this.props.availableIngredients
 		}); 
 	}
 
 	handleClick (event) {
 		event.preventDefault(); 
-		console.log('Registering click handler!'); 
 		var newStep = this.state
-		console.log('Add Step Components State', newStep); 
 		this.props.handleAddStep(this.state);
 	}
 
 	handleChange (event) {
 	  var inputType = event.target.id; 
 	  if (inputType === 'description') {
-	  	this.setState({description: event.target.value}); 
+	  	var ingredients = this.props.availableIngredients; 
+	  	var parsedIngredients = this.state.parsedIngredients; 
+	  	var description = event.target.value; 
+	  	ingredients.forEach((ingredient) => {
+	  		var regEx = RegExp(ingredient);
+	  		var parsedIngredient = regEx.exec(description); 
+	  		// console.log(parsedIngredient); 
+	  		if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
+	  			console.log('Matched an ingredient: ', parsedIngredient); 
+	  			parsedIngredients.push(parsedIngredient[0])
+	  		}
+	  	}); 	
+	  	this.setState({
+	  		description: event.target.value,
+	  		parsedIngredients: parsedIngredients
+	  	}); 
 	  } else if (inputType === 'ingredients') {
 	  	var ingredients = event.target.value.split(','); 
 	  	this.setState({ingredients: ingredients}); 
@@ -53,7 +68,11 @@ class AddStep extends React.Component {
 					  <label htmlFor="servings">Ingredients</label>
 					</div>
 				</div>
+				<div> 
+					<h4> Parsed Ingredient List: </h4>
+					<h4> {this.state.parsedIngredients} </h4>
 				<button onClick={this.handleClick.bind(this)}> Next Step </button> 
+				</div>
 			</div>
 		); 
 	}
