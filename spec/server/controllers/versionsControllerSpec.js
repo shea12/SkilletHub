@@ -23,31 +23,10 @@ describe('versionsController.js', function() {
     it('should be a function', function() {
       expect(createVersion).to.be.a('function');
     });
-    it('should save to the correct user', function() {
-
-    });
-    it('should save to the correct branch', function() {
-
-    });
-    it('should omit fields that are not modified', function() {
-
-    });
-    it('should have a reference to the root version', function() {
-
-    });
-    it('should have a reference to the previous version', function() {
-
-    });
     it('should respond with success if creation handled successfully', function() {
 
     });
     it('should respond with an error if creation handled unsuccessfully', function() {
-
-    });
-    it('should maintain ingredient order', function() {
-
-    });
-    it('should maintain step order', function() {
 
     });
   });
