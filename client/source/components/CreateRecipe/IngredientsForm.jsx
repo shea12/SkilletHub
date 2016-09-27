@@ -21,26 +21,9 @@ class IngredientsForm extends React.Component {
 		}; 
 	}
 
-	// componentWillMount() {
-	// 	// console.log('Ingredients Form is mounting!'); 
-	// 	this.setState({
-	// 		ingredients: [], 
-	// 		newIngredient: {
-	// 			changed: true, 
-	// 			name: '',
-	// 			amount: '', 
-	// 			unit: '',
-	// 			prep: '', 
-	// 			optional: '', 
-	// 			type: null,
-	// 			position: null
-	// 		},
-	// 		ingredientsCount: 1
-	// 	}); 
-	// }
-
 	handleAddIngredientForm (ingredient) {
 		event.preventDefault(); 
+		
 		// Add the ingredient to CreateRecipeMain state
 		this.props.handleAddIngredient(ingredient); 
 
