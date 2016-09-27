@@ -4,7 +4,7 @@
   "description": "Taste Driven Development",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha spec/server/ && mocha spec/server/controllers"
   },
   "repository": {
     "type": "git",
