@@ -6,15 +6,6 @@ class IngredientsForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			ingredients: [],
-			newIngredient: [],
-			ingredientsCount: 1
-		}; 
-	}
-
-	componentWillMount() {
-		console.log('Ingredients Form is mounting!'); 
-		this.setState({
 			ingredients: [], 
 			newIngredient: [{
 				changed: true, 
@@ -25,41 +16,42 @@ class IngredientsForm extends React.Component {
 				optional: '', 
 				type: null,
 				position: null
-			}]
-		}); 
+			}],
+			ingredientsCount: 1
+		}; 
 	}
+
+	// componentWillMount() {
+	// 	// console.log('Ingredients Form is mounting!'); 
+	// 	this.setState({
+	// 		ingredients: [], 
+	// 		newIngredient: {
+	// 			changed: true, 
+	// 			name: '',
+	// 			amount: '', 
+	// 			unit: '',
+	// 			prep: '', 
+	// 			optional: '', 
+	// 			type: null,
+	// 			position: null
+	// 		},
+	// 		ingredientsCount: 1
+	// 	}); 
+	// }
 
 	handleAddIngredientForm (ingredient) {
 		event.preventDefault(); 
+		// Add the ingredient to CreateRecipeMain state
 		this.props.handleAddIngredient(ingredient); 
+
+		// Update the state within the Ingredients Form component 
 		var ingredients = this.state.ingredients; 
-		// console.log('Currents ingredients:', JSON.stringify(ingredients)); 
-		// console.log('NEW STEP: ', step); 
-		// steps[steps.length - 1] = step; 
 		ingredients.push(ingredient); 
-		// console.log('Ingredients after change: ', ingredients); 
-		// steps.push({
-		// 		changed: true, 
-		// 		description: 'Placeholder',
-		// 		ingredients: []
-		// 	}); 
 		var ingredientsCount = this.state.ingredientsCount + 1; 
 		this.setState({
 			ingredients: ingredients,
 			ingredientsCount: ingredientsCount
 		}); 
-		console.log('Added ingredient!'); 
-	}
-
-	handleChange (event) {
-	  // var inputType = event.target.className; 
-	  // if (inputType === 'exerciseInput') {
-	  // 	this.setState({exercise: event.target.value}); 
-	  // } else if (inputType === 'warmupsInput') {
-	  // 	this.setState({warmups: event.target.value}); 
-	  // } else {
-	  // 	this.setState({sets: event.target.value}); 
-	  // }
 	}
 
 	render () {

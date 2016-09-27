@@ -31,10 +31,10 @@ class AddStep extends React.Component {
 	handleChange (event) {
 	  var inputType = event.target.id; 
 	  if (inputType === 'description') {
-	  	var ingredients = this.props.availableIngredients; 
+	  	var availableIngredients = this.props.availableIngredients; 
 	  	var parsedIngredients = this.state.parsedIngredients; 
 	  	var description = event.target.value; 
-	  	ingredients.forEach((ingredient) => {
+	  	availableIngredients.forEach((ingredient) => {
 	  		var regEx = RegExp(ingredient);
 	  		var parsedIngredient = regEx.exec(description); 
 	  		// console.log(parsedIngredient); 
@@ -42,7 +42,7 @@ class AddStep extends React.Component {
 	  			console.log('Matched an ingredient: ', parsedIngredient); 
 	  			parsedIngredients.push(parsedIngredient[0])
 	  		}
-	  	}); 	
+	  	});
 	  	this.setState({
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
@@ -64,7 +64,7 @@ class AddStep extends React.Component {
 				</div>
 				<div className="row">
 					<div className="input-field col s12">
-					  <input placeholder={this.state.ingredients} id="ingredients" type="text" className="validate" onChange={this.handleChange.bind(this)}/>
+					  <input id="ingredients" type="text" className="validate" onChange={this.handleChange.bind(this)}/>
 					  <label htmlFor="servings">Ingredients</label>
 					</div>
 				</div>
