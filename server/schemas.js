@@ -51,7 +51,7 @@ let recipeSchema = new Schema({
     amount: Number,               //OPTIONAL: Amount of ingredient
     unit: String,                 //OPTIONAL: Unit of ingredient (cups, tbsp, etc)
     prep: String,                 //OPTIONAL: Preperation of ingredient (chopped, diced)
-    substitutes: [String]         //Optional: Substitute ingredients for that ingredient
+    substitutes: [String],         //Optional: Substitute ingredients for that ingredient
     optional: Boolean             //Whether ingredient is necessary
   }],
   steps: [{
