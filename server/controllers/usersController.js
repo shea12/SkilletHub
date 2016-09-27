@@ -1,13 +1,13 @@
 module.exports = {
-  signup: () => {
+  signup: (req, res) => {
 
   },
 
-  login: () => {
+  login: (req, res) => {
 
   },
-  
-  logout: () => {
+
+  logout: (req, res) => {
 
   }
 };

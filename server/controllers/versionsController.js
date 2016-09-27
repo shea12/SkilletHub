@@ -1,13 +1,13 @@
 module.exports = {
-  createVersion: () => {
-
-  },
-  
-  getVersion: () => {
+  createVersion: (req, res) => {
 
   },
 
-  deleteVersion: () => {
+  getVersion: (req, res) => {
+
+  },
+
+  deleteVersion: (req, res) => {
 
   }
 };
