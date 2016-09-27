@@ -16,6 +16,7 @@ class CreateRecipeMain extends Component {
       cookTime: '',
       picture: '',
       ingredients: [],
+      availableIngredients: [], 
       steps: []
     }; 
   }
@@ -40,15 +41,18 @@ class CreateRecipeMain extends Component {
 
   handleAddIngredient(ingredient) {
     var ingredients = this.state.ingredients;
-    ingredients.push(ingredients); 
+    ingredients.push(ingredient); 
+    var availableIngredients = this.state.availableIngredients; 
+    availableIngredients.push(ingredient.name); 
     this.setState({
-      ingredients: ingredients
+      ingredients: ingredients,
+      availableIngredients: availableIngredients
     }); 
   }
 
   handleAddStep(step) {
     var steps = this.state.steps;
-    steps.push(steps); 
+    steps.push(step); 
     this.setState({
       steps: steps
     }); 
@@ -82,7 +86,7 @@ class CreateRecipeMain extends Component {
             </div>
           </div>
           <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
-          <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length}/>
+          <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
         </form>
       </div>
     );

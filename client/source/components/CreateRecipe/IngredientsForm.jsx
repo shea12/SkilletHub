@@ -29,8 +29,9 @@ class IngredientsForm extends React.Component {
 		}); 
 	}
 
-	handleAddIngredient (ingredient) {
+	handleAddIngredientForm (ingredient) {
 		event.preventDefault(); 
+		this.props.handleAddIngredient(ingredient); 
 		var ingredients = this.state.ingredients; 
 		// console.log('Currents ingredients:', JSON.stringify(ingredients)); 
 		// console.log('NEW STEP: ', step); 
@@ -67,7 +68,7 @@ class IngredientsForm extends React.Component {
 				<h3> Recipe Ingredients </h3>
 				<RecipeIngredients ingredientList={this.state.ingredients} />
 				{this.state.newIngredient.map((ingredient) => (
-					<AddIngredient key={'ingredient' + this.state.ingredientsCount} number={this.state.ingredientsCount} handleAddIngredient={this.handleAddIngredient.bind(this)} ingredient={ingredient}/>
+					<AddIngredient key={'ingredient' + this.state.ingredientsCount} number={this.state.ingredientsCount} handleAddIngredient={this.handleAddIngredientForm.bind(this)} ingredient={ingredient}/>
 				))}
 			</div>
 		); 
