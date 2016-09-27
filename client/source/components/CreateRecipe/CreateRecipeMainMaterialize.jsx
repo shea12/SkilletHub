@@ -21,7 +21,7 @@ class CreateRecipeMain extends Component {
   }
 
   componentWillMount() {
-    console.log('Create recipe page is mounting!'); 
+    console.log('Main recipe page is mounting!'); 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
       --> // Main Server 
   }
