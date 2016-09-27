@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import RecipeDescription from './RecipeDescription.jsx'
-import IngredientList from './IngredientList.jsx'
-import ReadME from './ReadME.jsx'
+import RecipeDescription from './RecipeDescription'
+import IngredientList from './IngredientList'
+import ReadME from './ReadME'
 
 
 class RecipeMain extends Component {
