@@ -9,10 +9,10 @@ class Nav extends React.Component {
     return (
     	<div className='NavBar'>
     	  <Link to='/Home' className='NavBarElement'>Home</Link>
-    	  <Link to='/Calculator' className='NavBarElement'>  iLifted Calculator  </Link>
-    	  <Link to='/Create' className='NavBarElement'>  Create Template </Link>
-    	  <Link to='/Track' className='NavBarElement'>  Create Template </Link>
     	  <Link to='/SignUp' className='NavBarElement'> Sign Up  </Link>
+        <Link to='/User' className='NavBarElement'> Profile </Link>
+        <Link to='/Recipe' className='NavBarElement'> Recipe </Link>
+        <Link to='/Create' className='NavBarElement'> Create Recipe </Link>
     	</div>
     ); 
   }

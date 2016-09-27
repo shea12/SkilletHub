@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import RecipeDescription from './RecipeDescription'
-import IngredientList from './IngredientList'
+import RecipeIngredients from './RecipeIngredients'
 import ReadME from './ReadME'
 
+// Placeholder recipe data 
+import placeholders from '../../../../placeholders'
 
 class RecipeMain extends Component {
   constructor(props) {
@@ -11,6 +13,10 @@ class RecipeMain extends Component {
     this.state = {
       recipe: {},
       user: {},
+      recipeName: '',
+      recipeDescription: '',
+      recipeIngredients: [],
+      recipeReadME: []
     }; 
   }
 
@@ -18,6 +24,19 @@ class RecipeMain extends Component {
     console.log('Main recipe page is mounting!'); 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
       --> // Main Server 
+
+    // Temporary placeholder values 
+    // console.log(placeholders);   
+    var recipe = placeholders.recipes[0]; 
+    console.log(recipe); 
+    this.setState({
+      recipe: recipe,
+      user: placeholders.user,
+      recipeName: recipe.name,
+      recipeDescription: recipe.description, 
+      recipeIngredients: recipe.ingredients, 
+      recipeReadME: recipe.steps
+    }); 
   }
 
   handleChange (event) {
@@ -30,7 +49,10 @@ class RecipeMain extends Component {
       console.log('Cooking recipe'); 
       // TODO: Implement routing (react || server)
     }  
+  }
 
+  handleClick (event) {
+    console.log('Clicked on button!'); 
   }
 
   // TODO: Implement conditional render to display forked from. 
@@ -39,9 +61,9 @@ class RecipeMain extends Component {
   render() {
     return (
       <div className="recipeMain">
-          <h2 className="recipeHeader">{user.name} / {recipe.name}</h2>
+          <h2 className="recipeHeader">{this.state.user.name} / {this.state.recipeName}</h2>
         <div>
-          <RecipeDescription recipeDescription={this.state.recipe.description} />
+          <RecipeDescription recipeDescription={this.state.recipe} />
         </div> 
 
         <div>
@@ -50,11 +72,11 @@ class RecipeMain extends Component {
         </div>
 
         <div>
-            <IngredientList ingredientList={this.state.recipe.ingredientList}/>
+            <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         </div>
 
         <div>
-            <ReadME readME={this.state.recipe.readME}/>
+            <ReadME readME={this.state.recipeReadME}/>
         </div>
 
       </div>

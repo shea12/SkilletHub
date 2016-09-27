@@ -10,11 +10,9 @@ export default ({ingredientList}) => {
 		    <ul className="recipeList" >
 		    {ingredientList.map((ingredient) => {
 		      return (
-		      	<li key={ingredient.id}> 
-			      <div> 
-			      	<p>{ingredient.name}</p>
-			      	<p>{ingredient.unit}</p>
-			      	<p>{ingredient.quantity}</p>
+		      	<li key={ingredient.position}> 
+		      		<div>
+			      	<p>{ingredient.name} - {ingredient.amount} {ingredient.unit}</p>
 			      </div> 
 		      	</li> 
 		      	)
@@ -24,3 +22,4 @@ export default ({ingredientList}) => {
 		</div>
   ); 
 }
+

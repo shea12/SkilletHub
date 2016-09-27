@@ -7,10 +7,11 @@ export default ({recipe, forkRecipe}) => {
   return (
     <li>
       <div>
-        <span className="title">{recipe.recipeName}</span>
-        <span className="forkedSource"> forked from {recipe.forkedSource} </span>
-        <button onClick={forkRecipe.bind(this)}> Fork </button> 
+        <span className="title">{recipe.name}</span>
+        <span className="forkedSource"> forked from {'Austin Riedel'} </span>
+		<button onClick={forkRecipe.bind(this)}> Fork </button> 
       </div>
     </li>
   ); 
 }
+

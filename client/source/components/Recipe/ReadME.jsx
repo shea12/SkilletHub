@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 // TODO: Confirm ingredient object structure, ensure that key refers to the proper value 
 // TODO: Add headers for the 'Ingredient', 'Quantity', 'Unit' and other fields. 
-var count = 1; 
 
 export default ({readME}) => {
   return (
@@ -11,9 +10,10 @@ export default ({readME}) => {
 		    <ul className="ReadME List" >
 		    {readME.map((step) => {
 		      return (
-		      	<li key={count++}> 
+		      	<li key={step.position}> 
 			      <div> 
-			      	<p>{step.description}</p>
+			      	<h5>Step: {step.position}</h5>
+			      	<p style={{font: 16}}>{step.description}</p>
 			      </div> 
 		      	</li> 
 		      	)
