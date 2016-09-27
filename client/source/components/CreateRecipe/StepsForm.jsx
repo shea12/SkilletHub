@@ -12,70 +12,20 @@ class StepsForm extends React.Component {
 		}; 
 	}
 
-	componentWillMount() {
-		// console.log('Steps Form is mounting!'); 
-		// var availableIngredients = this.props.availableIngredients; 
-		// availableIngredients = availableIngredients.map((ingredient) => {
-		// 	ingredient.name; 
-		// });
-		// console.log('Available ingredients from Steps Form: ', availableIngredients); 
-		this.setState({
-			steps: [], 
-			newStep: {
-				changed: true, 
-				description: 'Placeholder',
-				ingredients: [],
-				position: null
-			}
-		}); 
-	}
-
-	componentWillReceiveProps() {
-		console.log('Props are changing!'); 
-	}
-
-	componentWillUpdate() {
-		// console.log('Component is updating!'); 
-		// var availableIngredients = this.props.availableIngredients; 
-		// availableIngredients = availableIngredients.map((ingredient) => {
-		// 	return ingredient.name; 
-		// });
-		// console.log('Available ingredients from Steps Form: ', availableIngredients); 
-		// this.setState({
-		// 	availableIngredients: availableIngredients
-		// }); 
-	}
-
 	handleAddStepForm (step) {
 		event.preventDefault(); 
+
+		// Add the ingredient to CreateRecipeMain state
+		this.props.handleAddStep(step); 
+
+		// Update the state within the Ingredients Form component 
 		var steps = this.state.steps; 
-		// console.log('Currents steps:', JSON.stringify(steps)); 
-		// console.log('NEW STEP: ', step); 
-		// steps[steps.length - 1] = step; 
 		steps.push(step); 
-		// console.log('Steps after change: ', steps); 
-		// steps.push({
-		// 		changed: true, 
-		// 		description: 'Placeholder',
-		// 		ingredients: []
-		// 	}); 
 		var stepsCount = this.state.stepsCount + 1; 
 		this.setState({
 			steps: steps,
 			stepsCount: stepsCount
 		}); 
-		// console.log('Added a step!'); 
-	}
-
-	handleChange (event) {
-	  // var inputType = event.target.className; 
-	  // if (inputType === 'exerciseInput') {
-	  // 	this.setState({exercise: event.target.value}); 
-	  // } else if (inputType === 'warmupsInput') {
-	  // 	this.setState({warmups: event.target.value}); 
-	  // } else {
-	  // 	this.setState({sets: event.target.value}); 
-	  // }
 	}
 
 	render () {
