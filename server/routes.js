@@ -14,13 +14,14 @@ module.exports = function(app, express) {
   // app.put('/:username/profile', users.updateProfile);
 
   // /*** Recipes ***/
-  // app.post('/:username/recipe/create', recipes.createRecipe);
-  // app.get('/:username/:recipe', recipes.getRecipe);
-  // app.delete('/:username/:recipe', recipes.deleteRecipe);
+  app.post('/:username/create-recipe', recipes.createRecipe);
+  app.get('/:username/:recipe', recipes.getRecipe); 
+  app.delete('/:username/:recipe', recipes.deleteRecipe);
 
   // /*** Branches ***/
-  // app.get('/:username/:recipe/:branch', branches.getBranch);
-  // app.delete('/:username/:recipe/:branch', branches.deleteBranch);
+  app.post('/:username/:recipe/:branch', branches.createBranch);
+  app.get('/:username/:recipe/:branch', branches.getBranch);
+  app.delete('/:username/:recipe/:branch', branches.deleteBranch);
 
   /*** Versions ***/
   app.post('/:username/:recipe/:branch/:version', versions.createVersion);
