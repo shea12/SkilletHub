@@ -18,7 +18,6 @@ class AddStep extends React.Component {
 			description: this.props.step.description,
 			ingredients: this.props.step.ingredients,
 			position: this.props.stepNumber
-			// availableIngredients: this.props.availableIngredients
 		}); 
 	}
 
@@ -37,7 +36,6 @@ class AddStep extends React.Component {
 	  	availableIngredients.forEach((ingredient) => {
 	  		var regEx = RegExp(ingredient);
 	  		var parsedIngredient = regEx.exec(description); 
-	  		// console.log(parsedIngredient); 
 	  		if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
 	  			console.log('Matched an ingredient: ', parsedIngredient); 
 	  			parsedIngredients.push(parsedIngredient[0])
