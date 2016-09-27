@@ -1,9 +1,11 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
+mongoose.Promise = require('bluebird');
 
 let recipeSchema = new Schema({
   rootVersion: Schema.Types.ObjectId,       //The root version of the recipe
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
+  deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
   branch: {                                 //Name of branch
     changed: Boolean,
     value: String
