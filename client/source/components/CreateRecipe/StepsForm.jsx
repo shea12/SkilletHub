@@ -12,24 +12,23 @@ class StepsForm extends React.Component {
 		}; 
 	}
 
-	// componentWillMount() {
+	componentWillMount() {
 		// console.log('Steps Form is mounting!'); 
 		// var availableIngredients = this.props.availableIngredients; 
 		// availableIngredients = availableIngredients.map((ingredient) => {
 		// 	ingredient.name; 
 		// });
 		// console.log('Available ingredients from Steps Form: ', availableIngredients); 
-		// this.setState({
-		// 	steps: [], 
-		// 	newStep: {
-		// 		changed: true, 
-		// 		description: 'Placeholder',
-		// 		ingredients: [],
-		// 		position: null
-		// 	},
-		// 	availableIngredients: availableIngredients
-		// }); 
-	// }
+		this.setState({
+			steps: [], 
+			newStep: {
+				changed: true, 
+				description: 'Placeholder',
+				ingredients: [],
+				position: null
+			}
+		}); 
+	}
 
 	componentWillReceiveProps() {
 		console.log('Props are changing!'); 
@@ -87,7 +86,7 @@ class StepsForm extends React.Component {
 					<div key={'enteredStep' + step.position}>
 					  <h4> Step {step.position} </h4>
 					  <h5> {step.description} </h5>
-					  <h5> {step.ingredients} </h5>
+					  <h5> {step.ingredients + step.parsedIngredients} </h5>
 					</div>
 				))}
 				<AddStep 

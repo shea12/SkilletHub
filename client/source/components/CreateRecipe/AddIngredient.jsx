@@ -16,7 +16,6 @@ class AddIngredient extends React.Component {
 	}
 
 	componentWillMount(){
-		console.log('THIS PROPS NUMBER: ', this.props.number); 
 		this.setState({
 			position: this.props.number
 		}); 
@@ -24,9 +23,7 @@ class AddIngredient extends React.Component {
 
 	handleClick (event) {
 		event.preventDefault(); 
-		// console.log('Registering click handler!'); 
 		var newIngredient = this.state; 
-		// console.log('Add Step Components State', newStep); 
 		this.props.handleAddIngredient(newIngredient);
 	}
 
