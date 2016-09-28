@@ -145,14 +145,15 @@ class CreateRecipeMain extends Component {
       </Row>
           <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
           <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
-        <Row className="show-grid">
-        <Col xs={12} md={12}> 
-          <p>{JSON.stringify(this.state)}</p>
-        </Col>
-        </Row>
       </Grid> 
     );
   }
 }
 
 export default CreateRecipeMain;
+
+        // <Row className="show-grid">
+        // <Col xs={12} md={12}> 
+        //   <p>{JSON.stringify(this.state)}</p>
+        // </Col>
+        // </Row>

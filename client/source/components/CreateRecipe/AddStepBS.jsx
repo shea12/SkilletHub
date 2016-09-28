@@ -4,12 +4,15 @@ import React from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
 var timeParse = function(string) {
+	var match = []; 
 	timesRegEx.forEach((timeRegEx) => {
 		var time = timeRegEx.exec(string); 
 		if (time) {
-			console.log(time); 
+			// console.log(time); 
+			match.push(time); 
 		} 
 	});
+	return match; 
 }
 
 var times = [/\d*\smin/, 'hour', 'second', 'hr', 'sec', 'min']; 
@@ -60,13 +63,15 @@ class AddStep extends React.Component {
 	  			parsedIngredients.push(parsedIngredient[0])
 	  		}
 	  	});
-	  	var time = timeParse(description); 
 	  	this.setState({
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
 	  	}); 
+	  	var time = timeParse(description); 
+	  	// console.log('TIME IS: ', time); 
 	  	var stepTime = this.state.stepTime; 
 	  	if (time && !stepTime) {
+	  		console.log('SETTING TIME: ', time); 
 	  		this.setState({
 	  			stepTime: time[0]
 	  		}); 
@@ -99,10 +104,6 @@ class AddStep extends React.Component {
 				<button style={{display: "none"}} onClick={this.handleClick.bind(this)}> Next Step </button> 
 			</div>
 			</form>
-			<div> 
-				<h4> Parsed Ingredient List: </h4>
-				<h4> {JSON.stringify(this.state.parsedIngredients)} </h4>
-			</div>
 			</Grid>
 		); 
 	}
@@ -111,3 +112,7 @@ class AddStep extends React.Component {
 export default AddStep;
 
 
+			// <div> 
+			// 	<h4> Parsed Ingredient List: </h4>
+			// 	<h4> {JSON.stringify(this.state.parsedIngredients)} </h4>
+			// </div>
