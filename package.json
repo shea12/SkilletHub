@@ -39,6 +39,7 @@
     "less": "^2.7.1",
     "mongoose": "^4.6.1",
     "react": "^15.3.2",
+    "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
     "redux": "^3.6.0",
