@@ -18,8 +18,8 @@ class LandingPage extends React.Component {
   }
 
   handleChange (event) {
-    var inputType = event.target.className; 
-    if (inputType === 'usernameInput') {
+    var inputType = event.target.id; 
+    if (inputType === 'username') {
       this.setState({username: event.target.value}); 
     } else {
       this.setState({password: event.target.value}); 
@@ -40,8 +40,8 @@ class LandingPage extends React.Component {
             <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} method="post" style={{'background':'white', 'height': 200, 'borderRadius': 10}}>
               <FormGroup controlId="formBasicText" style={{padding: 10}}>
               <ControlLabel> Sign Up For SkilletHub </ControlLabel>
-              <FormControl type="text" onChange={this.handleChange.bind(this)} value={this.state.username} className="usernameInput" name="username" style={{margin: 5}}/>
-              <FormControl type="password" onChange={this.handleChange.bind(this)} value={this.state.password} className="passwordInput" name="password" style={{margin: 5}}/>
+              <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} name="username" style={{margin: 5}}/>
+              <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
               <Button type="submit" style={{margin: 5}}>Sign Up</Button>
               </FormGroup>
             </form>
