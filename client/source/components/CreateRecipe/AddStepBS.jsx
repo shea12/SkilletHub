@@ -30,20 +30,16 @@ class AddStep extends React.Component {
 
 	handleChange (event) {
 	  var inputType = event.target.id; 
-	  // if (inputType === 'description') {
-	  // 	this.setState({ description: event.target.value}); 
-	  // } else if (inputType === 'ingredients') {
-	  // 	var ingredients = event.target.value.split(','); 
-	  // 	this.setState({ingredients: ingredients}); 
-	  // } 
 	  if (inputType === 'description') {
 	  	var availableIngredients = this.props.availableIngredients; 
-	  	console.log(availableIngredients); 
+	  	// console.log(availableIngredients); 
 	  	var parsedIngredients = this.state.parsedIngredients; 
 	  	var description = event.target.value; 
+	  	// console.log('Description: ', description); 
 	  	availableIngredients.forEach((ingredient) => {
-	  		var regEx = RegExp(ingredient);
+	  		var regEx = RegExp(ingredient, 'i');
 	  		var parsedIngredient = regEx.exec(description); 
+	  		// console.log(parsedIngredient); 
 	  		if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
 	  			console.log('Matched an ingredient: ', parsedIngredient); 
 	  			parsedIngredients.push(parsedIngredient[0])
