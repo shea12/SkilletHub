@@ -1,5 +1,5 @@
 import React from 'react';
-import AddStep from './AddStep'; 
+import AddStep from './AddStepBS'; 
 
 class StepsForm extends React.Component {
 	constructor(props) {
@@ -36,7 +36,7 @@ class StepsForm extends React.Component {
 					<div key={'enteredStep' + step.position}>
 					  <h4> Step {step.position} </h4>
 					  <h5> {step.description} </h5>
-					  <h5> {step.ingredients + step.parsedIngredients} </h5>
+					  <h5> {step.ingredients || ''} {step.parsedIngredients || ''} </h5>
 					</div>
 				))}
 				<AddStep 

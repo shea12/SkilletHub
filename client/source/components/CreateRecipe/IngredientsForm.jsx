@@ -1,6 +1,6 @@
 import React from 'react';
-import AddIngredient from './AddIngredient'; 
-import RecipeIngredients from '../Recipe/RecipeIngredients'; 
+import AddIngredient from './AddIngredientBS'; 
+import RecipeIngredients from '../Recipe/RecipeIngredientsBS'; 
 
 class IngredientsForm extends React.Component {
 	constructor(props) {

@@ -4,6 +4,8 @@ import StepsForm from './StepsForm'
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
+import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
+
 
 class CreateRecipeMain extends Component {
   constructor(props) {
@@ -63,18 +65,25 @@ class CreateRecipeMain extends Component {
 
   render() {
     return (
-      <div className="row">
-        <form className="col s12">
-          <div className="row">
-            <div className="input-field col s6">
-              <input placeholder={this.state.name} id="name" type="text" className="validate" />
-              <label htmlFor="name">Recipe Name</label>
-            </div>
-            <div className="input-field col s6">
-              <input placeholder={this.state.servings} id="servings" type="text" className="validate" />
-              <label htmlFor="servings">Servings</label>
-            </div>
-          </div>
+      <div>
+      <Row className="show-grid">
+        <Col xs={6} md={6}> 
+            <form>
+              <FormGroup style={{padding: 10}}>
+              <ControlLabel> Recipe Name </ControlLabel>
+              <FormControl type="text" controlId="name" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} />
+              </FormGroup>
+            </form>
+        </Col>
+        <Col xs={6} md={6}> 
+            <form>
+              <FormGroup style={{padding: 10}}>
+              <ControlLabel> Recipe Servings </ControlLabel>
+              <FormControl type="text" controlId="name" id="name" onChange={this.handleChange.bind(this)} value={this.state.servings} />
+              </FormGroup>
+            </form>
+        </Col>
+      </Row>
           <div className="row">
             <div className="input-field col s12">
               <textarea id="description" className="materialize-textarea"></textarea>
@@ -83,8 +92,7 @@ class CreateRecipeMain extends Component {
           </div>
           <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
           <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length}/>
-        </form>
-      </div>
+        </div>
     );
   }
 }
