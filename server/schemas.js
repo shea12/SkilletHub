@@ -6,10 +6,7 @@ let recipeSchema = new Schema({
   rootVersion: Schema.Types.ObjectId,       //The root version of the recipe
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
   deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
-  branch: {                                 //Name of branch
-    changed: Boolean,
-    value: String
-  },                 
+  branch: String,            
   userID: {                                 //Creator of recipe
     changed: Boolean,
     value: Schema.Types.ObjectId  
@@ -24,11 +21,11 @@ let recipeSchema = new Schema({
   },            
   servings: {                               //Number of people served
     changed: Boolean,
-    value: Number
+    value: String
   }, 
   cookTime: {                               //Cook time in minutes
     changed: Boolean,
-    value: Number,                          
+    value: Number                         
   },             
   skillLevel: {                             //Recipe difficulty [easy, medium, hard]
     changed: Boolean,
@@ -71,7 +68,6 @@ let recipeSchema = new Schema({
     position: Number,
     issueId: Schema.Types.ObjectId
   }],
-  stars: Number,                  //Number of people who starred this recipe
 });
 
 let userRecipeSchema = new Schema({
