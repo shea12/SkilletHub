@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import IngredientsForm from './IngredientsForm'
 import StepsForm from './StepsForm'
 
+//Bootstrap 
+import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
+
+
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
 
@@ -28,7 +32,7 @@ class CreateRecipeMain extends Component {
   }
 
   handleChange (event) {
-    var inputType = event.target.data; 
+    var inputType = event.target.id; 
     if (inputType === 'fork') {
       console.log('Forking recipe'); 
       // TODO: Implement routing (react || server)
@@ -36,7 +40,16 @@ class CreateRecipeMain extends Component {
     if (inputType === 'cook') {
       console.log('Cooking recipe'); 
       // TODO: Implement routing (react || server)
-    }  
+    } 
+    if (inputType === 'name'){
+      this.setState({name: event.target.value}); 
+    } 
+    if (inputType === 'servings'){
+      this.setState({servings: event.target.value}); 
+    } 
+    if (inputType === 'description'){
+      this.setState({description: event.target.value}); 
+    } 
   }
 
   handleAddIngredient(ingredient) {
@@ -67,28 +80,41 @@ class CreateRecipeMain extends Component {
 
   render() {
     return (
-      <div className="row">
-        <form className="col s12">
-          <div className="row">
-            <div className="input-field col s6">
-              <input placeholder={this.state.name} id="name" type="text" className="active validate" />
-              <label htmlFor="name">Recipe Name</label>
-            </div>
-            <div className="input-field col s6">
-              <input placeholder={this.state.servings} id="servings" type="text" className="active validate" />
-              <label htmlFor="servings">Servings</label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="input-field col s12">
-              <textarea id="description" className="materialize-textarea"></textarea>
-              <label htmlFor="description">Recipe Description</label>
-            </div>
-          </div>
+      <Grid> 
+      <Row className="show-grid">
+        <Col xs={4} md={4}> 
+            <form>
+              <FormGroup style={{padding: 5}}>
+              <ControlLabel> Recipe Name </ControlLabel>
+              <FormControl type="text" controlId="name" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} />
+              </FormGroup>
+            </form>
+        </Col>
+        <Col xs={4} md={4}> 
+            <form>
+              <FormGroup style={{padding: 5}}>
+              <ControlLabel> Recipe Servings </ControlLabel>
+              <FormControl type="text" controlId="servings" id="servings" onChange={this.handleChange.bind(this)} value={this.state.servings} />
+              </FormGroup>
+            </form>
+        </Col>
+        <Col xs={4} md={4}> 
+          <p>{JSON.stringify(this.state)}</p>
+        </Col>
+      </Row>
+      <Row className="show-grid">
+        <Col xs={8} md={8}> 
+            <form>
+              <FormGroup style={{padding: 5}}>
+              <ControlLabel> Recipe Description </ControlLabel>
+              <FormControl componentClass="textarea" controlId="description" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
+              </FormGroup>
+            </form>
+        </Col>
+      </Row>
           <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
           <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
-        </form>
-      </div>
+      </Grid> 
     );
   }
 }
