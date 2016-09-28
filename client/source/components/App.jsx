@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
-import Nav from './Nav'; 
+import Nav from './NavigationBar'; 
 
 class App extends React.Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class App extends React.Component {
 	// }.bind(this))
     return (
     	<div> 
-    		<h3> Welcome to SkilletHub </h3>
     		<Nav />
     		{ this.props.children }
     	</div>

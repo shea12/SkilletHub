@@ -71,11 +71,11 @@ class CreateRecipeMain extends Component {
         <form className="col s12">
           <div className="row">
             <div className="input-field col s6">
-              <input placeholder={this.state.name} id="name" type="text" className="validate" />
+              <input placeholder={this.state.name} id="name" type="text" className="active validate" />
               <label htmlFor="name">Recipe Name</label>
             </div>
             <div className="input-field col s6">
-              <input placeholder={this.state.servings} id="servings" type="text" className="validate" />
+              <input placeholder={this.state.servings} id="servings" type="text" className="active validate" />
               <label htmlFor="servings">Servings</label>
             </div>
           </div>
