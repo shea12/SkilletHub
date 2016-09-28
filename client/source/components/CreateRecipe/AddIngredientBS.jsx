@@ -3,6 +3,11 @@ import React from 'react';
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
+var units = ['select unit', 'tsp.', 'tbsp.', 'fl.oz.', 'cup', 'pt.', 'qt.', 'gal.', 'g', 'kg', 'oz.', 'lbs', 'whole']; 
+var volume = ['tsp.', 'tbsp.', 'fl.oz.', 'cup', 'pt.', 'qt.', 'gal.']; 
+var mass = ['g', 'kg', 'oz.', 'lbs']; 
+var other = ['whole']; 
+
 class AddIngredient extends React.Component {
 	constructor(props) {
 		super(props);
@@ -63,10 +68,14 @@ class AddIngredient extends React.Component {
 			        </FormGroup>
 			  </Col>
 			  <Col xs={4} md={4}> 
-			  		<FormGroup controlId="unit" >
-			        <ControlLabel> Unit </ControlLabel>
-			        <FormControl type="text" controlId="unit" id="unit" onChange={this.handleChange.bind(this)} value={this.state.unit} />
-			        </FormGroup>
+		          <FormGroup controlId="formControlsSelect">
+		            <ControlLabel>Units</ControlLabel>
+		            <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="unit">
+		              {units.map((unit)=> (
+		              	<option value={unit}>{unit}</option>
+		              ))}
+		            </FormControl>
+		          </FormGroup>
 			  </Col>
 			</Row>
 			<Row className="show-grid" style={{padding: 5}}>
