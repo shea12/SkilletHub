@@ -36,7 +36,8 @@ class StepsForm extends React.Component {
 					<div key={'enteredStep' + step.position}>
 					  <h4> Step {step.position} </h4>
 					  <h5> {step.description} </h5>
-					  <h5> {step.ingredients || ''} {step.parsedIngredients || ''} </h5>
+					  <h5> {step.ingredients || ''} {step.parsedIngredients.join(', ') || ''} </h5>
+					  <h5> {step.stepTime} </h5>
 					</div>
 				))}
 				<AddStep 

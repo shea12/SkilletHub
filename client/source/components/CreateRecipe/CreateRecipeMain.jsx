@@ -94,12 +94,13 @@ class CreateRecipeMain extends Component {
   render() {
     return (
       <Grid> 
+      <h3> Recipe </h3>
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Name </ControlLabel>
-              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} />
+              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} required/>
               </FormGroup>
             </form>
         </Col>
@@ -107,7 +108,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Min </ControlLabel>
-              <FormControl type="text" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} />
+              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} optional/>
               </FormGroup>
             </form>
         </Col>
@@ -115,7 +116,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Max </ControlLabel>
-              <FormControl type="text" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} />
+              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} optional/>
               </FormGroup>
             </form>
         </Col>
@@ -133,11 +134,11 @@ class CreateRecipeMain extends Component {
         </Col>
       </Row>
       <Row className="show-grid">
-        <Col xs={8} md={8}> 
+        <Col xs={12} md={12}> 
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Description </ControlLabel>
-              <FormControl componentClass="textarea" controlId="description" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
+              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
               </FormGroup>
             </form>
         </Col>
@@ -155,10 +156,3 @@ class CreateRecipeMain extends Component {
 }
 
 export default CreateRecipeMain;
-
-
-    // <DropdownButton title={"Skill Level"} id="skill" style={{padding: 5, marginTop: 30}}>
-    //   <MenuItem eventKey="1">Junior Dev</MenuItem>
-    //   <MenuItem eventKey="2"> Kitchen Team Lead </MenuItem>
-    //   <MenuItem eventKey="3" active>Scrum Master</MenuItem>
-    // </DropdownButton>

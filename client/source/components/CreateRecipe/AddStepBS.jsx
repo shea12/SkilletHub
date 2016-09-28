@@ -3,6 +3,19 @@ import React from 'react';
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
+var timeParse = function(string) {
+	timesRegEx.forEach((timeRegEx) => {
+		var time = timeRegEx.exec(string); 
+		if (time) {
+			console.log(time); 
+		} 
+	});
+}
+
+var times = [/\d*\smin/, 'hour', 'second', 'hr', 'sec', 'min']; 
+var timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
+// var timesRegEx = times.map((time) => { return new RegExp(\d*\stime, 'i')}); 
+
 class AddStep extends React.Component {
 	constructor(props) {
 		super(props);
@@ -11,7 +24,9 @@ class AddStep extends React.Component {
 			description: '',
 			ingredients: [],
 			parsedIngredients: [], 
-			position: null
+			position: null,
+			time: '',
+			stepTime: null
 		}; 
 	}
 
@@ -45,10 +60,17 @@ class AddStep extends React.Component {
 	  			parsedIngredients.push(parsedIngredient[0])
 	  		}
 	  	});
+	  	var time = timeParse(description); 
 	  	this.setState({
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
 	  	}); 
+	  	var stepTime = this.state.stepTime; 
+	  	if (time && !stepTime) {
+	  		this.setState({
+	  			stepTime: time[0]
+	  		}); 
+	  	}
 	  } else if (inputType === 'ingredients') {
 	  	var ingredients = event.target.value.split(','); 
 	  	this.setState({ingredients: ingredients}); 
@@ -87,3 +109,5 @@ class AddStep extends React.Component {
 }
 
 export default AddStep;
+
+
