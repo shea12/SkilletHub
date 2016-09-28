@@ -3,7 +3,7 @@ import IngredientsForm from './IngredientsForm'
 import StepsForm from './StepsForm'
 
 //Bootstrap 
-import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
 
 // Placeholder recipe data 
@@ -15,8 +15,14 @@ class CreateRecipeMain extends Component {
 
     this.state = {
       name: '',
-      servings: '',
-      description: '', 
+      nameValue: '', 
+      servings: {changed: true, value: ''},
+      servingsMin: '',
+      servingsMax: '', 
+      servingsValue: '',
+      skillLevel: '', 
+      description: {changed: true, value: ''}, 
+      descriptionValue: '',
       cookTime: '',
       picture: '',
       ingredients: [],
@@ -42,13 +48,20 @@ class CreateRecipeMain extends Component {
       // TODO: Implement routing (react || server)
     } 
     if (inputType === 'name'){
-      this.setState({name: event.target.value}); 
+      this.setState({ nameValue: event.target.value
+      });
     } 
-    if (inputType === 'servings'){
-      this.setState({servings: event.target.value}); 
+    if (inputType === 'servingsMin'){
+      this.setState({servingsMin: event.target.value}); 
+    } 
+    if (inputType === 'servingsMax'){
+      this.setState({servingsMax: event.target.value}); 
     } 
     if (inputType === 'description'){
-      this.setState({description: event.target.value}); 
+      this.setState({descriptionValue: event.target.value}); 
+    } 
+    if (inputType === 'skill'){
+      this.setState({skillLevel: event.target.value}); 
     } 
   }
 
@@ -86,20 +99,37 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Name </ControlLabel>
-              <FormControl type="text" controlId="name" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} />
+              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} />
               </FormGroup>
             </form>
         </Col>
-        <Col xs={4} md={4}> 
+        <Col xs={2} md={2}> 
             <form>
               <FormGroup style={{padding: 5}}>
-              <ControlLabel> Recipe Servings </ControlLabel>
-              <FormControl type="text" controlId="servings" id="servings" onChange={this.handleChange.bind(this)} value={this.state.servings} />
+              <ControlLabel> Recipe Servings Min </ControlLabel>
+              <FormControl type="text" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} />
+              </FormGroup>
+            </form>
+        </Col>
+        <Col xs={2} md={2}> 
+            <form>
+              <FormGroup style={{padding: 5}}>
+              <ControlLabel> Recipe Servings Max </ControlLabel>
+              <FormControl type="text" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} />
               </FormGroup>
             </form>
         </Col>
         <Col xs={4} md={4}> 
-          <p>{JSON.stringify(this.state)}</p>
+          <form> 
+          <FormGroup controlId="formControlsSelect">
+            <ControlLabel>Recipe Skill Level</ControlLabel>
+            <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="skill">
+              <option value="Junior Dev">Junior Dev</option>
+              <option value="Kitchen Team Lead">Kitchen Team Lead</option>
+              <option value="Scrum Master">Scrum Master</option>
+            </FormControl>
+          </FormGroup>
+          </form>
         </Col>
       </Row>
       <Row className="show-grid">
@@ -107,16 +137,28 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Description </ControlLabel>
-              <FormControl componentClass="textarea" controlId="description" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
+              <FormControl componentClass="textarea" controlId="description" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
               </FormGroup>
             </form>
         </Col>
       </Row>
           <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
           <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
+        <Row className="show-grid">
+        <Col xs={12} md={12}> 
+          <p>{JSON.stringify(this.state)}</p>
+        </Col>
+        </Row>
       </Grid> 
     );
   }
 }
 
 export default CreateRecipeMain;
+
+
+    // <DropdownButton title={"Skill Level"} id="skill" style={{padding: 5, marginTop: 30}}>
+    //   <MenuItem eventKey="1">Junior Dev</MenuItem>
+    //   <MenuItem eventKey="2"> Kitchen Team Lead </MenuItem>
+    //   <MenuItem eventKey="3" active>Scrum Master</MenuItem>
+    // </DropdownButton>
