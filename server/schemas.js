@@ -3,6 +3,7 @@ let Schema = mongoose.Schema;
 mongoose.Promise = require('bluebird');
 
 let recipeSchema = new Schema({
+  createdAt: { type: Date, default: Date.now },
   rootVersion: Schema.Types.ObjectId,       //The root version of the recipe
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
   deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
@@ -67,12 +68,18 @@ let recipeSchema = new Schema({
     changed: Boolean,
     position: Number,
     issueId: Schema.Types.ObjectId
-  }],
+  }]
 });
 
 let userRecipeSchema = new Schema({
   userID: Number,                   //User who owns recipes / forks
-  recipes: [Schema.Types.ObjectId], //Forks and created recipes belonging to that user
+  recipes: [{   //Forks and created recipes belonging to that user
+    rootRecipeId: Schema.Types.ObjectId,
+    branches: [{
+      name: String,
+      mostRecentVersionId: Schema.Types.ObjectId
+    }]
+  }]
 });  
 
 let dependencySchema = new Schema({

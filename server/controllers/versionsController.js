@@ -20,11 +20,20 @@ module.exports = {
 
   //gets a specific version
   getVersion: (req, res) => {
-    helpers.retrieveVersion()
-    .then(result => {
+    let branch = req.params.branch;
+    UserRecipe.find({
+      userId: //add user id here *!*!*!*!
+    }).then(recipes => {
+      let recipe = _.where(recipes, {
+        rootRecipeId: //add recipe id here *!*!*!!**!
+      });
+      let version = _.where(recipe, {
+        branch: branch
+      });
+      return helpers.retrieveVersion(version)
+    }).then(result => {
       res.status(200).send(result);
-    })
-    .catch(error => {
+    }).catch(error => {
       res.status(404).send(error)
     })
   },
