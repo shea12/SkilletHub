@@ -25,7 +25,7 @@ describe('recipesController.js', function() {
     beforeEach(function() {
       req = httpMocks.createRequest({
         method: 'DELETE',
-        url: 
+        url: 'username/recipe'
       });
       res = httpMocks.createResponse();
     });

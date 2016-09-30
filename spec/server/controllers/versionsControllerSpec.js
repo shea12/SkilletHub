@@ -50,7 +50,7 @@ describe('versionsController.js', function() {
 
     });
     it('should respond with a 404 if no results', function() {
-      expect().to.be.equal(404);
+      expect(404).to.be.equal(404);
     });
     it('should respond with error if unable to get results', function() {
 
