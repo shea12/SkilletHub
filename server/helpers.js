@@ -113,9 +113,9 @@ module.exports = {
 
   },
 
-  addUserRecipesCollection: (username) => {
+  addUserRecipesCollection: (username, recipe) => {
     return //find userID where username = username
-    .then(function(userId, recipe) {
+    .then(function(userId) {
       return new UserRecipe({
         userID: userId,
         recipes: [

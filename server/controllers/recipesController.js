@@ -8,9 +8,10 @@ module.exports = {
   createRecipe: (req, res) => {
     helpers.makeVersion('new', req.body)
     .then(result => {
-      res.status(201).send(result);
-    })
-    .catch(error => {
+      return helpers.addUserRecipeCollection(req.params.username, result);
+    }).then(function() {
+      res.status(201).send();
+    }).catch(error => {
       res.status(500).send(error)
     });
   },
