@@ -3,20 +3,20 @@ import React from 'react';
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
-var timeParse = function(string) {
-	var match = []; 
-	timesRegEx.forEach((timeRegEx) => {
-		var time = timeRegEx.exec(string); 
-		if (time) {
-			// console.log(time); 
-			match.push(time); 
-		} 
-	});
-	return match; 
-}
+// var timeParse = function(string) {
+// 	var match = []; 
+// 	timesRegEx.forEach((timeRegEx) => {
+// 		var time = timeRegEx.exec(string); 
+// 		if (time) {
+// 			// console.log(time); 
+// 			match.push(time); 
+// 		} 
+// 	});
+// 	return match; 
+// }
 
-var times = [/\d*\smin/, 'hour', 'second', 'hr', 'sec', 'min']; 
-var timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
+const timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
+// const times = [/\d*\smin/, 'hour', 'second', 'hr', 'sec', 'min']; 
 // var timesRegEx = times.map((time) => { return new RegExp(\d*\stime, 'i')}); 
 
 class AddStep extends React.Component {
@@ -46,6 +46,18 @@ class AddStep extends React.Component {
 		this.props.handleAddStep(this.state);
 	}
 
+	timeParse (string) {
+		var match = []; 
+		timesRegEx.forEach((timeRegEx) => {
+			var time = timeRegEx.exec(string); 
+			if (time) {
+				// console.log(time); 
+				match.push(time); 
+			} 
+		});
+		return match; 
+	}
+
 	handleChange (event) {
 	  var inputType = event.target.id; 
 	  if (inputType === 'description') {
@@ -67,7 +79,7 @@ class AddStep extends React.Component {
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
 	  	}); 
-	  	var time = timeParse(description); 
+	  	var time = this.timeParse(description); 
 	  	// console.log('TIME IS: ', time); 
 	  	var stepTime = this.state.stepTime; 
 	  	if (time && !stepTime) {
@@ -76,9 +88,6 @@ class AddStep extends React.Component {
 	  			stepTime: time[0]
 	  		}); 
 	  	}
-	  } else if (inputType === 'ingredients') {
-	  	var ingredients = event.target.value.split(','); 
-	  	this.setState({ingredients: ingredients}); 
 	  } 
 	}
 
@@ -87,16 +96,10 @@ class AddStep extends React.Component {
 			<Grid>
 			<form onSubmit={this.handleClick.bind(this)}>
 			<Row className="show-grid">
-			  <Col xs={6} md={6}> 
+			  <Col xs={8} md={8}> 
 			  		<FormGroup>
 			        <ControlLabel> Step Description </ControlLabel>
 			        <FormControl type="text" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
-			        </FormGroup>
-			  </Col>
-			  <Col xs={6} md={6}> 
-			  		<FormGroup>
-			        <ControlLabel> Ingredients </ControlLabel>
-			        <FormControl type="text" id="ingredients" onChange={this.handleChange.bind(this)} value={this.state.ingredients} />
 			        </FormGroup>
 			  </Col>
 			</Row>

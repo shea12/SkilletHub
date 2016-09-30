@@ -12,7 +12,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-    	<Nav className='NavBar' bsStyle="tabs" activeKey={1} onSelect={this.handleSelect.bind(this)}>
+    	<Nav className='NavBar' bsStyle="tabs" onSelect={this.handleSelect.bind(this)}>
     	  <NavItem eventKey={1} href="/Create">Testing Create</NavItem>
     	  <Link to='/SignUp'> Sign Up </Link>
         <Link to='/User' className='NavBarElement'> Profile </Link>
