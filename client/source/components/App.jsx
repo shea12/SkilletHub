@@ -20,21 +20,24 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: COGNITO_IDENTITY_POOL_ID
 });
 
+
+////// 
+// APP COMPONENT 
+////////
+
 class App extends React.Component {
   constructor(props) {
   	super(props); 
   	this.state = {
       siteName: 'SkilletHub',
-      userID: null
+      userID: null,
+      username: 'Username', 
+      password: 'Password',
+      firstname: 'First Name',
+      lastname: 'Last Name',
+      email: 'email'
   	}; 
   }
-
-  // handleCreateTemplate(template) {
-  // 	console.log(template); 
-  //   this.setState({
-  //     skil
-  //   }); 
-  // }
 
   handleChange (event) {
     var inputType = event.target.id; 
@@ -49,6 +52,19 @@ class App extends React.Component {
     } else if (inputType === 'email') {
       this.setState({email: event.target.value}); 
     }
+  }
+
+  handleSignUp(user){
+    console.log('Attempting sign up!'); 
+    console.log('User info: ', user.username); 
+    this.setState({
+      username: user.username,
+      password: user.password,
+      firstname: user.firstname,
+      lastname:user.lastname,
+      email: user.email
+    }); 
+    var test = this.signUpUser(user).bind(this); 
   }
 
   /************************************************************
@@ -74,15 +90,15 @@ class App extends React.Component {
   /************************************************************
   *****************    SIGN UP A NEW USER    ******************
   ************************************************************/
-  signUpUser (event) {
-    event.preventDefault();
-    debugger;
+  signUpUser (user) {
+    // event.preventDefault();
+    // debugger;
     console.log('signing up user');
-    console.log('username: ', this.state.username);
-    console.log('username: ', this.state.password);
-    console.log('firstname: ', this.state.firstname);
-    console.log('lastname: ', this.state.lastname);
-    console.log('email: ', this.state.email);
+    console.log('username: ', user.username);
+    console.log('username: ', user.password);
+    console.log('firstname: ', user.firstname);
+    console.log('lastname: ', user.lastname);
+    console.log('email: ', user.email);
     var poolConfig = {
       UserPoolId: USER_POOL_ID,
       ClientId: USER_POOL_APP_CLIENT_ID
@@ -92,10 +108,10 @@ class App extends React.Component {
     var attList = [];
     var currentTime = Date.now().toString();
 
-    var prefusername = {Name: 'preferred_username', Value: this.state.username};
-    var firstname = {Name: 'given_name', Value: this.state.firstname};
-    var lastname = {Name: 'family_name', Value: this.state.lastname};
-    var email = {Name: 'email', Value: this.state.email};
+    var prefusername = {Name: 'preferred_username', Value: user.username};
+    var firstname = {Name: 'given_name', Value: user.firstname};
+    var lastname = {Name: 'family_name', Value: user.lastname};
+    var email = {Name: 'email', Value: user.email};
     var timestamp = {Name: 'updated_at', Value: currentTime };
 
     var attPrefUsername = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(prefusername);
@@ -110,8 +126,8 @@ class App extends React.Component {
     attList.push(attEmail);
     attList.push(attTimeStamp);
 
-    var un = this.state.username;
-    var pw = this.state.password;
+    var un = user.username;
+    var pw = user.password;
 
     userPool.signUp(un, pw, attList, null, function(error, result) {
       if (error) {
@@ -140,7 +156,10 @@ class App extends React.Component {
             else { 
               console.log('userDeets result: ', result); 
               user_id = result[0].Value;
+              // this.setState({userID: user_id}); 
               console.log('user_id: ', user_id);
+              console.log(window); 
+              return user_id; 
             }
           });
         },
@@ -202,16 +221,15 @@ class App extends React.Component {
   };
 
   render () {
-	// const children = React.Children.map(this.props.children, function (child) {
-	//   return React.cloneElement(child, {
-	//     handleCreateTemplate: this.handleCreateTemplate.bind(this),
-	//     workoutTemplate: this.state.workoutTemplate
-	//   })
-	// }.bind(this))
+	const children = React.Children.map(this.props.children, function (child) {
+	  return React.cloneElement(child, {
+	    handleSignUp: this.handleSignUp.bind(this)
+	  })
+	}.bind(this))
     return (
     	<div> 
     		<Nav />
-    		{ this.props.children }
+    		{ children }
     	</div>
     ); 
   }
