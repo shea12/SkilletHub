@@ -5,9 +5,9 @@ var versions = require('./controllers/versionsController.js');
 
 module.exports = function(app, express) {
   // /*** Sign up / Sign in / Logout ***/
-  // app.post('/user/signup', users.signup);
-  // app.get('/user/login', users.login);
-  // app.get('/user/logout', users.logout);
+  app.post('/user/signup', users.signup);
+  app.post('/user/login', users.login);
+  app.get('/user/logout', users.logout);
 
   // /*** Users ***/
   // app.get('/:username/profile', users.getProfile); //gets recipes
