@@ -114,23 +114,23 @@ module.exports = {
   },
 
   addUserRecipesCollection: (username, recipe) => {
-    return //find userID where username = username
-    .then(function(userId) {
-      return new UserRecipe({
-        userID: userId,
-        recipes: [
-          {
-            name: recipe.name,
-            rootRecipeId: recipe._id,
-            branches: [
-              {
-                name: 'master',
-                mostRecentVersionId: recipe._id
-              }
-            ]
-          }
-        ]
-      }).save()
-    });
+    // return //find userID where username = username
+    // .then(function(userId) {
+    //   return new UserRecipe({
+    //     userID: userId,
+    //     recipes: [
+    //       {
+    //         name: recipe.name,
+    //         rootRecipeId: recipe._id,
+    //         branches: [
+    //           {
+    //             name: 'master',
+    //             mostRecentVersionId: recipe._id
+    //           }
+    //         ]
+    //       }
+    //     ]
+    //   }).save()
+    // });
   }
 };

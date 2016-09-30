@@ -8,6 +8,7 @@ var generateId = mongoose.Types.ObjectId;
 var makeVersion = helpers.makeVersion;
 var retrieveVersion = helpers.retrieveVersion;
 var deleteDownstream = helpers.deleteDownstream;
+var addUserRecipesCollection = helpers.addUserRecipesCollection;
 
 var db = require(`${__dirname}/../../server/schemas.js`);
 var Recipe = db.Recipe;
@@ -250,4 +251,42 @@ describe('helpers.js', function() {
 
   });
 
+  describe('addUserRecipesCollection()', function() {
+    var exampleRecipe;
+    beforeEach(function() {
+      exampleRecipe = {
+        _id: generateId(),
+        name: 'potato salad'
+      };
+    });
+
+    it('should be a function', function() {
+      expect(addUserRecipesCollection).to.be.a('function');
+    });
+    // it('should return an object', function() {
+    //   return addUserRecipesCollection('test', exampleRecipe)
+    //   .then(function(result) {
+    //     expect(result).to.be.a('object');
+    //   });
+    // });
+    // it('should be assigned to the correct user', function() {
+    //   return addUserRecipesCollection('test', exampleRecipe)
+    //   .then(function(result) {
+    //     expect(result.userId).to.equal( /* INSERT USERID HERE */ );
+    //   });
+    // });
+    // it('should add the master recipe', function() {
+    //   return addUserRecipesCollection('test', exampleRecipe)
+    //   .then(function(result) {
+    //     expect(result.recipes[0].braches[0].name).to.equal('master');
+    //     expect(result.recipes[0].braches[0].mostRecentVersionId.equals(exampleRecipe._id)).to.be.true;
+    //   });
+    // });
+    // it('should have the correct recipe name', function() {
+    //   return addUserRecipesCollection('test', exampleRecipe)
+    //   .then(function(result) {
+    //     expect(result.recipes[0].name).to.equal('potato salad');
+    //   });
+    // });
+  });
 });
