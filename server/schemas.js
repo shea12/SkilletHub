@@ -72,6 +72,7 @@ let recipeSchema = new Schema({
 let userRecipeSchema = new Schema({
   userId: Number,                   //User who owns recipes / forks
   recipes: [{   //Forks and created recipes belonging to that user
+    name: String,
     rootRecipeId: Schema.Types.ObjectId,
     branches: [{
       name: String,
