@@ -2,6 +2,24 @@ import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import Nav from './NavigationBar'; 
 
+/************************************************************
+*****************    AWS COGNITO CONFIG    ******************
+************************************************************/
+var AWS = require('aws-sdk');
+// var passport = require('passport');
+// var session = require('express-session');
+// var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
+var USER_POOL_APP_CLIENT_ID = '3998t3ftof3q7k5f0cqn260smk';
+var USER_POOL_ID = 'us-west-2_P8tGz1Tx6';
+var COGNITO_IDENTITY_POOL_ID = 'us-west-2:ea2abcb1-10a0-4964-8c13-97067e5b50bb';
+
+AWS.config.region = 'us-west-2';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+  IdentityPoolId: COGNITO_IDENTITY_POOL_ID
+});
+
 class App extends React.Component {
   constructor(props) {
   	super(props); 
