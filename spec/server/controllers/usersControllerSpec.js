@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var db = require(`${__dirname}/../../server/schemas.js`);
+var db = require(`${__dirname}/../../../server/schemas.js`);
 var UserRecipe = db.UserRecipe;
 var generateId = mongoose.Types.ObjectId;
 
@@ -7,7 +7,7 @@ var expect = require('chai').expect;
 var httpMocks = require('node-mocks-http');
 var Promise = require('bluebird');
 
-var usersController = require(`${__dirname}/../../server/controllers/usersController.js`);
+var usersController = require(`${__dirname}/../../../server/controllers/usersController.js`);
 var getProfile = usersController.getProfile;
 
 
