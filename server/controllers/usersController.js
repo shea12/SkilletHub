@@ -9,5 +9,10 @@ module.exports = {
 
   logout: (req, res) => {
 
+  },
+
+  //Gets all the recipes that belong to that user
+  getProfile: (req, res) => {
+
   }
 };

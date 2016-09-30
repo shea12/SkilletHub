@@ -10,7 +10,7 @@ module.exports = function(app, express) {
   // app.get('/user/logout', users.logout);
 
   // /*** Users ***/
-  // app.get('/:username/profile', users.getProfile); //gets recipes
+  app.get('/:username/profile', users.getProfile); //gets recipes
   // app.put('/:username/profile', users.updateProfile);
 
   // /*** Recipes ***/
