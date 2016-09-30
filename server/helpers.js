@@ -111,5 +111,26 @@ module.exports = {
   //for everything else, set them to unavailable
   deleteDownstream: (version) => {
 
+  },
+
+  addUserRecipesCollection: (username) => {
+    return //find userID where username = username
+    .then(function(userId, recipe) {
+      return new UserRecipe({
+        userID: userId,
+        recipes: [
+          {
+            name: recipe.name,
+            rootRecipeId: recipe._id,
+            branches: [
+              {
+                name: 'master',
+                mostRecentVersionId: recipe._id
+              }
+            ]
+          }
+        ]
+      }).save()
+    });
   }
 };
