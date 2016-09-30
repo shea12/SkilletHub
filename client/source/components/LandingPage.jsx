@@ -1,28 +1,55 @@
 import React from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
+/************************************************************
+*****************    AWS COGNITO CONFIG    ******************
+************************************************************/
+var AWS = require('aws-sdk');
+// var passport = require('passport');
+// var session = require('express-session');
+// var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
+var USER_POOL_APP_CLIENT_ID = '3998t3ftof3q7k5f0cqn260smk';
+var USER_POOL_ID = 'us-west-2_P8tGz1Tx6';
+var COGNITO_IDENTITY_POOL_ID = 'us-west-2:ea2abcb1-10a0-4964-8c13-97067e5b50bb';
+
+AWS.config.region = 'us-west-2';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+  IdentityPoolId: COGNITO_IDENTITY_POOL_ID
+});
 
 class LandingPage extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Enter username', 
-      password: ''
+      username: 'Username', 
+      password: 'Password',
+      firstname: 'First Name',
+      lastname: 'Last Name',
+      email: 'email'
     }; 
   }
 
   handleSubmit (event) {
+    debugger;
     console.log(event); 
     console.log(this.state.username, this.state.password);
+    this.props.signUpUser(event);
   }
 
   handleChange (event) {
     var inputType = event.target.id; 
     if (inputType === 'username') {
       this.setState({username: event.target.value}); 
-    } else {
+    } else if (inputType === 'password') {
       this.setState({password: event.target.value}); 
+    } else if (inputType === 'firstname') {
+      this.setState({firstname: event.target.value}); 
+    } else if (inputType === 'lastname') {
+      this.setState({lastname: event.target.value}); 
+    } else if (inputType === 'email') {
+      this.setState({email: event.target.value}); 
     }
   }
 
@@ -37,12 +64,15 @@ class LandingPage extends React.Component {
         }}> 
           <Row className="show-grid">
             <Col xs={4} xsOffset={7} md={4} mdOffset={7}> 
-            <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} method="post" style={{'background':'white', 'height': 200, 'borderRadius': 10}}>
+            <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} style={{'background':'white', 'height': 200, 'borderRadius': 10}}>
               <FormGroup controlId="formBasicText" style={{padding: 10}}>
-              <ControlLabel> Sign Up For SkilletHub </ControlLabel>
-              <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} name="username" style={{margin: 5}}/>
-              <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
-              <Button type="submit" style={{margin: 5}}>Sign Up</Button>
+                <ControlLabel> Sign Up For SkilletHub </ControlLabel>
+                <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} name="username" style={{margin: 5}}/>
+                <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
+                <FormControl type="text" id="firstname" onChange={this.handleChange.bind(this)} value={this.state.firstname} name="firstname" style={{margin: 5}}/>
+                <FormControl type="text" id="lastname" onChange={this.handleChange.bind(this)} value={this.state.lastname} name="lastname" style={{margin: 5}}/>
+                <FormControl type="text" id="email" onChange={this.handleChange.bind(this)} value={this.state.email} name="email" style={{margin: 5}}/>
+                <Button type="submit" style={{margin: 5}}>Sign Up</Button>  
               </FormGroup>
             </form>
             </Col>
@@ -51,6 +81,8 @@ class LandingPage extends React.Component {
     );
   }
 }
+
+
 
 export default LandingPage;
 
