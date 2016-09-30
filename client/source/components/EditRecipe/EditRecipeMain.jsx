@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EditIngredients from './EditIngredientsMain'
+import EditSteps from './EditSteps'
 // import StepsForm from './StepsForm'
 
 //Bootstrap 
@@ -37,8 +38,11 @@ class EditRecipeMain extends Component {
 
     // MEAT LOAF TEST
     var meatloafIngredients = meatloafRecipe.ingredients; 
+    var meatloafSteps = meatloafRecipe.steps; 
+    console.log(meatloafSteps.length); 
     this.setState({
-      ingredients: meatloafIngredients
+      ingredients: meatloafIngredients,
+      steps: meatloafSteps
     }); 
 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
@@ -176,7 +180,8 @@ class EditRecipeMain extends Component {
         <h4> Main Recipe Edit State </h4>
         {this._renderIngredientsTest()}
       </Row>
-      <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients}/>
+      <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients} />
+      <EditSteps steps={this.state.steps} />
       </Grid> 
     );
   }
