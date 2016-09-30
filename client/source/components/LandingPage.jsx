@@ -46,7 +46,6 @@ class LandingPage extends React.Component {
         }}> 
           <Row className="show-grid">
             <Col xs={4} xsOffset={7} md={4} mdOffset={7}> 
-<<<<<<< 4702e5730ead709659b7586bb5a8cc20305c4b98
             <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} style={{'background':'white', 'height': 200, 'borderRadius': 10}}>
               <FormGroup controlId="formBasicText" style={{padding: 10}}>
                 <ControlLabel> Sign Up For SkilletHub </ControlLabel>
@@ -56,14 +55,6 @@ class LandingPage extends React.Component {
                 <FormControl type="text" id="lastname" onChange={this.handleChange.bind(this)} value={this.state.lastname} name="lastname" style={{margin: 5}}/>
                 <FormControl type="text" id="email" onChange={this.handleChange.bind(this)} value={this.state.email} name="email" style={{margin: 5}}/>
                 <Button type="submit" style={{margin: 5}}>Sign Up</Button>  
-=======
-            <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} method="post" style={{'background':'white', 'height': 200, 'borderRadius': 10}}>
-              <FormGroup style={{padding: 10}}>
-              <ControlLabel> Sign Up For SkilletHub </ControlLabel>
-              <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} name="username" style={{margin: 5}}/>
-              <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
-              <Button type="submit" style={{margin: 5}} bsSize="large" block>Sign Up</Button>
->>>>>>> Implement features on the User facing components in preparation for integrating logging in
               </FormGroup>
             </form>
             </Col>

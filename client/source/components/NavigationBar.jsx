@@ -41,20 +41,3 @@ class NavigationBar extends React.Component {
 }
 
 export default NavigationBar; 
-
-
-
-
-
-  // <Navbar>
-  //   <Navbar.Header>
-  //     <Navbar.Brand>
-  //       <a href="#">SkilletHub</a>
-  //     </Navbar.Brand>
-  //   </Navbar.Header>
-  //   <Nav className='NavBar' bsStyle="tabs" bsClass="nav" activeKey={1}>
-  //     <NavItem eventKey={1} href="/Profile"><Link to='/User'> Profile </Link></NavItem>
-  //     <NavItem eventKey={1} href="/Recipe"><Link to='/Recipe'> Recipe </Link></NavItem>
-  //     <NavItem eventKey={1} href="/Create"><Link to='/Create'> Create Recipe </Link></NavItem>
-  //   </Nav>
-  // </Navbar>
