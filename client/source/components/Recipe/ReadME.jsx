@@ -14,6 +14,7 @@ export default ({readME}) => {
 			      <div> 
 			      	<h5>Step: {step.position}</h5>
 			      	<p style={{font: 16}}>{step.description}</p>
+			      	<h6> Ingredients: {step.ingredients.join(', ')} </h6>
 			      </div> 
 		      	</li> 
 		      	)
