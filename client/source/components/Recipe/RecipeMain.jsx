@@ -11,6 +11,9 @@ import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
 import placeholders from '../../../../placeholders'
 import meatloafRecipe from '../../../../meatloafRecipe'
 
+// Axios 
+var axios = require('axios'); 
+
 class RecipeMain extends Component {
   constructor(props) {
     super(props);
@@ -29,11 +32,34 @@ class RecipeMain extends Component {
     console.log('Main recipe page is mounting!'); 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
       --> // Main Server 
+    console.log('PARAMS RECIPE PAGE: ', this.props.params); 
+    // var usernameParameter = this.props.params.username; 
+    var usernameParameter = this.props.username; 
+    console.log('USERNAME PARAMETER:', usernameParameter); 
 
-    // Temporary placeholder values 
-    // console.log(placeholders);   
+    var recipeParameter = this.props.params.recipe; 
+    console.log('RECIPE PARAMETER:', recipeParameter); 
+
+
+    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    .then((result)=> {
+      console.log(Object.keys(result)); 
+      // Temporary placeholder values 
+      // var recipe = meatloafRecipe; 
+      // this.setState({
+      //   recipe: recipe,
+      //   user: placeholders.user,
+      //   recipeName: recipe.name.value,
+      //   recipeDescription: recipe.description.value, 
+      //   recipeIngredients: recipe.ingredients, 
+      //   recipeReadME: recipe.steps
+      // }); 
+    })
+    .catch((error)=> {
+      console.log(error); 
+    }); 
+
     var recipe = meatloafRecipe; 
-    console.log(recipe); 
     this.setState({
       recipe: recipe,
       user: placeholders.user,
