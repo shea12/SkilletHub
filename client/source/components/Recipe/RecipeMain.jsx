@@ -44,6 +44,7 @@ class RecipeMain extends Component {
     axios.get(`/${usernameParameter}/${recipeParameter}`)
     .then((result)=> {
       console.log(Object.keys(result)); 
+      console.log(result.data); 
       // Temporary placeholder values 
       // var recipe = meatloafRecipe; 
       // this.setState({
