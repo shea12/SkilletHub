@@ -22,12 +22,10 @@ module.exports = {
   getRecipe: (req, res) => {
     let branch = 'master';
     UserRecipe.find({
-      //add user id here *!*!*!*!
-      userId: 1
+      username: req.params.username
     }).then(recipes => {
       let recipe = _.where(recipes, {
-        //add recipe id here *!*!*!!**!
-        rootRecipeId: 1 
+        rootRecipeId: req.params.version
       });
       let version = _.where(recipe, {
         branch: branch
