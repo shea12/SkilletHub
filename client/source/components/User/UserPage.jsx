@@ -45,7 +45,7 @@ class UserProfile extends React.Component {
     axios.get(`/${this.props.username}/profile`)
     .then((results) => {
       // console.log(Object.keys(results)); 
-      // console.log(results.data); 
+      console.log(results.data.recipes); 
       this.setState({
         recipeList: results.data.recipes
       }); 
