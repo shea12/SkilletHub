@@ -30,19 +30,20 @@ class UserProfile extends React.Component {
 
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
-    axios.get(`/${username}/profile`)
+    axios.get(`/${this.props.username}/profile`)
     .then((results) => {
       this.setState({
-        recipeList: results.recipes
+        recipeList: results.recipes,
+        userProfile: placeholders.user
       }); 
     }); 
 
     // Temporary placeholder values   
-    this.setState({
-      userProfile: placeholders.user,
-      recipeList: placeholders.recipes,
-      userID: this.props.userID
-    }); 
+    // this.setState({
+    //   userProfile: placeholders.user,
+    //   recipeList: placeholders.recipes,
+    //   userID: this.props.userID
+    // }); 
   }
 
   handleSelect() {
