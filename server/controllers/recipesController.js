@@ -6,7 +6,7 @@ module.exports = {
   // Input: req.body: { recipe changes }
   // Output: created version
   createRecipe: (req, res) => {
-    helpers.makeVersion('new', req.body)
+    helpers.makeVersion('new', req.body, req.params.username)
     .then(result => {
       return helpers.addUserRecipeCollection(req.params.username, result);
     }).then(function() {

@@ -12,7 +12,7 @@ module.exports = {
   // Output: Created version
   createVersion: (req, res) => {
     let newVersion;
-    helpers.makeVersion(req.body.previous, req.body.changes)
+    helpers.makeVersion(req.body.previous, req.body.changes, req.params.username)
     .then((version) => {
       newVersion = version;
       return UserRecipe.find({
