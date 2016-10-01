@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 

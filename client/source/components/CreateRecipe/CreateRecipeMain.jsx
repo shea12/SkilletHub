@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import IngredientsForm from './IngredientsForm'
 import StepsForm from './StepsForm'
+
 
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
@@ -111,12 +113,14 @@ class CreateRecipeMain extends Component {
 
     console.log('USERNAME:', this.props.username); 
 
-    axios.post(`/${this.props.username}/create-recipe`, { 
+    var requestUsername = this.props.username; 
+
+    axios.post(`/${requestUsername}/create-recipe`, { 
       recipeObject
     })
     .then(function(response) {
       console.log(response); 
-      browserHistory.push(`/User/${this.props.username}`);
+      browserHistory.push(`/User/${requestUsername}`);
     })
     .catch(function(error) {
       console.log(error); 
