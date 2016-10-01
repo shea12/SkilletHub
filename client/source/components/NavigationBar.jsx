@@ -14,6 +14,9 @@ class NavigationBar extends React.Component {
   }
 
   componentWillMount(){
+    console.log('MOUNTING NAV BAR'); 
+    console.log('NAVBAR STATE:', this.state); 
+    console.log('RECEIVING PROPS: ', this.props); 
     this.setState({
       userID: this.props.userID,
       username: this.props.username
@@ -22,7 +25,6 @@ class NavigationBar extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault(); 
-    console.log(event); 
     console.log(this.state.username, this.state.password);
     var user = this.state; 
     this.props.handleLoginUser(user);

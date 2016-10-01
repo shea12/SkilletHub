@@ -188,7 +188,6 @@ class CreateRecipeMain extends Component {
         {this._renderRecipeObjects(this.state.recipe)}
       </Col>
       <Col xs={6} md={6}>
-        {this._renderRecipeObjects(schema)}
       </Col>
       </Row>
       </Grid> 
@@ -197,9 +196,3 @@ class CreateRecipeMain extends Component {
 }
 
 export default CreateRecipeMain;
-
-        // <Row className="show-grid">
-        // <Col xs={12} md={12}> 
-        //   <p>{JSON.stringify(this.state)}</p>
-        // </Col>
-        // </Row>
