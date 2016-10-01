@@ -8,6 +8,7 @@ import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Co
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
+const schema = placeholders.comparisonSchema; 
 
 class CreateRecipeMain extends Component {
   constructor(props) {
@@ -88,6 +89,18 @@ class CreateRecipeMain extends Component {
     console.log('Clicked on button!'); 
   }
 
+  _renderRecipeObjects(recipe) {
+    var keys = Object.keys(recipe); 
+    var testString = keys.map((property) => {
+      return `${property}: ${recipe[property]}`; 
+    }); 
+    return (
+      testString.map((property) => (
+        <h4> {property} </h4>
+      ))
+    )
+  }
+
   // TODO: Implement conditional render to display forked from. 
   // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
 
@@ -143,8 +156,16 @@ class CreateRecipeMain extends Component {
             </form>
         </Col>
       </Row>
-          <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
-          <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
+        <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
+        <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
+      <Row> 
+      <Col xs={6} md={6}>
+        {this._renderRecipeObjects(this.state)}
+      </Col>
+      <Col xs={6} md={6}>
+        {this._renderRecipeObjects(schema)}
+      </Col>
+      </Row>
       </Grid> 
     );
   }
