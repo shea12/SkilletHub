@@ -1,6 +1,6 @@
 import React from 'react';
-import AddIngredient from './AddIngredientBS'; 
-import RecipeIngredients from '../Recipe/RecipeIngredientsBS'; 
+import AddIngredient from './AddIngredient'; 
+import RecipeIngredients from '../Recipe/RecipeIngredients'; 
 
 class IngredientsForm extends React.Component {
 	constructor(props) {
@@ -42,8 +42,8 @@ class IngredientsForm extends React.Component {
 			<div>
 				<h3> Recipe Ingredients </h3>
 				<RecipeIngredients ingredientList={this.state.ingredients} />
-				{this.state.newIngredient.map((ingredient) => (
-					<AddIngredient key={'ingredient' + this.state.ingredientsCount} number={this.state.ingredientsCount} handleAddIngredient={this.handleAddIngredientForm.bind(this)} ingredient={ingredient}/>
+				{this.state.newIngredient.map((ingredient, i) => (
+					<AddIngredient key={ingredient} number={this.props.ingredientsCount} handleAddIngredient={this.handleAddIngredientForm.bind(this)} ingredient={ingredient}/>
 				))}
 			</div>
 		); 

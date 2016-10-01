@@ -47,12 +47,16 @@ class NavigationBar extends React.Component {
     this.props.handleLogOutUser(user);
   }
 
+  handleFocus(event){
+    this.setState({username: ''});
+  }
+
   _renderAuthentication() {
     if (this.props.userID === null) {
       return (
         <form onSubmit={this.handleSubmit.bind(this)}>
           <FormGroup  style={{padding: 10}}>
-            <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: 5}}/>
+            <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{margin: 5}}/>
             <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
             <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
           </FormGroup>
@@ -75,11 +79,11 @@ class NavigationBar extends React.Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav>
-              <NavItem eventKey={1} href="#"><Link to='/User'> Profile </Link></NavItem>
-              <NavItem eventKey={2} href="/Recipe"><Link to='/Recipe'> Recipe </Link></NavItem>
-              <NavItem eventKey={3} href="#"><Link to='/Create'> Create Recipe </Link></NavItem>
-              <NavItem eventKey={4} href="#"><Link to='/Edit'> Edit Recipe </Link></NavItem>
+            <Nav onClick={this.props.handleNavigation.bind(this)}>
+              <NavItem eventKey={1} title={'/User'}> Profile </NavItem>
+              <NavItem eventKey={2} title={'/Recipe'}> Recipe </NavItem>
+              <NavItem eventKey={3} title={'/Create'}> Create Recipe </NavItem>
+              <NavItem eventKey={4} title={'/Edit'}> Edit Recipe </NavItem>
               <NavItem eventKey={5}> username: {this.props.username} </NavItem>
               <NavItem eventKey={6}> userID: {this.props.userID} </NavItem>
             </Nav>

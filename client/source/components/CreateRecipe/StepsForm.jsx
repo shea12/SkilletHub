@@ -1,5 +1,5 @@
 import React from 'react';
-import AddStep from './AddStepBS'; 
+import AddStep from './AddStep'; 
 
 class StepsForm extends React.Component {
 	constructor(props) {

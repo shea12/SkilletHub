@@ -8,8 +8,9 @@ export default ({recipe, handleUserClick, handleRecipeClick}) => {
   return (
         <Row height={50}> 
           <Col xs={6} md={6}> 
-            <h2 id={recipe.name} onClick={handleRecipeClick.bind(this)}> {recipe.name} </h2> 
-            <h6> forked from <Button id={recipe.sourceID} onClick={handleUserClick.bind(this)} disabled>{recipe.sourceID} </Button></h6> 
+            <h2 id={recipe.name}> {recipe.name || 'Master Recipe'} </h2> 
+            <h4 id={recipe.rootRecipeId} onClick={handleRecipeClick.bind(this)}> {recipe.rootRecipeId} </h4>
+            <h6> forked from <Button id={recipe.rootRecipeId} onClick={handleUserClick.bind(this)} disabled>{recipe.sourceID} </Button></h6> 
           </Col> 
           <Col xs={4} md={4} style={{marginTop: 25}}>  
             <ProgressBar bsStyle={progressBarStyles[(Math.floor(Math.random() * 4))]} now={(Math.floor(Math.random() * 100))} />

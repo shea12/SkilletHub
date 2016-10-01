@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import IngredientsForm from './IngredientsForm'
 import StepsForm from './StepsForm'
+
 
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
@@ -10,6 +12,7 @@ var axios = require('axios');
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
+import meatloafRecipe from '../../../../meatloafRecipe';
 const schema = placeholders.comparisonSchema; 
 
 class CreateRecipeMain extends Component {
@@ -85,10 +88,34 @@ class CreateRecipeMain extends Component {
       return `${property}: ${recipe[property]}`; 
     }); 
     return (
-      testString.map((property) => (
-        <h4> {property} </h4>
+      testString.map((property, i) => (
+        <h4 key={'test' + i}> {property} </h4>
       ))
     )
+  }
+
+  createMeatloaf(event){
+    event.preventDefault(); 
+
+    var recipeObject = meatloafRecipe; 
+
+    var requestUsername = this.props.username; 
+
+    console.log(recipeObject.name); 
+    console.log(Object.keys(recipeObject));
+    console.log('recipeObject: ', recipeObject);  
+
+    axios.post(`/${requestUsername}/create-recipe`, { 
+      recipeObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE FROM CREATE MEATLOAF: ', response); 
+      browserHistory.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+
   }
 
   createRecipeObject(event){
@@ -109,14 +136,16 @@ class CreateRecipeMain extends Component {
     recipeObject.issues = []; 
     this.setState({ recipe: recipeObject }); 
 
-    console.log('USERNAME:', this.props.username); 
+    console.log('CREATING RECIPE FOR:', this.props.username); 
 
-    axios.post(`/${this.props.username}/create-recipe`, { 
+    var requestUsername = this.props.username; 
+    console.log('RECIPE: ', recipeObject); 
+    axios.post(`/${requestUsername}/create-recipe`, { 
       recipeObject
     })
     .then(function(response) {
-      console.log(response); 
-      browserHistory.push(`/User/${this.props.username}`);
+      console.log('RESPONSE CREATE RECIPE: ', response); 
+      browserHistory.push(`/User/${requestUsername}`);
     })
     .catch(function(error) {
       console.log(error); 
@@ -133,6 +162,7 @@ class CreateRecipeMain extends Component {
       <Grid> 
       <h3> Recipe </h3>
       <Button onClick={this.createRecipeObject.bind(this)}> Create Recipe </Button> 
+      <Button onClick={this.createMeatloaf.bind(this)}> Create Meatloaf </Button> 
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
@@ -146,7 +176,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Min </ControlLabel>
-              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} optional/>
+              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin}/>
               </FormGroup>
             </form>
         </Col>
@@ -154,7 +184,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Max </ControlLabel>
-              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} optional/>
+              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax}/>
               </FormGroup>
             </form>
         </Col>
