@@ -24,7 +24,7 @@ module.exports = function(app, express) {
   app.delete('/:username/:recipe/:branch', branches.deleteBranch);
 
   /*** Versions ***/
-  app.post('/:username/:recipe/:branch/:version', versions.createVersion);
+  app.post('/:username/:recipe/:branch/create-version', versions.createVersion);
   app.get('/:username/:recipe/:branch/:version', versions.getVersion);
   app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);
 };
