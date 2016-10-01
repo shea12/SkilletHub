@@ -8,7 +8,7 @@ let recipeSchema = new Schema({
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
   deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
   branch: String,            
-  userId: Schema.Types.ObjectId,            //Creator of recipe
+  username: string,            //Creator of recipe
   name: {                                   //Recipe Title / Name
     changed: Boolean,
     value: String
@@ -70,7 +70,7 @@ let recipeSchema = new Schema({
 });
 
 let userRecipeSchema = new Schema({
-  userId: Number,                   //User who owns recipes / forks
+  username: Number,                   //User who owns recipes / forks
   recipes: [{   //Forks and created recipes belonging to that user
     name: String,
     rootRecipeId: Schema.Types.ObjectId,
@@ -92,7 +92,7 @@ let tagSchema = new Schema({
 }); 
 
 let issueSchema = new Schema({
-  userId: String,                       //User who left issue
+  username: String,                       //User who left issue
   description: String,                  //Description of the problem / issue
   step: Number                          //Optional: Step in the recipe that had issue
 }); 
