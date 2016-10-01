@@ -6,11 +6,12 @@ module.exports = {
   // Input: req.body: { recipe changes }
   // Output: created version
   createRecipe: (req, res) => {
-    helpers.makeVersion('new', req.body)
+    helpers.makeVersion('new', req.body, req.params.username)
     .then(result => {
-      res.status(201).send(result);
-    })
-    .catch(error => {
+      return helpers.addUserRecipeCollection(req.params.username, result);
+    }).then(function() {
+      res.status(201).send();
+    }).catch(error => {
       res.status(500).send(error)
     });
   },
@@ -21,12 +22,10 @@ module.exports = {
   getRecipe: (req, res) => {
     let branch = 'master';
     UserRecipe.find({
-      //add user id here *!*!*!*!
-      userId: 1
+      username: req.params.username
     }).then(recipes => {
       let recipe = _.where(recipes, {
-        //add recipe id here *!*!*!!**!
-        rootRecipeId: 1 
+        rootRecipeId: req.params.recipe
       });
       let version = _.where(recipe, {
         branch: branch

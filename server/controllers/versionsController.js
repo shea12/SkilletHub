@@ -1,4 +1,6 @@
 let helpers = require(`${__dirname}/../helpers.js`);
+let UserRecipe = require(`${__dirname}/../schemas.js`).UserRecipe;
+let _ = require('underscore');
 
 module.exports = {
   // Description: Makes a new version from an existing version
@@ -9,11 +11,31 @@ module.exports = {
   //   }
   // Output: Created version
   createVersion: (req, res) => {
-    helpers.makeVersion(req.body.previous, req.body.changes)
-    .then(result => {
-      res.status(201).send(result);
-    })
-    .catch(error => {
+    let newVersion;
+    helpers.makeVersion(req.body.previous, req.body.changes, req.params.username)
+    .then((version) => {
+      newVersion = version;
+      return UserRecipe.find({
+        username: version.username
+      });
+    }).then(userRecipe => {
+      let recipeLocation = _.findIndex(userRecipe.recipes, 
+        recipe => recipe.rootRecipeId === newVersion.rootRecipeId);
+      let recipe = userRecipe[recipeLocation];
+      if (newVersion.branch = 'master') {
+        recipe.name = newVersion.name;
+      }
+
+      let branchLocation = _.findIndex(recipe.branches,
+        branch => branch.name === newVersion.branch);
+      let branch = recipe[branchLocation];
+      branch.mostRecentVersionId = newVersion._id;
+
+      res.status(201).send();
+      return UserRecipe.update({
+        username: userRecipe.username
+      }, userRecipe);
+    }).catch(error => {
       res.status(500).send(error)
     });
   },
@@ -22,12 +44,10 @@ module.exports = {
   getVersion: (req, res) => {
     let branch = req.params.branch;
     UserRecipe.find({
-      //add user id here *!*!*!*!
-      userId: 1
+      username: req.params.username
     }).then(recipes => {
       let recipe = _.where(recipes, {
-        //add recipe id here *!*!*!!**!
-        rootRecipeId: 1
+        rootRecipeId: req.params.version
       });
       let version = _.where(recipe, {
         branch: branch

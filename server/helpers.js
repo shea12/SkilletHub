@@ -10,7 +10,7 @@ const fields = [
   'previousVersion',  
   'deleted',                      
   'branch',            
-  'userID',  
+  'username',  
   'name',                   
   'description',            
   'servings', 
@@ -23,7 +23,7 @@ const fields = [
 
 module.exports = {
   //build a version and save it
-  makeVersion: (prev, changes) => {
+  makeVersion: (prev, changes, username) => {
     //New recipe
     let newVersion;
     if (prev === 'new') {
@@ -32,7 +32,7 @@ module.exports = {
         previousVersion: null,
         deleted: false,
         branch: 'master',
-        // userId:
+        username: username
       };
     //New branch or version
     } else {
@@ -41,9 +41,10 @@ module.exports = {
         previousVersion: prev._id,
         deleted: prev.deleted,
         branch: prev.branch,
-        // userId: prev.userId
+        username: prev.username
       };
     }
+    changes.username = username;
     //build new version object
     _.extend(newVersion, changes);
 
@@ -93,7 +94,7 @@ module.exports = {
                 }
               }
               //previous ver, deleted, root ver, etc
-            } else if (_.contains(['rootVersion', 'previousVersion', 'branch', 'deleted', 'userId'], field)) {
+            } else if (_.contains(['rootVersion', 'previousVersion', 'branch', 'deleted', 'username'], field)) {
               built[field] = currentHistory[field];
             } else if (currentHistory[field].changed === true) {
               built[field] = currentHistory[field];
@@ -111,5 +112,23 @@ module.exports = {
   //for everything else, set them to unavailable
   deleteDownstream: (version) => {
 
+  },
+
+  addUserRecipesCollection: (username, recipe) => {
+    return new UserRecipe({
+      username: username,
+      recipes: [
+        {
+          name: recipe.name,
+          rootRecipeId: recipe._id,
+          branches: [
+            {
+              name: 'master',
+              mostRecentVersionId: recipe._id
+            }
+          ]
+        }
+      ]
+    }).save();
   }
 };
