@@ -20,7 +20,6 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: COGNITO_IDENTITY_POOL_ID
 });
 
-
 ////// 
 // APP COMPONENT 
 ////////
