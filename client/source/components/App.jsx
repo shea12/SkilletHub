@@ -286,7 +286,7 @@ class App extends React.Component {
 	}.bind(this))
     return (
     	<div> 
-    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} username={this.state.username}/>
+    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} username={this.state.username} />
     		{ children }
     	</div>
     ); 
