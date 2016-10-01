@@ -5,6 +5,8 @@ import StepsForm from './StepsForm'
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
+// Axios 
+var axios = require('axios'); 
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
@@ -38,8 +40,7 @@ class CreateRecipeMain extends Component {
   handleChange (event) {
     var inputType = event.target.id; 
     if (inputType === 'name'){
-      this.setState({ nameValue: event.target.value
-      });
+      this.setState({ name: event.target.value});
     } 
     if (inputType === 'servingsMin'){
       this.setState({servingsMin: event.target.value}); 
@@ -48,7 +49,7 @@ class CreateRecipeMain extends Component {
       this.setState({servingsMax: event.target.value}); 
     } 
     if (inputType === 'description'){
-      this.setState({descriptionValue: event.target.value}); 
+      this.setState({description: event.target.value}); 
     } 
     if (inputType === 'skill'){
       this.setState({skillLevel: event.target.value}); 
@@ -108,12 +109,14 @@ class CreateRecipeMain extends Component {
     recipeObject.issues = []; 
     this.setState({ recipe: recipeObject }); 
 
-    axios.post(`/${this.props.username}/create-recipe`, {
-      body: recipeObject
+    console.log('USERNAME:', this.props.username); 
+
+    axios.post(`/${this.props.username}/create-recipe`, { 
+      recipeObject
     })
     .then(function(response) {
       console.log(response); 
-      browserHistory.push(`/${this.props.username}`);
+      browserHistory.push(`/User/${this.props.username}`);
     })
     .catch(function(error) {
       console.log(error); 
@@ -157,7 +160,7 @@ class CreateRecipeMain extends Component {
         </Col>
         <Col xs={4} md={4}> 
           <form> 
-          <FormGroup controlId="formControlsSelect">
+          <FormGroup>
             <ControlLabel>Recipe Skill Level</ControlLabel>
             <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="skill">
               <option value="Junior Dev">Junior Dev</option>

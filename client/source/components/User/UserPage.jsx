@@ -24,26 +24,27 @@ class UserProfile extends React.Component {
 
   componentWillMount() {
     console.log('User page is mounting!'); 
+    console.log(Object.keys(placeholders)); 
     // TODO: Implement request that loads the profile information  
       --> // User Service 
 
 
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
-    axios.get(`/${this.props.username}/profile`)
-    .then((results) => {
-      this.setState({
-        recipeList: results.recipes,
-        userProfile: placeholders.user
-      }); 
-    }); 
+    // axios.get(`/${this.props.username}/profile`)
+    // .then((results) => {
+    //   this.setState({
+    //     recipeList: results.recipes,
+    //     userProfile: placeholders.user
+    //   }); 
+    // }); 
 
     // Temporary placeholder values   
-    // this.setState({
-    //   userProfile: placeholders.user,
-    //   recipeList: placeholders.recipes,
-    //   userID: this.props.userID
-    // }); 
+    this.setState({
+      userProfile: placeholders.user,
+      recipeList: placeholders.recipes,
+      userID: this.props.userID
+    }); 
   }
 
   handleSelect() {
