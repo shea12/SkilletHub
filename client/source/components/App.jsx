@@ -158,6 +158,7 @@ class App extends React.Component {
       this.setState({userID: userID, AWSusername: username}); 
     }.bind(this); 
 
+
     userPool.signUp(un, pw, attList, null, function(error, result) {
       if (error) {
         console.log('Error signing up user: ', error);
