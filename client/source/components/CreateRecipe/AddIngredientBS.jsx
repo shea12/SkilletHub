@@ -64,13 +64,13 @@ class AddIngredient extends React.Component {
 			  <Col xs={4} md={4}> 
 			  		<FormGroup>
 			        <ControlLabel> Quantity </ControlLabel>
-			        <FormControl type="text" controlId="amount" id="amount" onChange={this.handleChange.bind(this)} value={this.state.amount} />
+			        <FormControl type="text" id="amount" onChange={this.handleChange.bind(this)} value={this.state.amount} />
 			        </FormGroup>
 			  </Col>
 			  <Col xs={4} md={4}> 
 		          <FormGroup>
 		            <ControlLabel>Units</ControlLabel>
-		            <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="unit">
+		            <FormControl componentClass="select" id="unit" onChange={this.handleChange.bind(this)} >
 		              {units.map((unit)=> (
 		              	<option value={unit}>{unit}</option>
 		              ))}
