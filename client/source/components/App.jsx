@@ -91,7 +91,8 @@ class App extends React.Component {
     console.log('Clicked on username!'); 
     console.log(event.target); 
     var recipe = event.target.id;
-    browserHistory.push(`/${recipe}`);
+    var username = this.state.username; 
+    browserHistory.push(`/Recipe/${username}/${recipe}`);
   }
 
   /************************************************************

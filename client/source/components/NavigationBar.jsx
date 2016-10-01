@@ -47,12 +47,16 @@ class NavigationBar extends React.Component {
     this.props.handleLogOutUser(user);
   }
 
+  handleFocus(event){
+    this.setState({username: ''});
+  }
+
   _renderAuthentication() {
     if (this.props.userID === null) {
       return (
         <form onSubmit={this.handleSubmit.bind(this)}>
           <FormGroup  style={{padding: 10}}>
-            <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: 5}}/>
+            <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{margin: 5}}/>
             <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
             <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
           </FormGroup>
