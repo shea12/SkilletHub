@@ -8,15 +8,17 @@ class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Username', 
-      password: 'Password'
+      username: 'testUser7', 
+      password: '8Characters!'
     }; 
   }
 
   handleSubmit (event) {
+    event.preventDefault(); 
     console.log(event); 
     console.log(this.state.username, this.state.password);
-    this.props.handleSignUp(event);
+    var user = this.state; 
+    this.props.handleLoginUser(user);
   }
 
   handleChange (event) {
@@ -51,13 +53,14 @@ class NavigationBar extends React.Component {
               <NavItem eventKey={4} href="#"><Link to='/Edit'> Edit Recipe </Link></NavItem>
             </Nav>
             <Nav pullRight>
-              <Navbar.Form onSubmit={this.handleSubmit.bind(this)}>
-                <FormGroup style={{padding: 10}}>
+              <Navbar.Form >
+                <form onSubmit={this.handleSubmit.bind(this)}>
+                <FormGroup  style={{padding: 10}}>
                   <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: 5}}/>
                   <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
+                  <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
                 </FormGroup>
-                {' '}
-                <Button type="submit" onSubmit={this.handleSubmit.bind(this)} style={{margin: 5}}>Sign Up</Button>  
+                </form> 
               </Navbar.Form>
             </Nav>
           </Navbar.Collapse>

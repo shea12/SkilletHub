@@ -27,13 +27,21 @@ class UserProfile extends React.Component {
     // TODO: Implement request that loads the profile information  
       --> // User Service 
 
+
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
+    // axios.get(`/${username}/profile`)
+    // .then((recipes) => {
+    //   this.setState({
+    //     recipeList: results
+    //   }); 
+    // }); 
 
     // Temporary placeholder values   
     this.setState({
       userProfile: placeholders.user,
-      recipeList: placeholders.recipes
+      recipeList: placeholders.recipes,
+      userID: this.props.userID
     }); 
   }
 
@@ -48,6 +56,7 @@ class UserProfile extends React.Component {
           <Col xs={4} md={4}>
             <img src={this.state.userProfile.image} width={250} height={250} style={{borderRadius: 10}} />
             <h3> {this.state.userProfile.name} </h3>
+            <h4> {this.state.userID} </h4>
             <p> {this.state.bio} </p> 
             <p> {this.state.userProfile.email} </p>
             <p> {this.state.userProfile.date} </p>
