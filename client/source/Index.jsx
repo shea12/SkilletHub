@@ -18,6 +18,7 @@ render((
 	  	<Route path="/User" component={User} />
       <Route path="/User/:username" component={User} />
 	  	<Route path="/Recipe" component={RecipeMain} />
+	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  </Route>
