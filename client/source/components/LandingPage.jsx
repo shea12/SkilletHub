@@ -5,7 +5,7 @@ class LandingPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'testUser3', 
+      username: '1UserTest', 
       password: '8Characters!',
       firstname: 'test',
       lastname: 'user3',
