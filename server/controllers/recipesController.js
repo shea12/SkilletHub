@@ -1,15 +1,18 @@
 let helpers = require(`${__dirname}/../helpers.js`);
-let UserRecipe = require(`${__dirname}/../schemas.js`).UserRecipe;
+let db = require(`${__dirname}/../schemas.js`);
+let UserRecipe = db.UserRecipe;
+let Recipe = db.Recipe;
+let _ = require('underscore');
 
 module.exports = {
   // Description: Makes a new recipe
   // Input: req.body: { recipe changes }
   // Output: created version
   createRecipe: (req, res) => {
-    helpers.makeVersion('new', req.body, req.params.username)
+    helpers.makeVersion('new', req.body.recipeObject, req.params.username)
     .then(result => {
       return helpers.addUserRecipesCollection(req.params.username, result);
-    }).then(function() {
+    }).then(result => {
       res.status(201).send();
     }).catch(error => {
       res.status(500).send(error)
@@ -21,16 +24,20 @@ module.exports = {
   // Output: { Recipe }
   getRecipe: (req, res) => {
     let branch = 'master';
-    UserRecipe.find({
+    UserRecipe.findOne({
       username: req.params.username
-    }).then(recipes => {
-      let recipe = _.where(recipes, {
-        rootRecipeId: req.params.recipe
+    }).then(userRecipesCollection => {
+      let recipe = _.find(userRecipesCollection.recipes, recipe => {
+        return recipe.rootRecipeId.equals(req.params.recipe);
       });
-      let version = _.where(recipe, {
-        branch: branch
+      let version = _.find(recipe.branches, currentBranch => {
+        return currentBranch.name === branch;
       });
-      return helpers.retrieveVersion(version)
+      return Recipe.findOne({
+        _id: version.mostRecentVersionId
+      });
+    }).then(version => {
+      return helpers.retrieveVersion(version);
     }).then(result => {
       res.status(200).send(result);
     }).catch(error => {
