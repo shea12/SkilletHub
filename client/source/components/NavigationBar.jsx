@@ -15,7 +15,8 @@ class NavigationBar extends React.Component {
 
   componentWillMount(){
     this.setState({
-      userID: this.props.userID
+      userID: this.props.userID,
+      username: this.props.username
     });
   }
 
@@ -74,7 +75,8 @@ class NavigationBar extends React.Component {
               <NavItem eventKey={2} href="/Recipe"><Link to='/Recipe'> Recipe </Link></NavItem>
               <NavItem eventKey={3} href="#"><Link to='/Create'> Create Recipe </Link></NavItem>
               <NavItem eventKey={4} href="#"><Link to='/Edit'> Edit Recipe </Link></NavItem>
-              <NavItem eventKey={5}> userID: {this.props.userID} </NavItem>
+              <NavItem eventKey={5}> username: {this.props.username} </NavItem>
+              <NavItem eventKey={6}> userID:: {this.props.userID} </NavItem>
             </Nav>
             <Nav pullRight>
               <Navbar.Form >

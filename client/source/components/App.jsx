@@ -281,6 +281,7 @@ class App extends React.Component {
 	  return React.cloneElement(child, {
 	    handleSignUp: this.handleSignUp.bind(this),
       userID: this.state.userID,
+      username: this.state.username, 
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeClick: this.handleRecipeClick.bind(this)
 	  })
