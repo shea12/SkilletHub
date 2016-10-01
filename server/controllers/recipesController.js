@@ -25,7 +25,7 @@ module.exports = {
       username: req.params.username
     }).then(recipes => {
       let recipe = _.where(recipes, {
-        rootRecipeId: req.params.version
+        rootRecipeId: req.params.recipe
       });
       let version = _.where(recipe, {
         branch: branch

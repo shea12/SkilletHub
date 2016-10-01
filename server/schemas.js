@@ -50,35 +50,39 @@ let recipeSchema = new Schema({
   //   substitutes: [String],         //Optional: Substitute ingredients for that ingredient
   //   optional: Boolean             //Whether ingredient is necessary
   // }],
-  steps: [{
-    changed: Boolean,
-    position: Number,             //Step position in order
-    description: String,          //Step details
-    time: Number,                 //OPTIONAL: Time to complete step
-    ingredients: [String],        //OPTIONAL: Ingredients required in step
-  }],
-  tags: [{
-    changed: Boolean,
-    position: Number,
-    tagId: Schema.Types.ObjectId
-  }],
-  issues: [{
-    changed: Boolean,
-    position: Number,
-    issueId: Schema.Types.ObjectId
-  }]
+  steps: Schema.Types.Mixed,
+  // [{
+  //   changed: Boolean,
+  //   position: Number,             //Step position in order
+  //   description: String,          //Step details
+  //   time: Number,                 //OPTIONAL: Time to complete step
+  //   ingredients: [String],        //OPTIONAL: Ingredients required in step
+  // }],
+  tags: Schema.Types.Mixed,
+  // [{
+  //   changed: Boolean,
+  //   position: Number,
+  //   tagId: Schema.Types.ObjectId
+  // }],
+  issues: Schema.Types.Mixed
+  // [{
+  //   changed: Boolean,
+  //   position: Number,
+  //   issueId: Schema.Types.ObjectId
+  // }]
 });
 
 let userRecipeSchema = new Schema({
-  username: Number,                   //User who owns recipes / forks
-  recipes: [{   //Forks and created recipes belonging to that user
-    name: String,
-    rootRecipeId: Schema.Types.ObjectId,
-    branches: [{
-      name: String,
-      mostRecentVersionId: Schema.Types.ObjectId
-    }]
-  }]
+  username: String,                   //User who owns recipes / forks
+  recipes: Schema.Types.Mixed
+  // [{   //Forks and created recipes belonging to that user
+  //   name: String,
+  //   rootRecipeId: Schema.Types.ObjectId,
+  //   branches: [{
+  //     name: String,
+  //     mostRecentVersionId: Schema.Types.ObjectId
+  //   }]
+  // }]
 });  
 
 let dependencySchema = new Schema({

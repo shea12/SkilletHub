@@ -65,7 +65,7 @@ describe('helpers.js', function() {
       });
     });
     it('should save to the correct user', function() {
-      var username = changes.userId;
+      var username = changes.username;
       var newUsername = 'marcell';
       var newChanges = _.clone(changes);
       newChanges.username = newUsername;
@@ -252,8 +252,9 @@ describe('helpers.js', function() {
   });
 
   describe('addUserRecipesCollection()', function() {
-    var exampleRecipe;
+    var exampleRecipe, username;
     beforeEach(function() {
+      username = 'don miguel';
       exampleRecipe = {
         _id: generateId(),
         name: 'potato salad'
@@ -263,30 +264,30 @@ describe('helpers.js', function() {
     it('should be a function', function() {
       expect(addUserRecipesCollection).to.be.a('function');
     });
-    // it('should return an object', function() {
-    //   return addUserRecipesCollection('test', exampleRecipe)
-    //   .then(function(result) {
-    //     expect(result).to.be.a('object');
-    //   });
-    // });
-    // it('should be assigned to the correct user', function() {
-    //   return addUserRecipesCollection('test', exampleRecipe)
-    //   .then(function(result) {
-    //     expect(result.userId).to.equal( /* INSERT USERID HERE */ );
-    //   });
-    // });
-    // it('should add the master recipe', function() {
-    //   return addUserRecipesCollection('test', exampleRecipe)
-    //   .then(function(result) {
-    //     expect(result.recipes[0].braches[0].name).to.equal('master');
-    //     expect(result.recipes[0].braches[0].mostRecentVersionId.equals(exampleRecipe._id)).to.be.true;
-    //   });
-    // });
-    // it('should have the correct recipe name', function() {
-    //   return addUserRecipesCollection('test', exampleRecipe)
-    //   .then(function(result) {
-    //     expect(result.recipes[0].name).to.equal('potato salad');
-    //   });
-    // });
+    it('should return an object', function() {
+      return addUserRecipesCollection(username, exampleRecipe)
+      .then(function(result) {
+        expect(result).to.be.a('object');
+      });
+    });
+    it('should be assigned to the correct user', function() {
+      return addUserRecipesCollection(username, exampleRecipe)
+      .then(function(result) {
+        expect(result.username).to.equal(username);
+      });
+    });
+    it('should add the master recipe', function() {
+      return addUserRecipesCollection(username, exampleRecipe)
+      .then(function(result) {
+        expect(result.recipes[0].branches[0].name).to.equal('master');
+        expect(result.recipes[0].branches[0].mostRecentVersionId.equals(exampleRecipe._id)).to.be.true;
+      });
+    });
+    it('should have the correct recipe name', function() {
+      return addUserRecipesCollection(username, exampleRecipe)
+      .then(function(result) {
+        expect(result.recipes[0].name).to.equal('potato salad');
+      });
+    });
   });
 });

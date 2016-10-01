@@ -17,7 +17,7 @@ describe('userController.js', function() {
     mongoose.connect('mongodb://localhost/mochaTesting');
   });
   after(function() {
-    return Recipe.remove({})
+    return UserRecipe.remove({})
     .then(function() {
       mongoose.connection.close();
     });
@@ -58,9 +58,9 @@ describe('userController.js', function() {
       res = httpMocks.createResponse();
     });
 
-    // it('should be a function', function() {
-    //   expect(getProfile).to.be.a('function');
-    // });
+    it('should be a function', function() {
+      expect(getProfile).to.be.a('function');
+    });
     // it('should return 200 when succesful', function() {
     //   return UserRecipe.remove({})
     //   .then(function() {

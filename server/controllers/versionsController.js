@@ -32,6 +32,9 @@ module.exports = {
       branch.mostRecentVersionId = newVersion._id;
 
       res.status(201).send();
+      return UserRecipe.update({
+        username: userRecipe.username
+      }, userRecipe);
     }).catch(error => {
       res.status(500).send(error)
     });
