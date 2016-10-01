@@ -44,7 +44,7 @@ class LandingPage extends React.Component {
         <Jumbotron style={{
          'backgroundImage': 'url(\"http://67.media.tumblr.com/426d4abee7ca7c24c0414edbe35f8ddb/tumblr_nlwab73eK91s4468do1_1280.jpg\")',
          'backgroundSize': 'cover',
-         'height': 900
+         'height': 940
         }}> 
           <Row className="show-grid">
             <Col xs={4} xsOffset={7} md={4} mdOffset={7}> 
