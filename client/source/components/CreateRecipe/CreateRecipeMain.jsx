@@ -16,19 +16,16 @@ class CreateRecipeMain extends Component {
 
     this.state = {
       name: '',
-      nameValue: '', 
-      servings: {changed: true, value: ''},
       servingsMin: '',
       servingsMax: '', 
-      servingsValue: '',
       skillLevel: '', 
-      description: {changed: true, value: ''}, 
-      descriptionValue: '',
+      description: '', 
       cookTime: '',
       picture: '',
       ingredients: [],
       availableIngredients: [], 
-      steps: []
+      steps: [],
+      recipe: {}
     }; 
   }
 
@@ -40,14 +37,6 @@ class CreateRecipeMain extends Component {
 
   handleChange (event) {
     var inputType = event.target.id; 
-    if (inputType === 'fork') {
-      console.log('Forking recipe'); 
-      // TODO: Implement routing (react || server)
-    }
-    if (inputType === 'cook') {
-      console.log('Cooking recipe'); 
-      // TODO: Implement routing (react || server)
-    } 
     if (inputType === 'name'){
       this.setState({ nameValue: event.target.value
       });
@@ -101,6 +90,38 @@ class CreateRecipeMain extends Component {
     )
   }
 
+  createRecipeObject(event){
+    event.preventDefault(); 
+
+    var recipeObject = {}; 
+    recipeObject.createdAt = Date.now();
+    recipeObject.name = {changed: true, value: this.state.name}; 
+    recipeObject.description = {changed: true, value: this.state.description}; 
+    recipeObject.servings = {changed: true, value: `serves ${this.state.servingsMin} to ${this.state.servingsMax}`}; 
+    recipeObject.cookTime = {changed: true, value: this.state.cookTime}; 
+    recipeObject.skillLevel = {changed: true, value: this.state.skillLevel};
+    recipeObject.picture = {changed: true, value: "http://www.seriouseats.com/recipes/assets_c/2015/08/20150813-meatloaf-food-lab-excerpt-kenji-lopez-alt-25-thumb-1500xauto-425894.jpg"};
+    recipeObject.dependencies = []; 
+    recipeObject.ingredients = this.state.ingredients; 
+    recipeObject.steps = this.state.steps; 
+    recipeObject.tags = []; 
+    recipeObject.issues = []; 
+    this.setState({ recipe: recipeObject }); 
+
+    axios.post(`/${this.props.username}/create-recipe`, {
+      body: recipeObject
+    })
+    .then(function(response) {
+      console.log(response); 
+      browserHistory.push(`/${this.props.username}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+
+  }
+
+
   // TODO: Implement conditional render to display forked from. 
   // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
 
@@ -108,12 +129,13 @@ class CreateRecipeMain extends Component {
     return (
       <Grid> 
       <h3> Recipe </h3>
+      <Button onClick={this.createRecipeObject.bind(this)}> Create Recipe </Button> 
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Name </ControlLabel>
-              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} required/>
+              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} required/>
               </FormGroup>
             </form>
         </Col>
@@ -151,7 +173,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Description </ControlLabel>
-              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
+              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
               </FormGroup>
             </form>
         </Col>
@@ -160,7 +182,7 @@ class CreateRecipeMain extends Component {
         <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
       <Row> 
       <Col xs={6} md={6}>
-        {this._renderRecipeObjects(this.state)}
+        {this._renderRecipeObjects(this.state.recipe)}
       </Col>
       <Col xs={6} md={6}>
         {this._renderRecipeObjects(schema)}
