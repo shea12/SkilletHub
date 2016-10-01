@@ -30,12 +30,12 @@ class UserProfile extends React.Component {
 
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
-    // axios.get(`/${username}/profile`)
-    // .then((recipes) => {
-    //   this.setState({
-    //     recipeList: results
-    //   }); 
-    // }); 
+    axios.get(`/${username}/profile`)
+    .then((results) => {
+      this.setState({
+        recipeList: results.recipes
+      }); 
+    }); 
 
     // Temporary placeholder values   
     this.setState({
@@ -73,8 +73,8 @@ class UserProfile extends React.Component {
               <NavItem eventKey={3} disabled>Followers</NavItem>
               <NavItem eventKey={3} disabled>Following</NavItem>
             </Nav>
-            {this.state.recipeList.map((recipe) => (
-              <RecipeListEntry recipe={recipe} />
+            {this.state.recipeList.map((recipe, i) => (
+              <RecipeListEntry key={i + 'recipe'} recipe={recipe} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
             ))}
           </Col>
         </Row> 

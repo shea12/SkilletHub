@@ -4,12 +4,12 @@ import { Image, Grid, Row, Col, Form, FormGroup, Badge, ProgressBar, FormControl
 
 const progressBarStyles = ['success', 'warning', 'danger']; 
 
-export default ({recipe}) => {
+export default ({recipe, handleUserClick, handleRecipeClick}) => {
   return (
         <Row height={50}> 
           <Col xs={6} md={6}> 
-            <h2> {recipe.name} </h2> 
-            <h6> forked from {recipe.sourceID} </h6> 
+            <h2 id={recipe.name} onClick={handleRecipeClick.bind(this)}> {recipe.name} </h2> 
+            <h6> forked from <Button id={recipe.sourceID} onClick={handleUserClick.bind(this)} disabled>{recipe.sourceID} </Button></h6> 
           </Col> 
           <Col xs={4} md={4} style={{marginTop: 25}}>  
             <ProgressBar bsStyle={progressBarStyles[(Math.floor(Math.random() * 4))]} now={(Math.floor(Math.random() * 100))} />
