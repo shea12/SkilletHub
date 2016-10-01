@@ -56,19 +56,19 @@ class AddIngredient extends React.Component {
 			  <form onSubmit={this.handleClick.bind(this)}>
 			<Row className="show-grid">
 			  <Col xs={4} md={4}> 
-			  		<FormGroup controlId="name" >
+			  		<FormGroup>
 			        <ControlLabel> IngredientName </ControlLabel>
 			        <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} />
 			        </FormGroup>
 			  </Col>
 			  <Col xs={4} md={4}> 
-			  		<FormGroup controlId="amount" >
+			  		<FormGroup>
 			        <ControlLabel> Quantity </ControlLabel>
 			        <FormControl type="text" controlId="amount" id="amount" onChange={this.handleChange.bind(this)} value={this.state.amount} />
 			        </FormGroup>
 			  </Col>
 			  <Col xs={4} md={4}> 
-		          <FormGroup controlId="formControlsSelect">
+		          <FormGroup>
 		            <ControlLabel>Units</ControlLabel>
 		            <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="unit">
 		              {units.map((unit)=> (
@@ -80,13 +80,13 @@ class AddIngredient extends React.Component {
 			</Row>
 			<Row className="show-grid" style={{padding: 5}}>
 			  <Col xs={6} md={6}> 
-			  		<FormGroup controlId="prep" >
+			  		<FormGroup>
 			        <ControlLabel> Preparation </ControlLabel>
 			        <FormControl type="text" id="prep" onChange={this.handleChange.bind(this)} value={this.state.prep} />
 			        </FormGroup>
 			  </Col>
 			  <Col xs={6} md={6}> 
-			  		<FormGroup controlId="optional" >
+			  		<FormGroup>
 			        <ControlLabel> Additional Notes </ControlLabel>
 			        <FormControl type="text" id="optional" onChange={this.handleChange.bind(this)} value={this.state.optional} />
 			        </FormGroup>
