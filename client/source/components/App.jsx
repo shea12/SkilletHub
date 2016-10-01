@@ -194,7 +194,10 @@ class App extends React.Component {
           });
         },
         onFailure: function(error) {
-          console.log('Error authenticating user: ', error);
+          console.log('Error authenticating user: ' + error);
+          if (error === 'Error: Incorrect username or password.') {
+            console.log('error match');
+          }
         }
       });
       // console.log('sign up successful: ', cognitoUser);
