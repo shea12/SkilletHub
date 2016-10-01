@@ -5,9 +5,12 @@ import StepsForm from './StepsForm'
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
+// Axios 
+var axios = require('axios'); 
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
+const schema = placeholders.comparisonSchema; 
 
 class CreateRecipeMain extends Component {
   constructor(props) {
@@ -15,19 +18,16 @@ class CreateRecipeMain extends Component {
 
     this.state = {
       name: '',
-      nameValue: '', 
-      servings: {changed: true, value: ''},
       servingsMin: '',
       servingsMax: '', 
-      servingsValue: '',
       skillLevel: '', 
-      description: {changed: true, value: ''}, 
-      descriptionValue: '',
+      description: '', 
       cookTime: '',
       picture: '',
       ingredients: [],
       availableIngredients: [], 
-      steps: []
+      steps: [],
+      recipe: {}
     }; 
   }
 
@@ -39,17 +39,8 @@ class CreateRecipeMain extends Component {
 
   handleChange (event) {
     var inputType = event.target.id; 
-    if (inputType === 'fork') {
-      console.log('Forking recipe'); 
-      // TODO: Implement routing (react || server)
-    }
-    if (inputType === 'cook') {
-      console.log('Cooking recipe'); 
-      // TODO: Implement routing (react || server)
-    } 
     if (inputType === 'name'){
-      this.setState({ nameValue: event.target.value
-      });
+      this.setState({ name: event.target.value});
     } 
     if (inputType === 'servingsMin'){
       this.setState({servingsMin: event.target.value}); 
@@ -58,7 +49,7 @@ class CreateRecipeMain extends Component {
       this.setState({servingsMax: event.target.value}); 
     } 
     if (inputType === 'description'){
-      this.setState({descriptionValue: event.target.value}); 
+      this.setState({description: event.target.value}); 
     } 
     if (inputType === 'skill'){
       this.setState({skillLevel: event.target.value}); 
@@ -88,6 +79,52 @@ class CreateRecipeMain extends Component {
     console.log('Clicked on button!'); 
   }
 
+  _renderRecipeObjects(recipe) {
+    var keys = Object.keys(recipe); 
+    var testString = keys.map((property) => {
+      return `${property}: ${recipe[property]}`; 
+    }); 
+    return (
+      testString.map((property) => (
+        <h4> {property} </h4>
+      ))
+    )
+  }
+
+  createRecipeObject(event){
+    event.preventDefault(); 
+
+    var recipeObject = {}; 
+    recipeObject.createdAt = Date.now();
+    recipeObject.name = {changed: true, value: this.state.name}; 
+    recipeObject.description = {changed: true, value: this.state.description}; 
+    recipeObject.servings = {changed: true, value: `serves ${this.state.servingsMin} to ${this.state.servingsMax}`}; 
+    recipeObject.cookTime = {changed: true, value: this.state.cookTime}; 
+    recipeObject.skillLevel = {changed: true, value: this.state.skillLevel};
+    recipeObject.picture = {changed: true, value: "http://www.seriouseats.com/recipes/assets_c/2015/08/20150813-meatloaf-food-lab-excerpt-kenji-lopez-alt-25-thumb-1500xauto-425894.jpg"};
+    recipeObject.dependencies = []; 
+    recipeObject.ingredients = this.state.ingredients; 
+    recipeObject.steps = this.state.steps; 
+    recipeObject.tags = []; 
+    recipeObject.issues = []; 
+    this.setState({ recipe: recipeObject }); 
+
+    console.log('USERNAME:', this.props.username); 
+
+    axios.post(`/${this.props.username}/create-recipe`, { 
+      recipeObject
+    })
+    .then(function(response) {
+      console.log(response); 
+      browserHistory.push(`/User/${this.props.username}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+
+  }
+
+
   // TODO: Implement conditional render to display forked from. 
   // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
 
@@ -95,12 +132,13 @@ class CreateRecipeMain extends Component {
     return (
       <Grid> 
       <h3> Recipe </h3>
+      <Button onClick={this.createRecipeObject.bind(this)}> Create Recipe </Button> 
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Name </ControlLabel>
-              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} required/>
+              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} required/>
               </FormGroup>
             </form>
         </Col>
@@ -122,7 +160,7 @@ class CreateRecipeMain extends Component {
         </Col>
         <Col xs={4} md={4}> 
           <form> 
-          <FormGroup controlId="formControlsSelect">
+          <FormGroup>
             <ControlLabel>Recipe Skill Level</ControlLabel>
             <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="skill">
               <option value="Junior Dev">Junior Dev</option>
@@ -138,13 +176,21 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Description </ControlLabel>
-              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
+              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
               </FormGroup>
             </form>
         </Col>
       </Row>
-          <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
-          <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
+        <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
+        <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
+      <Row> 
+      <Col xs={6} md={6}>
+        {this._renderRecipeObjects(this.state.recipe)}
+      </Col>
+      <Col xs={6} md={6}>
+        {this._renderRecipeObjects(schema)}
+      </Col>
+      </Row>
       </Grid> 
     );
   }

@@ -95,7 +95,7 @@ var testStep1 = {
 	position: 1, 
 	description: "Combine the chicken stock and buttermilk in a liquid measuring cup and sprinkle the gelatin evenly over the top. Set aside.",
 	time: null,                 //OPTIONAL: Time to complete step
-    ingredients: ['chicken stock', 'buttermilk'] 
+  ingredients: ['chicken stock', 'buttermilk'] 
 }
 
 var testStep2 = {
@@ -103,7 +103,7 @@ var testStep2 = {
 	position: 2, 
 	description: "Heat the butter in a 10-inch nonstick skillet over medium-high heat until foaming. Add the chopped vegetable mixture and cook, stirring and tossing frequently, until it is softened and most of the liquid has evaporated, about 5 minutes; the mixture should start to darken a bit. Stir in the buttermilk mixture, bring to a simmer, and cook until reduced by half, about 10 minutes.",
 	time: 10,                 //OPTIONAL: Time to complete step
-    ingredients: ['chicken stock', 'buttermilk'] 
+  ingredients: ['chicken stock', 'buttermilk'] 
 }
 
 var testStep3 = {
@@ -111,7 +111,7 @@ var testStep3 = {
 	position: 3, 
 	description: "Add the meat mixture to the bowl, along with the eggs, cheese, parsley, 1 tablespoon salt, and 1 teaspoon pepper. With clean hands, mix gently until everything is thoroughly combined and homogeneous; it will be fairly loose.",
 	time: 10,                 //OPTIONAL: Time to complete step
-    ingredients: ['beef', 'pork', 'large eggs', 'cheese'] 
+  ingredients: ['beef', 'pork', 'large eggs', 'cheese'] 
 }
 
 var meatloafRecipe = {

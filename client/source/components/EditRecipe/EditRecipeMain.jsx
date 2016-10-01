@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EditIngredients from './EditIngredientsMain'
+import EditSteps from './EditSteps'
 // import StepsForm from './StepsForm'
 
 //Bootstrap 
@@ -16,14 +17,11 @@ class EditRecipeMain extends Component {
 
     this.state = {
       name: '',
-      nameValue: '', 
-      servings: {changed: true, value: ''},
+      servings: '',
       servingsMin: '',
       servingsMax: '', 
-      servingsValue: '',
       skillLevel: '', 
-      description: {changed: true, value: ''}, 
-      descriptionValue: '',
+      description: '', 
       cookTime: '',
       picture: '',
       ingredients: [],
@@ -37,8 +35,14 @@ class EditRecipeMain extends Component {
 
     // MEAT LOAF TEST
     var meatloafIngredients = meatloafRecipe.ingredients; 
+    var meatloafSteps = meatloafRecipe.steps; 
+    // console.log(meatloafSteps.length); 
     this.setState({
-      ingredients: meatloafIngredients
+      name: meatloafRecipe.name, 
+      skillLevel: meatloafRecipe.skillLevel,
+      description: meatloafRecipe.description.value,
+      ingredients: meatloafIngredients,
+      steps: meatloafSteps
     }); 
 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
@@ -81,7 +85,8 @@ class EditRecipeMain extends Component {
     var availableIngredients = this.state.availableIngredients; 
     availableIngredients.push(ingredient.name); 
     this.setState({
-      ingredients: ingredients
+      ingredients: ingredients, 
+      availableIngredients: availableIngredients
     }); 
   }
 
@@ -89,6 +94,7 @@ class EditRecipeMain extends Component {
     var deletedIngredient = ingredient.name; 
     var ingredients = this.state.ingredients;
     var index = 0; 
+
     // Search based on ingredient name
     ingredients.forEach((ingredient, i) => {
       if (ingredient.name === deletedIngredient) {
@@ -98,13 +104,15 @@ class EditRecipeMain extends Component {
         index = i; 
       }
     });
+
     var ingMap = ingredients.map((ing)=>{return ing.name});
-    console.log(ingMap);  
+    // console.log(ingMap);  
     ingredients.splice(index, 1); 
-    ingMap = ingredients.map((ing)=>{return ing.name});
-    console.log(ingMap);  
+    ingredientNames = ingredients.map((ing)=>{return ing.name});
+    // console.log(ingMap);  
     this.setState({
-      ingredients: ingredients
+      ingredients: ingredients,
+      availableIngredients: ingredientNames
     }); 
   }
 
@@ -154,6 +162,7 @@ class EditRecipeMain extends Component {
           <FormGroup style={{padding: 5}}>
             <ControlLabel>Recipe Skill Level</ControlLabel>
             <FormControl componentClass="select" onChange={this.handleChange.bind(this)} id="skill">
+              <option value="previous">{this.state.skillLevel}</option>
               <option value="Junior Dev">Junior Dev</option>
               <option value="Kitchen Team Lead">Kitchen Team Lead</option>
               <option value="Scrum Master">Scrum Master</option>
@@ -176,7 +185,8 @@ class EditRecipeMain extends Component {
         <h4> Main Recipe Edit State </h4>
         {this._renderIngredientsTest()}
       </Row>
-      <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients}/>
+      <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients} />
+      <EditSteps steps={this.state.steps} availableIngredients={this.state.availableIngredients}/>
       </Grid> 
     );
   }
