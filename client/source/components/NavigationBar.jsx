@@ -43,6 +43,7 @@ class NavigationBar extends React.Component {
     event.preventDefault();
     console.log('Attempting to logout!'); 
     //11:45
+    var user = this.state;
     this.props.handleLogOutUser(user);
   }
 

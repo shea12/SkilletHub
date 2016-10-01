@@ -67,9 +67,15 @@ class App extends React.Component {
   }
 
   handleLoginUser(user){
-    console.log('Attempting login!'); 
+    console.log('In App.jsx, attempting login!'); 
     console.log('User info: ', user.username); 
     this.loginUser(user); 
+  }
+
+  handleLogOutUser(user){
+    console.log('In App.jsx, attempting logout!'); 
+    console.log('User info: ', user.username); 
+    this.logOutUser(user); 
   }
 
   handleUserClick(event) {
@@ -257,14 +263,15 @@ class App extends React.Component {
   /************************************************************
   /******************    LOG OUT USER    **********************
   ************************************************************/
-  logout (event) {
+  logOutUser (user) {
+    console.log("before logout: ", window.AWS.config.credentials);
     var poolData = { 
       UserPoolId: USER_POOL_ID,
       ClientId: USER_POOL_APP_CLIENT_ID
     };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
     var userData = {
-      Username : this.state.username,
+      Username : user.username,
       Pool : userPool
     };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
@@ -272,8 +279,14 @@ class App extends React.Component {
     cognitoUser.signOut();
 
     console.log('logged out user: ', cognitoUser);
+    console.log("after logout: ", window.AWS.config.credentials);
+
+    browserHistory.push('/');
   };
 
+  /************************************************************
+  /****************    RENDER COMPONENTS    *******************
+  ************************************************************/
   render () {
 	const children = React.Children.map(this.props.children, function (child) {
 	  return React.cloneElement(child, {
@@ -282,11 +295,12 @@ class App extends React.Component {
       username: this.state.username, 
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeClick: this.handleRecipeClick.bind(this)
+
 	  })
 	}.bind(this))
     return (
     	<div> 
-    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} username={this.state.username} />
+    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} handleLogOutUser={this.handleLogOutUser.bind(this)} userID={this.state.userID} username={this.state.username} />
     		{ children }
     	</div>
     ); 
@@ -294,3 +308,7 @@ class App extends React.Component {
 }; 
 
 export default App; 
+
+
+
+
