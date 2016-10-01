@@ -30,24 +30,25 @@ class UserProfile extends React.Component {
   }
 
   componentWillMount() {
-    console.log('User page is mounting!'); 
-    console.log(Object.keys(placeholders)); 
+    // console.log('User page is mounting!'); 
+    // console.log(Object.keys(placeholders)); 
     // TODO: Implement request that loads the profile information  
       --> // User Service 
     this.setState({
       username: this.props.username, 
-      userID: this.props.userID
+      userID: this.props.userID,
+      date: 'May 4th, 2012'
     }); 
 
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
     axios.get(`/${this.props.username}/profile`)
     .then((results) => {
-      console.log(Object.keys(results)); 
-      // this.setState({
-      //   recipeList: results.recipes,
-      //   userProfile: placeholders.user
-      // }); 
+      // console.log(Object.keys(results)); 
+      // console.log(results.data); 
+      this.setState({
+        recipeList: results.data.recipes
+      }); 
     })
     .catch((error) => {
       console.log(error); 
@@ -67,6 +68,14 @@ class UserProfile extends React.Component {
     return (
       <Grid> 
         <Row> 
+          <Col xs={4} md={4}>
+            <img src={this.state.image} width={250} height={250} style={{borderRadius: 10}} />
+            <h3> {this.state.username} </h3>
+            <h4> {this.state.userID} </h4>
+            <p> {this.state.bio} </p> 
+            <p> {this.state.email} </p>
+            <p> {this.state.date} </p>
+          </Col> 
           <Col xs={8} md={8}>
             <div style={{borderRadius: 10, background: '#e8f4f8', border: 'solid 3px #e8f4f8', marginBottom: 10}}>
               <h5> Get Cooking! </h5>
@@ -80,7 +89,7 @@ class UserProfile extends React.Component {
               <NavItem eventKey={3} disabled>Following</NavItem>
             </Nav>
             {this.state.recipeList.map((recipe, i) => (
-              <RecipeListEntry key={i + 'recipe'} recipe={recipe} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
+              <RecipeListEntry key={recipe.branches[0].mostRecentVersionId} recipe={recipe} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
             ))}
           </Col>
         </Row> 
@@ -92,11 +101,3 @@ class UserProfile extends React.Component {
 export default UserProfile;
 
 
-// <Col xs={4} md={4}>
-//   <img src={this.state.userProfile.image} width={250} height={250} style={{borderRadius: 10}} />
-//   <h3> {this.state.userProfile.name} </h3>
-//   <h4> {this.state.userID} </h4>
-//   <p> {this.state.bio} </p> 
-//   <p> {this.state.userProfile.email} </p>
-//   <p> {this.state.userProfile.date} </p>
-// </Col> 
