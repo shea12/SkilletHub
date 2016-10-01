@@ -176,7 +176,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Min </ControlLabel>
-              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} optional={true}/>
+              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin}/>
               </FormGroup>
             </form>
         </Col>
@@ -184,7 +184,7 @@ class CreateRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Max </ControlLabel>
-              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} optional={true}/>
+              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax}/>
               </FormGroup>
             </form>
         </Col>

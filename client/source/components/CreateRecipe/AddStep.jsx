@@ -1,4 +1,10 @@
 import React from 'react';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+
+//Bootstrap 
+import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
+
+const timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
 
 class AddStep extends React.Component {
 	constructor(props) {
@@ -8,15 +14,15 @@ class AddStep extends React.Component {
 			description: '',
 			ingredients: [],
 			parsedIngredients: [], 
-			position: null
+			position: null,
+			time: '',
+			stepTime: null
 		}; 
 	}
 
 	componentWillMount(){
 		this.setState({
 			changed: this.props.step.changed, 
-			description: this.props.step.description,
-			ingredients: this.props.step.ingredients,
 			position: this.props.stepNumber
 		}); 
 	}
@@ -27,15 +33,30 @@ class AddStep extends React.Component {
 		this.props.handleAddStep(this.state);
 	}
 
+	timeParse (string) {
+		var match = []; 
+		timesRegEx.forEach((timeRegEx) => {
+			var time = timeRegEx.exec(string); 
+			if (time) {
+				// console.log(time); 
+				match.push(time); 
+			} 
+		});
+		return match; 
+	}
+
 	handleChange (event) {
 	  var inputType = event.target.id; 
 	  if (inputType === 'description') {
 	  	var availableIngredients = this.props.availableIngredients; 
+	  	// console.log(availableIngredients); 
 	  	var parsedIngredients = this.state.parsedIngredients; 
 	  	var description = event.target.value; 
+	  	// console.log('Description: ', description); 
 	  	availableIngredients.forEach((ingredient) => {
-	  		var regEx = RegExp(ingredient);
+	  		var regEx = RegExp(ingredient, 'i');
 	  		var parsedIngredient = regEx.exec(description); 
+	  		// console.log(parsedIngredient); 
 	  		if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
 	  			console.log('Matched an ingredient: ', parsedIngredient); 
 	  			parsedIngredients.push(parsedIngredient[0])
@@ -45,35 +66,43 @@ class AddStep extends React.Component {
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
 	  	}); 
-	  } else if (inputType === 'ingredients') {
-	  	var ingredients = event.target.value.split(','); 
-	  	this.setState({ingredients: ingredients}); 
+	  	var time = this.timeParse(description); 
+	  	// console.log('TIME IS: ', time); 
+	  	var stepTime = this.state.stepTime; 
+	  	if (time && !stepTime) {
+	  		console.log('SETTING TIME: ', time); 
+	  		this.setState({
+	  			stepTime: time[0]
+	  		}); 
+	  	}
 	  } 
 	}
 
 	render () {
 		return (
+			<Grid>
+			<form onSubmit={this.handleClick.bind(this)}>
+			<Row className="show-grid">
+			  <Col xs={8} md={8}> 
+			  		<FormGroup>
+			        <ControlLabel> Step Description </ControlLabel>
+			        <FormControl type="text" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
+			        </FormGroup>
+			  </Col>
+			</Row>
 			<div>
-				<div className="row">
-				  <div className="input-field col s12">
-				    <textarea id="description" className="materialize-textarea" onChange={this.handleChange.bind(this)}></textarea>
-				    <label htmlFor="description"> {this.props.stepNumber} Step Description</label>
-				  </div>
-				</div>
-				<div className="row">
-					<div className="input-field col s12">
-					  <input id="ingredients" type="text" className="validate" onChange={this.handleChange.bind(this)}/>
-					  <label htmlFor="servings">Ingredients</label>
-					</div>
-				</div>
-				<div> 
-					<h4> Parsed Ingredient List: </h4>
-					<h4> {this.state.parsedIngredients} </h4>
-				<button onClick={this.handleClick.bind(this)}> Next Step </button> 
-				</div>
+				<button style={{display: "none"}} onClick={this.handleClick.bind(this)}> Next Step </button> 
 			</div>
+			</form>
+			</Grid>
 		); 
 	}
 }
 
 export default AddStep;
+
+
+			// <div> 
+			// 	<h4> Parsed Ingredient List: </h4>
+			// 	<h4> {JSON.stringify(this.state.parsedIngredients)} </h4>
+			// </div>
