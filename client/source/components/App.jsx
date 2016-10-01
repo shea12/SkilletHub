@@ -77,6 +77,23 @@ class App extends React.Component {
     this.loginUser(user).bind(this); 
   }
 
+  handleUserClick(event) {
+    event.preventDefault(); 
+    console.log('Clicked on username!'); 
+    console.log(event.target); 
+    var username = event.target.id;
+    browserHistory.push(`/User/${username}`);
+  }
+
+  handleRecipeClick(event) {
+    event.preventDefault(); 
+    console.log('Clicked on username!'); 
+    console.log(event.target); 
+    var recipe = event.target.id;
+    browserHistory.push(`/${recipe}`);
+  }
+
+
   /************************************************************
   ***************    AUTHENTICATION HELPER    *****************
   ************************************************************/
@@ -263,12 +280,14 @@ class App extends React.Component {
 	const children = React.Children.map(this.props.children, function (child) {
 	  return React.cloneElement(child, {
 	    handleSignUp: this.handleSignUp.bind(this),
-      userID: this.state.userID
+      userID: this.state.userID,
+      handleUserClick: this.handleUserClick.bind(this),
+      handleRecipeClick: this.handleRecipeClick.bind(this)
 	  })
 	}.bind(this))
     return (
     	<div> 
-    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} />
+    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} />
     		{ children }
     	</div>
     ); 

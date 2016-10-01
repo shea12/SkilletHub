@@ -8,9 +8,15 @@ class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'testUser7', 
-      password: '8Characters!'
+      username: 'Username', 
+      password: ''
     }; 
+  }
+
+  componentWillMount(){
+    this.setState({
+      userID: this.props.userID
+    });
   }
 
   handleSubmit (event) {
@@ -30,9 +36,26 @@ class NavigationBar extends React.Component {
     }
   } 
 
-  _renderAuthButton() {
-    if (this.state.username === "Username") {
+  handleLogout(event){
+    event.preventDefault();
+    console.log('Attempting to logout!'); 
+  }
 
+  _renderAuthentication() {
+    if (this.props.userID === null) {
+      return (
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <FormGroup  style={{padding: 10}}>
+            <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: 5}}/>
+            <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
+            <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
+          </FormGroup>
+        </form> 
+      )
+    } else {
+      return (
+        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5}}>Log Out</Button>  
+      )
     }
   }
 
@@ -51,16 +74,11 @@ class NavigationBar extends React.Component {
               <NavItem eventKey={2} href="/Recipe"><Link to='/Recipe'> Recipe </Link></NavItem>
               <NavItem eventKey={3} href="#"><Link to='/Create'> Create Recipe </Link></NavItem>
               <NavItem eventKey={4} href="#"><Link to='/Edit'> Edit Recipe </Link></NavItem>
+              <NavItem eventKey={5}> userID: {this.props.userID} </NavItem>
             </Nav>
             <Nav pullRight>
               <Navbar.Form >
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                <FormGroup  style={{padding: 10}}>
-                  <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: 5}}/>
-                  <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
-                  <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
-                </FormGroup>
-                </form> 
+                {this._renderAuthentication()}
               </Navbar.Form>
             </Nav>
           </Navbar.Collapse>
