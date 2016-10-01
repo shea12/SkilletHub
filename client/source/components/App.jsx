@@ -70,11 +70,7 @@ class App extends React.Component {
   handleLoginUser(user){
     console.log('Attempting login!'); 
     console.log('User info: ', user.username); 
-    this.setState({
-      username: user.username,
-      password: user.password,
-    }); 
-    this.loginUser(user).bind(this); 
+    this.loginUser(user); 
   }
 
   handleUserClick(event) {
@@ -228,7 +224,9 @@ class App extends React.Component {
     console.log('cognitoUser is: ', cognitoUser);
 
     var setUserID = function(userID) {
-      this.setState({userID: userID}); 
+      console.log('SETTING USER ID: ', userID);
+      console.log('SETTING USERNAME: ', authData.Username)
+      this.setState({userID: userID, username: authData.Username}); 
       browserHistory.push(`/User/${authData.Username}`);
     }.bind(this); 
     
@@ -288,7 +286,7 @@ class App extends React.Component {
 	}.bind(this))
     return (
     	<div> 
-    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} />
+    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} userID={this.state.userID} username={this.state.username}/>
     		{ children }
     	</div>
     ); 
