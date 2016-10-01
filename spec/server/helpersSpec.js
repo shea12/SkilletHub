@@ -28,15 +28,15 @@ describe('helpers.js', function() {
 
   describe('makeVersion()', function() {
     var prev, changes;
+    var username = 'jose';
     beforeEach(function() {
-      var userId = generateId();
       prev = {
         rootVersion: null,
         _id: generateId(),
-        userId: userId
+        username: username
       };
       changes = {
-        userId: userId,
+        username: 'phillipe',
         name: {
           changed: true,
           value: 'hey',
@@ -50,13 +50,13 @@ describe('helpers.js', function() {
       expect(makeVersion).to.be.a('function');
     });
     it('should return an object', function() {
-      return makeVersion(prev, changes)
+      return makeVersion(prev, changes, username)
       .then(function(result) {
         expect(result).to.be.a('object');
       });
     });
     it('should initialize a new recipe', function() {
-      return makeVersion('new', changes)
+      return makeVersion('new', changes, username)
       .then(function(result) {
         expect(result.rootVersion).to.be.null;
         expect(result.previousVersion).to.be.null;
@@ -65,16 +65,16 @@ describe('helpers.js', function() {
       });
     });
     it('should save to the correct user', function() {
-      var userId = changes.userId;
-      var newUserId = generateId();
+      var username = changes.userId;
+      var newUsername = 'marcell';
       var newChanges = _.clone(changes);
-      newChanges.userId = newUserId;
+      newChanges.username = newUsername;
 
-      var tests = [makeVersion(prev, newChanges), makeVersion(prev, changes)]
+      var tests = [makeVersion(prev, newChanges, newUsername), makeVersion(prev, changes, username)]
       Promise.all(tests)
       .spread(function(result1, result2) {
-        expect(result1.userId.equals(newUserId)).to.be.true;
-        expect(result2.userId.equals(userId)).to.be.true;
+        expect(result1.username).to.equal(newUsername);
+        expect(result2.username).to.equal(username);
       });
     });
     // it('should save to the correct branch', function() {
@@ -82,14 +82,14 @@ describe('helpers.js', function() {
     // });
     it('should have a reference to the root version', function() {
       var rootId = prev._id;
-      return makeVersion(prev, changes)
+      return makeVersion(prev, changes, username)
       .then(function(result) {
         expect(result.rootVersion.equals(rootId)).to.be.true;
       });
     });
     it('should have a reference to the previous version', function() {
       var rootId = prev._id;
-      return makeVersion(prev, changes)
+      return makeVersion(prev, changes, username)
       .then(function(result) {
         expect(result.previousVersion.equals(rootId)).to.be.true;
       });

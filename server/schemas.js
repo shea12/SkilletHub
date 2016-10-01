@@ -8,7 +8,7 @@ let recipeSchema = new Schema({
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
   deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
   branch: String,            
-  username: string,            //Creator of recipe
+  username: String,                         //Creator of recipe
   name: {                                   //Recipe Title / Name
     changed: Boolean,
     value: String
