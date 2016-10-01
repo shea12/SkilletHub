@@ -8,7 +8,7 @@ module.exports = {
   createRecipe: (req, res) => {
     helpers.makeVersion('new', req.body, req.params.username)
     .then(result => {
-      return helpers.addUserRecipeCollection(req.params.username, result);
+      return helpers.addUserRecipesCollection(req.params.username, result);
     }).then(function() {
       res.status(201).send();
     }).catch(error => {
