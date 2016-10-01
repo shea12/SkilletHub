@@ -42,14 +42,3 @@ class UnitDropdown extends Component {
 }
 
 export default UnitDropdown; 
-
-
-		  	// <Col xs={2} md={2}> 
-	    //       <FormGroup controlId="formControlsSelect">
-	    //         <FormControl componentClass="select" id="unit" onChange={this.props.onChange.bind(this)}>
-	    //           {this.state.unitsMenu.map((unit, i)=> (
-	    //           	<option key={'unit'+i} value={unit}>{unit}</option>
-	    //           ))}
-	    //         </FormControl>
-	    //       </FormGroup>
-		  	// </Col>

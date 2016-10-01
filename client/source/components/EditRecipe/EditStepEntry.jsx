@@ -3,6 +3,8 @@ import React from 'react';
 //Bootstrap 
 import { Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
+const timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
+
 class EditStepEntry extends React.Component {
   constructor(props) {
     super(props);
@@ -15,8 +17,7 @@ class EditStepEntry extends React.Component {
       unit: null, 
       prep: null, 
       optional: null,
-      position: null,
-
+      position: null
     }; 
   }
 
@@ -28,31 +29,14 @@ class EditStepEntry extends React.Component {
       description: this.props.step.description,
       lines: lines,
       ingredients: this.props.step.ingredients,
+      parsedIngredients: this.props.step.ingredients, 
+      availableIngredients: this.props.availableIngredients, 
       time: this.props.step.time
     }); 
   }
 
-  // componentWillReceiveProps(){
-  //   console.log('INDIVIDUAL COMPONENT RECEIVING PROPS!'); 
-  //   console.log(this.props.ingredient.name); 
-  //   var unitsMenu = units.slice(0);
-  //   unitsMenu[0] = this.props.ingredient.unit;  
-  //   this.setState({
-  //     ingredient: this.props.ingredient,
-  //     name: this.props.ingredient.name,
-  //     amount: this.props.ingredient.amount,
-  //     unit: this.props.ingredient.unit,
-  //     unitsMenu: unitsMenu, 
-  //     prep: this.props.ingredient.prep,
-  //     optional: this.props.ingredient.optional,
-  //     position: this.props.ingredient.position
-  //   }); 
-  // }
-
   handleClick (event) {
     event.preventDefault(); 
-    console.log('Attempting to edit ingredient!'); 
-    console.log(this.state); 
     this.setState({
       changed: true, 
       disabled: false
@@ -61,23 +45,94 @@ class EditStepEntry extends React.Component {
 
   handleDelete (event) {
     event.preventDefault(); 
-    console.log('Attempting to delete ingredient!'); 
+    console.log('Attempting to delete step!'); 
     console.log(this.state.description); 
-    // this.props.handleDeleteIngredient(this.state); 
-    // this.setState({
-    //  display: 'none'
-    // }); 
+  }
+
+  timeParse (string) {
+    var match = []; 
+    timesRegEx.forEach((timeRegEx) => {
+      var time = timeRegEx.exec(string); 
+      if (time) {
+        // console.log(time); 
+        match.push(time); 
+      } 
+    });
+    return match; 
   }
 
   handleChange (event) {
     var inputType = event.target.id; 
     if (inputType === 'description') {
-      var lines = Math.ceil(event.target.value.length / 100) * 30; 
-      console.log(lines); 
+      var description = event.target.value; 
+
+      // Set height of the text box based on string length 
+      var lines = Math.ceil(description.length / 100) * 30; 
       this.setState({
-        description: event.target.value,
+        changed: true, 
+        description: description,
         line: lines
       }); 
+
+      // Parse for ingredients 
+      var availableIngredients = this.props.availableIngredients; 
+      var parsedIngredients = this.state.parsedIngredients;
+      availableIngredients.forEach((ingredient) => {
+        var regEx = RegExp(ingredient, 'i');
+        var parsedIngredient = regEx.exec(description); 
+        if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
+          parsedIngredients.push(parsedIngredient[0])
+        }
+      });
+      this.setState({
+        parsedIngredients: parsedIngredients
+      }); 
+
+      // Parse for time 
+    }
+  }
+
+
+  handleChange (event) {
+    var inputType = event.target.id; 
+    if (inputType === 'description') {
+      var availableIngredients = this.props.availableIngredients; 
+      // console.log(availableIngredients); 
+      var parsedIngredients = this.state.parsedIngredients; 
+      var description = event.target.value; 
+      // console.log('Description: ', description); 
+      availableIngredients.forEach((ingredient) => {
+        var regEx = RegExp(ingredient, 'i');
+        var parsedIngredient = regEx.exec(description); 
+        // console.log(parsedIngredient); 
+        if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
+          console.log('Matched an ingredient: ', parsedIngredient); 
+          parsedIngredients.push(parsedIngredient[0])
+        }
+      });
+      this.setState({
+        description: event.target.value,
+        parsedIngredients: parsedIngredients
+      }); 
+      var time = this.timeParse(description); 
+      // console.log('TIME IS: ', time); 
+      var stepTime = this.state.stepTime; 
+      if (time && !stepTime) {
+        console.log('SETTING TIME: ', time); 
+        this.setState({
+          stepTime: time[0]
+        }); 
+      }
+    } 
+  }
+
+  _renderTime(){
+    if (this.props.step.time) {
+      return (
+        <Col xs={4} md={4} style={{margin: 5}}>
+          <h4> Time: {this.state.time} minutes </h4>
+        </Col>
+      )
     }
   }
 
@@ -102,9 +157,7 @@ class EditStepEntry extends React.Component {
           <Col xs={4} md={4} style={{margin: 5}}>
             <h4> Ingredients: {this.state.ingredients.join(', ')} </h4>
           </Col>
-          <Col xs={4} md={4} style={{margin: 5}}>
-            <h4> Time: {this.state.time} minutes </h4>
-          </Col>
+          {this._renderTime()}
         </Row>
       </Grid>
     )
