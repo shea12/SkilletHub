@@ -95,6 +95,13 @@ class App extends React.Component {
     browserHistory.push(`/Recipe/${username}/${recipe}`);
   }
 
+  handleNavigation(event) {
+    event.preventDefault();
+    var route = event.target.title; 
+    console.log('NAVIGATING TO:', route); 
+    browserHistory.push(`${route}`);
+  }
+
   /************************************************************
   *****************    SIGN UP A NEW USER    ******************
   ************************************************************/
@@ -282,7 +289,7 @@ class App extends React.Component {
 	}.bind(this))
     return (
     	<div> 
-    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} handleLogOutUser={this.handleLogOutUser.bind(this)} userID={this.state.userID} username={this.state.username} />
+    		<Nav handleLoginUser={this.handleLoginUser.bind(this)} handleLogOutUser={this.handleLogOutUser.bind(this)} userID={this.state.userID} username={this.state.username} handleNavigation={this.handleNavigation.bind(this)} />
     		{ children }
     	</div>
     ); 

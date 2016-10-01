@@ -79,11 +79,11 @@ class NavigationBar extends React.Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav>
-              <NavItem eventKey={1} href="#"><Link to='/User'> Profile </Link></NavItem>
-              <NavItem eventKey={2} href="/Recipe"><Link to='/Recipe'> Recipe </Link></NavItem>
-              <NavItem eventKey={3} href="#"><Link to='/Create'> Create Recipe </Link></NavItem>
-              <NavItem eventKey={4} href="#"><Link to='/Edit'> Edit Recipe </Link></NavItem>
+            <Nav onClick={this.props.handleNavigation.bind(this)}>
+              <NavItem eventKey={1} title={'/User'}> Profile </NavItem>
+              <NavItem eventKey={2} title={'/Recipe'}> Recipe </NavItem>
+              <NavItem eventKey={3} title={'/Create'}> Create Recipe </NavItem>
+              <NavItem eventKey={4} title={'/Edit'}> Edit Recipe </NavItem>
               <NavItem eventKey={5}> username: {this.props.username} </NavItem>
               <NavItem eventKey={6}> userID: {this.props.userID} </NavItem>
             </Nav>
