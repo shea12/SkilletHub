@@ -24,8 +24,6 @@ class AddIngredient extends React.Component {
 	}
 
 	componentWillMount(){
-		console.log('Add Ingredient will mount!'); 
-		// console.log('ADD INGREDIENT POSITION:', this.props.number); 
 		this.setState({
 			position: this.props.number
 		}); 
