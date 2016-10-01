@@ -188,7 +188,6 @@ class CreateRecipeMain extends Component {
         {this._renderRecipeObjects(this.state.recipe)}
       </Col>
       <Col xs={6} md={6}>
-        {this._renderRecipeObjects(schema)}
       </Col>
       </Row>
       </Grid> 
