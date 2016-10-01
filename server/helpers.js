@@ -47,7 +47,6 @@ module.exports = {
     changes.username = username;
     //build new version object
     _.extend(newVersion, changes);
-
     //insert new version
     return new Recipe(newVersion).save()
   },
@@ -115,11 +114,31 @@ module.exports = {
   },
 
   addUserRecipesCollection: (username, recipe) => {
-    return new UserRecipe({
-      username: username,
-      recipes: [
-        {
-          name: recipe.name,
+    return UserRecipe.findOne({
+      username: username
+    }).then(result => {
+      //first recipe by users
+      if (result === null) {
+        return new UserRecipe({
+          username: username,
+          recipes: [
+            {
+              name: recipe.name.value,
+              rootRecipeId: recipe._id,
+              branches: [
+                {
+                  name: 'master',
+                  mostRecentVersionId: recipe._id
+                }
+              ]
+            }
+          ]
+        }).save();
+
+      //previously existing recipes by user
+      } else {
+        result.recipes.push({
+          name: recipe.name.value,
           rootRecipeId: recipe._id,
           branches: [
             {
@@ -127,8 +146,12 @@ module.exports = {
               mostRecentVersionId: recipe._id
             }
           ]
-        }
-      ]
-    }).save();
+        });
+        return UserRecipe.update({
+          username: username
+        }, result);
+      }
+
+    });
   }
 };
