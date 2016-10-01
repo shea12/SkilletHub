@@ -115,16 +115,16 @@ var testStep3 = {
 }
 
 var meatloafRecipe = {
-	rootVersion: 1,
-	previousVersion: null, 
-	branch: {
-		changed: false, 
-		value: null 
-	}, 
-	userID: {
-		changed: true, 
-		value: 1
-	}, 
+	// rootVersion: 1,
+	// previousVersion: null, 
+	// branch: {
+	// 	changed: false, 
+	// 	value: null 
+	// }, 
+	// userID: {
+	// 	changed: true, 
+	// 	value: 1
+	// }, 
 	name: {
 		changed: true, 
 		value: 'Serious Eats Meat Loaf'
@@ -146,16 +146,11 @@ var meatloafRecipe = {
   	  changed: true,
   	  value: 'Junior Dev'
   	},  
-  	dependencies: [{                          //Tools used for the recipe
-  	  changed: true,
-  	  position: 1,
-  	  dependencyId: 1
-  	}],
+  	dependencies: [],
   	ingredients: meatloafIngredients,
   	steps: [testStep1, testStep2, testStep3],
-  	tags: null, 
-  	issues: null, 
-  	stars: 4
+  	tags: [], 
+  	issues: []
 }; 
 
 module.exports = meatloafRecipe; 
