@@ -15,10 +15,8 @@ module.exports = {
     helpers.makeVersion(req.body.previous, req.body.changes)
     .then((version) => {
       newVersion = version;
-      return //userid where username
-    }).then((userId) => {
       return UserRecipe.find({
-        userId: userId
+        username: version.username
       });
     }).then(userRecipe => {
       let recipeLocation = _.findIndex(userRecipe.recipes, 
@@ -43,12 +41,10 @@ module.exports = {
   getVersion: (req, res) => {
     let branch = req.params.branch;
     UserRecipe.find({
-      //add user id here *!*!*!*!
-      userId: 1
+      username: req.params.username
     }).then(recipes => {
       let recipe = _.where(recipes, {
-        //add recipe id here *!*!*!!**!
-        rootRecipeId: 1
+        rootRecipeId: req.params.version
       });
       let version = _.where(recipe, {
         branch: branch
