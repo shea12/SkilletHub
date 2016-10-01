@@ -43,7 +43,7 @@ class IngredientsForm extends React.Component {
 				<h3> Recipe Ingredients </h3>
 				<RecipeIngredients ingredientList={this.state.ingredients} />
 				{this.state.newIngredient.map((ingredient, i) => (
-					<AddIngredient key={'ingredient' + i} number={this.state.ingredientsCount} handleAddIngredient={this.handleAddIngredientForm.bind(this)} ingredient={ingredient}/>
+					<AddIngredient key={ingredient} number={this.props.ingredientsCount} handleAddIngredient={this.handleAddIngredientForm.bind(this)} ingredient={ingredient}/>
 				))}
 			</div>
 		); 
