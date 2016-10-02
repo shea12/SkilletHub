@@ -19,7 +19,21 @@ var placeholderProfile = {
      name: "FlavorTown Nachos", 
      sourceID: "Guy Fieri"
    }
- ]
+ ],
+ recipeTemplate: {
+  name:{
+    value: ''
+  }, 
+  servings: {
+    value: ''
+  }, 
+  skillLevel: {
+    value: 'Junior Dev'
+  },
+  description: {
+    value: 'This is your basic recipe description'
+  }
+ }
 }
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import RecipeDescription from './RecipeDescription'
-import RecipeIngredients from './RecipeIngredientsBS'
+import RecipeIngredients from './RecipeIngredients'
 import ReadME from './ReadME'
 
 //Bootstrap 
@@ -19,7 +19,7 @@ class RecipeMain extends Component {
     super(props);
 
     this.state = {
-      recipe: {},
+      recipe: placeholders.recipeTemplate,
       user: {},
       recipeName: '',
       recipeDescription: '',
@@ -43,35 +43,25 @@ class RecipeMain extends Component {
 
     axios.get(`/${usernameParameter}/${recipeParameter}`)
     .then((result)=> {
-      console.log(Object.keys(result)); 
+      // console.log(Object.keys(result)); 
       console.log(result.data); 
-      // Temporary placeholder values 
-      // var recipe = meatloafRecipe; 
-      // this.setState({
-      //   recipe: recipe,
-      //   user: placeholders.user,
-      //   recipeName: recipe.name.value,
-      //   recipeDescription: recipe.description.value, 
-      //   recipeIngredients: recipe.ingredients, 
-      //   recipeReadME: recipe.steps
-      // }); 
+      console.log(Object.keys(result.data)); 
+      var recipe = result.data; 
+
+      console.log('NAME: ', recipe.name.value); 
+      console.log('DESCRIPTION:', recipe.description.value); 
+      
+      this.setState({
+        recipe: recipe,
+        recipeName: recipe.name.value,
+        recipeDescription: recipe.description.value, 
+        recipeIngredients: recipe.ingredients, 
+        recipeReadME: recipe.steps
+      }); 
     })
     .catch((error)=> {
       console.log(error); 
     }); 
-
-    var recipe = meatloafRecipe; 
-    this.setState({
-      recipe: recipe,
-      user: placeholders.user,
-      recipeName: recipe.name.value,
-      recipeDescription: recipe.description.value, 
-      recipeIngredients: recipe.ingredients, 
-      recipeReadME: recipe.steps
-    }); 
-  }
-
-  handleChange (event) {
   }
 
   handleClick (event) {
@@ -98,10 +88,7 @@ class RecipeMain extends Component {
   render() {
     return (
       <Grid className="recipeMain">
-          <h2 className="recipeHeader">{this.state.user.name} / {this.state.recipeName}</h2>
-        <div>
-          <RecipeDescription recipeDescription={this.state.recipe} />
-        </div> 
+          <h2 className="recipeHeader"> {'Gordon Ramsay'} / {this.state.recipeName}</h2>
         <Row>
         <Col xs={2} md={2}> 
           <Button onClick={this.handleClick.bind(this)} id="fork" type="submit">Fork</Button>
@@ -113,11 +100,12 @@ class RecipeMain extends Component {
           <Button onClick={this.handleClick.bind(this)} id="edit" type="submit"><Link to='/Edit'> Edit </Link></Button>
         </Col>
         </Row>
-
+        <div>
+          <RecipeDescription recipeDescription={this.state.recipe} />
+        </div> 
         <div>
             <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         </div>
-
         <div>
             <ReadME readME={this.state.recipeReadME}/>
         </div>
@@ -127,3 +115,5 @@ class RecipeMain extends Component {
 }
 
 export default RecipeMain;
+
+
