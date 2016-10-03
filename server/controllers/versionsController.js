@@ -63,5 +63,33 @@ module.exports = {
   //removes versions with no downstream, makes others unavailable
   deleteVersion: (req, res) => {
 
+  },
+
+  //fork a version
+  // body: {
+  //   username: 'username of person making the fork'
+  //   version: { version forked from },
+  // }
+  forkVersion: (req, res) => {
+    console.log('username: ', req.body.username);
+    console.log('version: ', req.body.version);
+    let forkedProps = {
+      username: req.body.username,
+      branch: 'master'
+    };
+
+    helpers.makeVersion(req.body.version, forkedProps, req.body.username)
+    .then(forkedVersion => {
+      console.log('forkedVersion: ', forkedVersion);
+      return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
+    })
+    .then(userRecipesCollectionResults => {
+      console.log('userRecipesCollectionResults: ', userRecipesCollectionResults);
+      res.status(201).send(userRecipesCollectionResults);
+    })
+    .catch(error => {
+      console.log('fail: ', error);
+      res.status(500).send(error);
+    });
   }
 };

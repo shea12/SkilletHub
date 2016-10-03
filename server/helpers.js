@@ -124,7 +124,7 @@ module.exports = {
           recipes: [
             {
               name: recipe.name.value,
-              rootRecipeId: recipe._id,
+              rootRecipeId: recipe.rootVersion || recipe._id,
               branches: [
                 {
                   name: 'master',
@@ -139,7 +139,7 @@ module.exports = {
       } else {
         result.recipes.push({
           name: recipe.name.value,
-          rootRecipeId: recipe._id,
+          rootRecipeId: recipe.rootVersion || recipe._id,
           branches: [
             {
               name: 'master',
