@@ -51,7 +51,25 @@ module.exports = {
   },
   //gets the latest version in a branch
   getBranch: (req, res) => {
-
+    UserRecipe.findOne({
+      username: req.params.username
+    }).then(userRecipesCollection => {
+      let recipe = _.find(userRecipesCollection.recipes, recipe => {
+        return recipe.rootRecipeId.equals(req.params.recipe);
+      });
+      let version = _.find(recipe.branches, currentBranch => {
+        return currentBranch.name === req.params.branch;
+      });
+      return Recipe.findOne({
+        _id: version.mostRecentVersionId
+      });
+    }).then(version => {
+      return helpers.retrieveVersion(version);
+    }).then(result => {
+      res.status(200).send(result);
+    }).catch(error => {
+      res.status(404).send(error);
+    })
   },
   //removes versions with no downstream, makes rest unavailable
   deleteBranch: (req, res) => {
