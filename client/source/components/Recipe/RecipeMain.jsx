@@ -95,7 +95,7 @@ class RecipeMain extends Component {
         </Row> 
         <Row>
           <Col xs={6} md={6}>
-            <img style={{maxWidth: '350px', height: '100%', display: 'block', margin: 'auto'}} src={'http://steamykitchen.com/wp-content/uploads/2009/08/hainanese-chicken-83.jpg'} alt={'picture of food'}/>
+            <img style={{maxWidth: '350px', maxHeight: '350px', display: 'block', margin: 'auto'}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
           </Col>
           <Col xs={6} md={6}>
             <RecipeDescription recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
