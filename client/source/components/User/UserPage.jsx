@@ -34,19 +34,17 @@ class UserProfile extends React.Component {
   }
 
   componentWillMount() {
-    // console.log('User page is mounting!'); 
-    // console.log(Object.keys(placeholders)); 
-    // TODO: Implement request that loads the profile information  
-      --> // User Service 
+    console.log('PARAMS USER PAGE: ', this.props.params); 
+
     this.setState({
-      username: this.props.username, 
+      username: this.props.params.username, 
       userID: this.props.userID,
       date: 'May 4th, 2012'
     }); 
 
     // TODO: Implement request that loads the recipe list for a given user to this components state. 
       --> // Main Server 
-    axios.get(`/${this.props.username}/profile`)
+    axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
       // console.log(Object.keys(results)); 
       console.log(results.data.recipes); 
@@ -57,6 +55,11 @@ class UserProfile extends React.Component {
     .catch((error) => {
       console.log(error); 
     }); 
+  }
+
+  componentWillReceiveProps(){
+    console.log('PARAMS USER PAGE: ', this.props.params); 
+
   }
 
   handleSelect(eventKey) {
@@ -72,7 +75,7 @@ class UserProfile extends React.Component {
     if (this.state.activeKey === 2) {
       return (
         this.state.recipeList.map((recipe, i) => (
-          <RecipeListEntry key={recipe.branches[0].mostRecentVersionId} recipe={recipe} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
+          <RecipeListEntry key={recipe.branches[0].mostRecentVersionId} recipe={recipe} username={this.state.username} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
         ))
       )
     } else if (this.state.activeKey === 3) {
@@ -96,12 +99,12 @@ class UserProfile extends React.Component {
             <p> {this.state.date} </p>
           </Col> 
           <Col xs={8} md={8}>
-            <div style={{borderRadius: 10, background: 'rgba(128,128,128, 0.2)', border: 'solid 1px rgba(128,128,128, 0.3)', marginBottom: 10}}>
-              <h5> Get Cooking! </h5>
-              <h6> Click here to get started by creating a new recipe! </h6> 
+            <div style={{borderRadius: 5, background: 'rgba(128,128,128, 0.2)', border: 'solid 1px rgba(173,216,230, 0.7)', marginBottom: 10}}>
+              <h5 style={{marginLeft: 10}}> Get Cooking! </h5>
+              <h6 style={{marginLeft: 10}}> Click here to get started by creating a new recipe! </h6> 
             </div> 
             <Nav bsStyle="tabs" justified activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)} style={{marginTop: 20}}>
-              <NavItem eventKey={1} >Overview</NavItem>
+              <NavItem eventKey={1} disabled>Overview</NavItem>
               <NavItem eventKey={2} title="Recipes">Recipes</NavItem>
               <NavItem eventKey={3} title="Following">Following</NavItem>
               <NavItem eventKey={4} disabled>Followers</NavItem>
