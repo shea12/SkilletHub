@@ -34,7 +34,8 @@ class App extends React.Component {
       password: 'Password',
       firstname: 'First Name',
       lastname: 'Last Name',
-      email: 'email'
+      email: 'email',
+      currentProfile: null 
   	}; 
   }
 
@@ -83,15 +84,16 @@ class App extends React.Component {
     console.log('Clicked on username!'); 
     console.log(event.target); 
     var username = event.target.id;
-    browserHistory.push(`/User/${username}`);
+    browserHistory.push(`/User/Profile/${username}`);
   }
 
   handleRecipeClick(event) {
     event.preventDefault(); 
     console.log('Clicked on username!'); 
     console.log(event.target); 
+    console.log('USERNAME: ', event.target.dataset.username); 
     var recipe = event.target.id;
-    var username = this.state.username; 
+    var username = event.target.dataset.username; 
     browserHistory.push(`/Recipe/${username}/${recipe}`);
   }
 
