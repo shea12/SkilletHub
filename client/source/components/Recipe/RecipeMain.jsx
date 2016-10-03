@@ -53,6 +53,7 @@ class RecipeMain extends Component {
       
       this.setState({
         recipe: recipe,
+        username: usernameParameter, 
         recipeName: recipe.name.value,
         recipeDescription: recipe.description.value, 
         recipeIngredients: recipe.ingredients, 
@@ -88,22 +89,19 @@ class RecipeMain extends Component {
   render() {
     return (
       <Grid className="recipeMain">
-          <h2 className="recipeHeader"> {'Gordon Ramsay'} / {this.state.recipeName}</h2>
+        <Row style={{margin: 10}}> 
+          <h3 className="recipeHeader"> {this.state.username} / {this.state.recipeName}</h3>
+          <h5> forked from </h5>
+        </Row> 
         <Row>
-        <Col xs={2} md={2}> 
-          <Button onClick={this.handleClick.bind(this)} id="fork" type="submit">Fork</Button>
-        </Col>
-        <Col xs={2} md={2}> 
-          <Button onClick={this.handleClick.bind(this)} id="cook" type="submit">Cook</Button>
-        </Col>
-        <Col xs={2} md={2}> 
-          <Button onClick={this.handleClick.bind(this)} id="edit" type="submit"><Link to='/Edit'> Edit </Link></Button>
-        </Col>
-        </Row>
-        <div>
-          <RecipeDescription recipeDescription={this.state.recipe} />
-        </div> 
-        <div>
+          <Col xs={6} md={6}>
+            <img style={{maxWidth: '350px', height: '100%', display: 'block', margin: 'auto'}} src={'http://steamykitchen.com/wp-content/uploads/2009/08/hainanese-chicken-83.jpg'} alt={'picture of food'}/>
+          </Col>
+          <Col xs={6} md={6}>
+            <RecipeDescription recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
+          </Col> 
+        </Row> 
+        <div style={{marginTop: 10}}>
             <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         </div>
         <div>
