@@ -9,7 +9,7 @@ class NavigationBar extends React.Component {
     super(props);
     this.state = {
       username: 'Username', 
-      password: ''
+      password: 'password'
     }; 
   }
 
@@ -19,7 +19,8 @@ class NavigationBar extends React.Component {
     console.log('RECEIVING PROPS: ', this.props); 
     this.setState({
       userID: this.props.userID,
-      username: this.props.username
+      // username: this.props.username
+      username: 'austinriedel'
     });
   }
 
