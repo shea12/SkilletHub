@@ -193,7 +193,8 @@ class App extends React.Component {
           });
         },
         onFailure: function(error) {
-          console.log('Error authenticating user: ', error);
+          console.log('Error authenticating user: ' + error);
+          alert(error);
         }
       });
       // console.log('sign up successful: ', cognitoUser);
@@ -251,6 +252,7 @@ class App extends React.Component {
         alert(error);
       }
     });
+    this.getListOfAllUsers();
   };
 
   /************************************************************
