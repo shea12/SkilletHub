@@ -78,7 +78,7 @@ class App extends React.Component {
     console.log('User info: ', user.username); 
     this.logOutUser(user); 
   }
-
+  
   handleUserClick(event) {
     event.preventDefault(); 
     console.log('Clicked on username!'); 
