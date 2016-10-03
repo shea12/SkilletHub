@@ -46,8 +46,8 @@ class EditIngredientEntry extends React.Component {
 	}
 
 	componentWillReceiveProps(){
-		console.log('INDIVIDUAL COMPONENT RECEIVING PROPS!'); 
-		console.log(this.props.ingredient.name); 
+		// console.log('INDIVIDUAL COMPONENT RECEIVING PROPS!'); 
+		// console.log(this.props.ingredient.name); 
 		var unitsMenu = units.slice(0);
 		unitsMenu[0] = this.props.ingredient.unit;  
 		this.setState({

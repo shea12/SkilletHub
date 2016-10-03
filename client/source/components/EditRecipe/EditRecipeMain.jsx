@@ -7,6 +7,7 @@ import { Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, Contro
 
 // Server Requests
 var axios = require('axios');
+var _ = require('underscore'); 
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
@@ -28,7 +29,9 @@ class EditRecipeMain extends Component {
       picture: '',
       ingredients: [],
       availableIngredients: [], 
-      steps: []
+      steps: [],
+      editRecipe: {},
+      displayOutput: false
     }; 
   }
 
@@ -56,12 +59,16 @@ class EditRecipeMain extends Component {
         servingsMin: servings[1],
         servingsMax: servings[3], 
         skillLevel: recipe.skillLevel.value, 
-        description: recipe.skillLevel.value, 
+        description: recipe.description.value, 
         cookTime: recipe.cookTime.value,
         picture: recipe.picture.value,
         ingredients: recipe.ingredients,
-        availableIngredients: availableIngredients, 
-        steps: recipe.steps
+        availableIngredients: availableIngredients,
+        editRecipe: {},  
+        editIngredients: [], 
+        steps: recipe.steps,
+        editSteps: [],
+        editRecipeObject: {}
       }); 
 
     })
@@ -82,44 +89,81 @@ class EditRecipeMain extends Component {
     )
   }
 
+  _renderObjectTest() {
+    var testObject = this.state.editRecipeObject; 
+    var display = this.state.displayOutput; 
+
+    if (display) {
+      var testObjectKeys = Object.keys(testObject); 
+      return (
+        testObjectKeys.map((key) => (
+          <h4> {key} : {JSON.stringify(testObject[key])} </h4>
+        ))
+      ) 
+    }
+  }
+
   handleChange (event) {
+    var editRecipe = this.state.editRecipe; 
+    var inputType = event.target.id;
     if (inputType === 'name'){
-      this.setState({ name: event.target.value });
+      editRecipe['name'] = true; 
+      console.log('Changing name!'); 
+      console.log(editRecipe); 
+      this.setState({ name: event.target.value, editRecipe: editRecipe });
     } 
     if (inputType === 'servingsMin'){
-      this.setState({servingsMin: event.target.value}); 
+      editRecipe['servings'] = true; 
+      this.setState({servingsMin: event.target.value, editRecipe: editRecipe }); 
     } 
     if (inputType === 'servingsMax'){
       this.setState({servingsMax: event.target.value}); 
     } 
     if (inputType === 'description'){
-      this.setState({description: event.target.value}); 
+      editRecipe['description'] = true; 
+      this.setState({description: event.target.value, editRecipe: editRecipe}); 
     } 
     if (inputType === 'skill'){
-      this.setState({skillLevel: event.target.value}); 
+      editRecipe['description'] = true; 
+      this.setState({skillLevel: event.target.value, editRecipe: editRecipe}); 
     } 
   }
 
   handleAddIngredient(ingredient) {
+    // Determine current state of ingredients 
     var ingredients = this.state.ingredients;
     ingredients.push(ingredient); 
     var availableIngredients = this.state.availableIngredients; 
     availableIngredients.push(ingredient.name); 
+    var editIngredients = this.state.editIngredients; 
+    editIngredients.push(ingredient); 
+
+    // Set the new state 
     this.setState({
       ingredients: ingredients, 
-      availableIngredients: availableIngredients
+      availableIngredients: availableIngredients,
+      editIngredients: editIngredients
     }); 
   }
 
   handleDeleteIngredient(ingredient) {
+    // Determine current state of ingredients 
     var deletedIngredient = ingredient.name; 
     var ingredients = this.state.ingredients;
+    var ingredientCount = ingredients.length; 
+    ingredientCount--; 
+    var editIngredients = this.state.editIngredients; 
+    editIngredients.push(ingredient); 
     var index = 0; 
 
     // Search based on ingredient name
     ingredients.forEach((ingredient, i) => {
       if (ingredient.name === deletedIngredient) {
-        console.log(ingredient.name);
+        console.log('DELETED INGREDIENT OBJECT: '); 
+        console.log(ingredient);
+        ingredient.deleted = true; 
+        console.log('DELETED INGREDIENT OBJECT: '); 
+        console.log(ingredient);
         console.log(deletedIngredient); 
         console.log(i); 
         index = i; 
@@ -127,12 +171,18 @@ class EditRecipeMain extends Component {
     });
 
     // Remove the specified ingredient from the recipe via splice
+    var unchangedIngredients = _.range(1, index);
+    var changedIngredients = _.range(index, ingredientCount);  
+    console.log(unchangedIngredients); 
+    console.log(changedIngredients); 
+
     ingredients.splice(index, 1); 
-    ingredientNames = ingredients.map((ing)=>{return ing.name});
+    var ingredientNames = ingredients.map((ing)=>{return ing.name});
 
     this.setState({
       ingredients: ingredients,
-      availableIngredients: ingredientNames
+      availableIngredients: ingredientNames,
+      editIngredients: editIngredients
     }); 
   }
 
@@ -148,10 +198,60 @@ class EditRecipeMain extends Component {
     console.log('Clicked on button!'); 
   }
 
+  reconcileSteps(steps) {
+    var stepCount = this.state.steps.length; 
+    console.log('STEP COUNT: ', stepCount); 
+    return steps; 
+  }
+
+  reconcileIngredients(ingredients) {
+    var ingredientCount = this.state.ingredients.length; 
+    console.log('INGREDIENT COUNT: ', ingredientCount); 
+    ingredients.forEach((ingredient) => { 
+      console.log('BEFORE: ', ingredient); 
+      delete ingredient.unitsMenu; 
+      delete ingredient.validationState; 
+      console.log('AFTER: ', ingredient); 
+    }); 
+    console.log(ingredients); 
+    return ingredients; 
+  }
+
+  //// TEST FOR OUTPUT
+  ////////// 
+
+  handleRecipeEditSubmit(event) {
+    event.preventDefault(); 
+
+    console.log(this.state); 
+
+    var editRecipe = this.state.editRecipe; 
+
+    var edits = Object.keys(editRecipe);
+
+    var editRecipeObject = this.state.editRecipeObject; 
+
+    edits.forEach((edit) => {
+      editRecipeObject[edit] = {changed: true, value: this.state[edit]}
+    }); 
+
+    editRecipeObject.steps = this.state.editSteps;
+    editRecipeObject.ingredients = this.state.editIngredients; 
+
+    editRecipeObject.steps = this.reconcileSteps(this.state.editSteps); 
+    editRecipeObject.ingredients = this.reconcileIngredients(this.state.editIngredients); 
+
+    console.log('EDIT RECIPE OBJECT:'); 
+    console.log(editRecipeObject); 
+
+    this.setState({ editRecipeObject: editRecipeObject, displayOutput: true });
+
+  }
+
   render() {
     return (
       <Grid> 
-      <h3> Recipe </h3>
+      <h3 style={{display: 'inline'}}> Edit Recipe </h3> <Button style={{display: 'inline'}} onClick={this.handleRecipeEditSubmit.bind(this)}> Commit Edit </Button> 
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
@@ -203,6 +303,10 @@ class EditRecipeMain extends Component {
       </Row>
       <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients} />
       <EditSteps steps={this.state.steps} availableIngredients={this.state.availableIngredients}/>
+      <Row> 
+        <h4> Edit Recipe Output </h4>
+        {this._renderObjectTest()}
+      </Row>
       </Grid> 
     );
   }

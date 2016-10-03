@@ -10,9 +10,9 @@ class AddIngredientEntry extends React.Component {
 		super(props);
 		this.state = {
 			changed: true,
-			name: null,
-			amount: null,
-			unit: null, 
+			name: 'sour cream',
+			amount: 2,
+			unit: 'cup', 
 			prep: null, 
 			optional: null,
 			position: null,
@@ -34,7 +34,12 @@ class AddIngredientEntry extends React.Component {
 				validationState: "error"
 			}); 
 		} else {
-			this.props.handleAddIngredient(this.state); 
+			var ingredientObject = this.state; 
+			// delete ingredientObject.validationState; 
+			// delete ingredientObject.unitsMenu; 
+			console.log('ADDING INGREDIENT:'); 
+			console.log(ingredientObject); 
+			this.props.handleAddIngredient(ingredientObject); 
 			this.setState({
 				changed: true,
 				name: "",
