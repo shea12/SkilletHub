@@ -290,25 +290,25 @@ class App extends React.Component {
   /************************************************************
   /******************    GET ALL USERS    *********************
   ************************************************************/
-  getListOfAllUsers() {
-    var poolData = { 
-      UserPoolId: USER_POOL_ID,
-      ClientId: USER_POOL_APP_CLIENT_ID
-    };
-    var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
-    var options = {
-      "AttributesToGet": [ "username" ],
-      "UserPoolId": USER_POOL_ID
-    };
-    userPool.listUsers(options, {
-      onSuccess: function(result) {
-        console.log('result in getListUsers: ', result);
-      },
-      onError: function(error) {
-        console.log('error in getListUsers: ', error);
-      }
-    });
-  };
+  // getListOfAllUsers() {
+  //   var poolData = { 
+  //     UserPoolId: USER_POOL_ID,
+  //     ClientId: USER_POOL_APP_CLIENT_ID
+  //   };
+  //   var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
+  //   var options = {
+  //     "AttributesToGet": [ "username" ],
+  //     "UserPoolId": USER_POOL_ID
+  //   };
+  //   userPool.listUsers(options, {
+  //     onSuccess: function(result) {
+  //       console.log('result in getListUsers: ', result);
+  //     },
+  //     onError: function(error) {
+  //       console.log('error in getListUsers: ', error);
+  //     }
+  //   });
+  // };
 
 
   /************************************************************
