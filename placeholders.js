@@ -27,13 +27,36 @@ var placeholderProfile = {
   servings: {
     value: ''
   }, 
+  cookTime: {
+    value: '60 minutes'
+  },
   skillLevel: {
     value: 'Junior Dev'
   },
   description: {
     value: 'This is your basic recipe description'
   }
- }
+ }, 
+ followingList: [
+  {
+    username: 'Gordon Ramsay', 
+    recipes: 2, 
+    skillLevel: 98,
+    totalForks: 1214
+  }, 
+  {
+    username: 'Bobby Flay', 
+    recipes: 5, 
+    skillLevel: 89,
+    totalForks: 1348
+  }, 
+  {
+    username: 'Guy Fieri', 
+    recipes: 3, 
+    skillLevel: 27,
+    totalForks: 0
+  }
+ ]
 }
 
 
