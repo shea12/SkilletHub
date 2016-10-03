@@ -285,11 +285,8 @@ class App extends React.Component {
     };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
     var options = {
-      "AttributesToGet (p. 103)": [ "string" ],
-      "Filter (p. 103)": "string",
-      "Limit (p. 103)": number,
-      "PaginationToken (p. 103)": "string",
-      "UserPoolId (p. 103)": "string"
+      "AttributesToGet": [ "username" ],
+      "UserPoolId": USER_POOL_ID
     };
     userPool.listUsers(options, {
       onSuccess: function(result) {
