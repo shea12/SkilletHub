@@ -71,8 +71,6 @@ module.exports = {
   //   version: { version forked from },
   // }
   forkVersion: (req, res) => {
-    console.log('username: ', req.body.username);
-    console.log('version: ', req.body.version);
     let forkedProps = {
       username: req.body.username,
       branch: 'master'
@@ -80,15 +78,12 @@ module.exports = {
 
     helpers.makeVersion(req.body.version, forkedProps, req.body.username)
     .then(forkedVersion => {
-      console.log('forkedVersion: ', forkedVersion);
       return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
     })
     .then(userRecipesCollectionResults => {
-      console.log('userRecipesCollectionResults: ', userRecipesCollectionResults);
       res.status(201).send(userRecipesCollectionResults);
     })
     .catch(error => {
-      console.log('fail: ', error);
       res.status(500).send(error);
     });
   }
