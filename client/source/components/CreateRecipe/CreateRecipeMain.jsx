@@ -26,7 +26,7 @@ class CreateRecipeMain extends Component {
       skillLevel: '', 
       description: '', 
       cookTime: '',
-      picture: '',
+      picture: "",
       ingredients: [],
       availableIngredients: [], 
       steps: [],
@@ -56,6 +56,9 @@ class CreateRecipeMain extends Component {
     } 
     if (inputType === 'skill'){
       this.setState({skillLevel: event.target.value}); 
+    } 
+    if (inputType === 'image'){
+      this.setState({image: event.target.value}); 
     } 
   }
 
@@ -128,7 +131,7 @@ class CreateRecipeMain extends Component {
     recipeObject.servings = {changed: true, value: `serves ${this.state.servingsMin} to ${this.state.servingsMax}`}; 
     recipeObject.cookTime = {changed: true, value: this.state.cookTime}; 
     recipeObject.skillLevel = {changed: true, value: this.state.skillLevel};
-    recipeObject.picture = {changed: true, value: "http://www.seriouseats.com/recipes/assets_c/2015/08/20150813-meatloaf-food-lab-excerpt-kenji-lopez-alt-25-thumb-1500xauto-425894.jpg"};
+    recipeObject.picture = {changed: true, value: this.state.picture};
     recipeObject.dependencies = []; 
     recipeObject.ingredients = this.state.ingredients; 
     recipeObject.steps = this.state.steps; 
@@ -211,6 +214,16 @@ class CreateRecipeMain extends Component {
             </form>
         </Col>
       </Row>
+      <Row> 
+      <Col xs={12} md={12}> 
+          <form>
+            <FormGroup style={{padding: 5}}>
+            <ControlLabel> Recipe Image </ControlLabel>
+            <FormControl type="text" id="picture" onChange={this.handleChange.bind(this)} value={this.state.picture} required/>
+            </FormGroup>
+          </form>
+      </Col>
+      </Row> 
         <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
         <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
       <Row> 
