@@ -35,6 +35,7 @@ class UserProfile extends React.Component {
 
   componentWillMount() {
     console.log('PARAMS USER PAGE: ', this.props.params); 
+
     var username = this.props.params.username; 
     var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
     var userBio = placeholders.bios[username] || 'Click here to write a short bio'; 
@@ -47,9 +48,12 @@ class UserProfile extends React.Component {
       image: userImage
     }); 
 
-
+    // TODO: Implement request that loads the recipe list for a given user to this components state. 
+      --> // Main Server 
     axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
+      // console.log(Object.keys(results)); 
+      console.log(results.data.recipes); 
       this.setState({
         recipeList: results.data.recipes
       }); 
@@ -66,11 +70,6 @@ class UserProfile extends React.Component {
     console.log(this); 
     this.setState({activeKey: eventKey}); 
     console.log(this.state.followingList); 
-  }
-
-  handleButtonClick(){
-    console.log('FORK RECIPE!'); 
-    // TODO: Implement handle recipe fork function that should be passed into the recipe list entry as a parameter
   }
 
   _renderActiveComponent(){

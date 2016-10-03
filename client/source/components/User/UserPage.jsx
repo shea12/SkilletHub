@@ -44,7 +44,6 @@ class UserProfile extends React.Component {
       image: userImage
     }); 
 
-
     axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
       this.setState({
