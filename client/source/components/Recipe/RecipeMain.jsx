@@ -34,7 +34,7 @@ class RecipeMain extends Component {
       --> // Main Server 
     console.log('PARAMS RECIPE PAGE: ', this.props.params); 
     // var usernameParameter = this.props.params.username; 
-    var usernameParameter = this.props.username; 
+    var usernameParameter = this.props.params.username; 
     console.log('USERNAME PARAMETER:', usernameParameter); 
 
     var recipeParameter = this.props.params.recipe; 
@@ -91,7 +91,6 @@ class RecipeMain extends Component {
       <Grid className="recipeMain">
         <Row style={{margin: 10}}> 
           <h3 className="recipeHeader"> {this.state.username} / {this.state.recipeName}</h3>
-          <h5> forked from </h5>
         </Row> 
         <Row>
           <Col xs={6} md={6}>
