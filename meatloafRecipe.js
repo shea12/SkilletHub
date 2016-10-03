@@ -129,7 +129,10 @@ var meatloafRecipe = {
 		changed: true, 
 		value: 'Serious Eats Meat Loaf'
 	},
-	image: "http://www.seriouseats.com/recipes/assets_c/2015/08/20150813-meatloaf-food-lab-excerpt-kenji-lopez-alt-25-thumb-1500xauto-425894.jpg",
+	picture: {
+    changed: true, 
+    value: "http://www.seriouseats.com/recipes/assets_c/2015/08/20150813-meatloaf-food-lab-excerpt-kenji-lopez-alt-25-thumb-1500xauto-425894.jpg"
+  },
 	description: {                            
 	    changed: true,
 	    value: "Americans are proud of their meatloaf, and rightfully so. It's one of our national dishes and deserves a place up on the pedestal, rubbing shoulders with the likes of hamburgers, barbecue, and hot dogs. The very best meatloaf should be tender and moist, with a distinctly soft but never mushy texture."

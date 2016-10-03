@@ -24,6 +24,9 @@ var placeholderProfile = {
   name:{
     value: ''
   }, 
+  picture: {
+    value: ''
+  }, 
   servings: {
     value: ''
   }, 
@@ -39,22 +42,28 @@ var placeholderProfile = {
  }, 
  followingList: [
   {
-    username: 'Gordon Ramsay', 
+    username: 'Gordon_Ramsay', 
     recipes: 2, 
     skillLevel: 98,
     totalForks: 1214
   }, 
   {
-    username: 'Bobby Flay', 
+    username: 'Bobby_Flay', 
     recipes: 5, 
     skillLevel: 89,
     totalForks: 1348
   }, 
   {
-    username: 'Guy Fieri', 
+    username: 'Guy_Fieri', 
     recipes: 3, 
     skillLevel: 27,
     totalForks: 0
+  },
+  {
+    username: 'testUser1',
+    recipes: 1,
+    skillLevel: 38,
+    totalForks: 1
   }
  ]
 }
