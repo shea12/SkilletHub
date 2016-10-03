@@ -3,7 +3,6 @@ import { browserHistory, Router, Route, IndexRoute, Link} from 'react-router';
 import RecipeListEntry from './RecipeListEntry'; 
 import FollowingListEntry from './FollowingListEntry'; 
 
-
 //Bootstrap 
 import { Image, Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem } from 'react-bootstrap';
 
@@ -35,19 +34,19 @@ class UserProfile extends React.Component {
 
   componentWillMount() {
     console.log('PARAMS USER PAGE: ', this.props.params); 
+    var username = this.props.params.username; 
+    var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
     this.setState({
       username: this.props.params.username, 
       userID: this.props.userID,
-      date: 'May 4th, 2012'
+      date: 'May 4th, 2012', 
+      image: userImage
     }); 
 
-    // TODO: Implement request that loads the recipe list for a given user to this components state. 
-      --> // Main Server 
+
     axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
-      // console.log(Object.keys(results)); 
-      console.log(results.data.recipes); 
       this.setState({
         recipeList: results.data.recipes
       }); 
@@ -55,11 +54,6 @@ class UserProfile extends React.Component {
     .catch((error) => {
       console.log(error); 
     }); 
-  }
-
-  componentWillReceiveProps(){
-    console.log('PARAMS USER PAGE: ', this.props.params); 
-
   }
 
   handleSelect(eventKey) {
@@ -75,13 +69,25 @@ class UserProfile extends React.Component {
     if (this.state.activeKey === 2) {
       return (
         this.state.recipeList.map((recipe, i) => (
-          <RecipeListEntry key={recipe.branches[0].mostRecentVersionId} recipe={recipe} username={this.state.username} handleUserClick={this.props.handleUserClick} handleRecipeClick={this.props.handleRecipeClick}/>
+          <RecipeListEntry 
+            key={recipe.branches[0].mostRecentVersionId} 
+            recipe={recipe} 
+            username={this.state.username} 
+            buttonText={'edit'}
+            handleUserClick={this.props.handleUserClick} 
+            handleRecipeClick={this.props.handleRecipeViewClick}
+            handleButtonClick={this.props.handleRecipeEditClick}
+          />
         ))
       )
     } else if (this.state.activeKey === 3) {
       return (
         this.state.followingList.map((user, i) => (
-           <FollowingListEntry key={'following' + i} user={user} handleUserClick={this.props.handleUserClick}/>
+           <FollowingListEntry 
+            key={'following' + i} 
+            user={user} 
+            handleUserClick={this.props.handleUserClick}
+          />
         ))
       )
     }

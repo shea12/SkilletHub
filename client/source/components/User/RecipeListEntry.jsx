@@ -4,7 +4,7 @@ import { Image, Grid, Row, Col, Form, FormGroup, Badge, ProgressBar, FormControl
 
 const progressBarStyles = ['success', 'warning', 'danger']; 
 
-export default ({recipe, username, handleUserClick, handleRecipeClick}) => {
+export default ({recipe, username, handleUserClick, handleRecipeClick, handleButtonClick, buttonText}) => {
 
   return (
         <Row height={50}> 
@@ -18,6 +18,7 @@ export default ({recipe, username, handleUserClick, handleRecipeClick}) => {
           </Col>
           <Col xs={2} md={2} style={{marginTop: 20}}> 
             <h4> forks <Badge>{Math.floor(Math.random() * 20)}</Badge></h4> 
+            <Button data-username={username} data-recipe={recipe.rootRecipeId} onClick={handleButtonClick.bind(this)}> {buttonText} </Button> 
           </Col>
         </Row>
     )
