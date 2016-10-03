@@ -13,6 +13,9 @@ var axios = require('axios');
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
 import meatloafRecipe from '../../../../meatloafRecipe';
+import wellingtonRecipe from '../../../../recipes/ramsayWellington';
+import nachosRecipe from '../../../../recipes/fieriNachos';
+
 const schema = placeholders.comparisonSchema; 
 
 class CreateRecipeMain extends Component {
@@ -121,6 +124,55 @@ class CreateRecipeMain extends Component {
 
   }
 
+  createWellington(event){
+    event.preventDefault(); 
+
+    var recipeObject = wellingtonRecipe; 
+    // console.log(recipeObject); 
+
+    var requestUsername = this.props.username; 
+
+    console.log(recipeObject.name); 
+    console.log(Object.keys(recipeObject));
+    console.log('recipeObject: ', recipeObject);  
+
+    axios.post(`/${requestUsername}/create-recipe`, { 
+      recipeObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE FROM CREATE MEATLOAF: ', response); 
+      browserHistory.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+
+  }
+
+  createNachos(event){
+    event.preventDefault(); 
+
+    var recipeObject = nachosRecipe; 
+
+    var requestUsername = this.props.username; 
+
+    console.log(recipeObject.name); 
+    console.log(Object.keys(recipeObject));
+    console.log('recipeObject: ', recipeObject);  
+
+    axios.post(`/${requestUsername}/create-recipe`, { 
+      recipeObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE FROM CREATE MEATLOAF: ', response); 
+      browserHistory.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+
+  }
+
   createRecipeObject(event){
     event.preventDefault(); 
 
@@ -166,6 +218,8 @@ class CreateRecipeMain extends Component {
       <h3> Recipe </h3>
       <Button onClick={this.createRecipeObject.bind(this)}> Create Recipe </Button> 
       <Button onClick={this.createMeatloaf.bind(this)}> Create Meatloaf </Button> 
+      <Button onClick={this.createWellington.bind(this)}> Create Wellington </Button> 
+      <Button onClick={this.createNachos.bind(this)}> Create Nachos </Button> 
       <Row className="show-grid">
         <Col xs={4} md={4}> 
             <form>
