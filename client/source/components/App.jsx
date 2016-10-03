@@ -34,7 +34,8 @@ class App extends React.Component {
       password: 'Password',
       firstname: 'First Name',
       lastname: 'Last Name',
-      email: 'email'
+      email: 'email',
+      currentProfile: null 
   	}; 
   }
 
@@ -83,16 +84,27 @@ class App extends React.Component {
     console.log('Clicked on username!'); 
     console.log(event.target); 
     var username = event.target.id;
-    browserHistory.push(`/User/${username}`);
+    this.setState({currentProfile: username}); 
+    browserHistory.push(`/User/Profile/${username}`);
   }
 
-  handleRecipeClick(event) {
+  handleRecipeViewClick(event) {
     event.preventDefault(); 
     console.log('Clicked on username!'); 
     console.log(event.target); 
+    console.log('USERNAME: ', event.target.dataset.username); 
     var recipe = event.target.id;
-    var username = this.state.username; 
+    var username = event.target.dataset.username; 
     browserHistory.push(`/Recipe/${username}/${recipe}`);
+  }
+
+  handleRecipeEditClick(event) {
+    event.preventDefault(); 
+    console.log('CLICKED EDIT IN APP!'); 
+    console.log(event.target); 
+    var recipe = event.target.dataset.recipe;
+    var username = event.target.dataset.username; 
+    browserHistory.push(`/Edit/${username}/${recipe}`);
   }
 
   handleNavigation(event) {
@@ -284,7 +296,8 @@ class App extends React.Component {
       userID: this.state.userID,
       username: this.state.username, 
       handleUserClick: this.handleUserClick.bind(this),
-      handleRecipeClick: this.handleRecipeClick.bind(this)
+      handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
+      handleRecipeEditClick: this.handleRecipeEditClick.bind(this)
 	  })
 	}.bind(this))
     return (

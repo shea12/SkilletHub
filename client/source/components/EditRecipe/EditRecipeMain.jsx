@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import EditIngredients from './EditIngredientsMain'
 import EditSteps from './EditSteps'
-// import StepsForm from './StepsForm'
 
 //Bootstrap 
 import { Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
+
+// Server Requests
+var axios = require('axios');
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
@@ -31,22 +33,41 @@ class EditRecipeMain extends Component {
   }
 
   componentWillMount() {
-    console.log('Create recipe page is mounting!'); 
 
-    // MEAT LOAF TEST
-    var meatloafIngredients = meatloafRecipe.ingredients; 
-    var meatloafSteps = meatloafRecipe.steps; 
-    // console.log(meatloafSteps.length); 
-    this.setState({
-      name: meatloafRecipe.name, 
-      skillLevel: meatloafRecipe.skillLevel,
-      description: meatloafRecipe.description.value,
-      ingredients: meatloafIngredients,
-      steps: meatloafSteps
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+
+    // console.log('Create recipe page is mounting!'); 
+    // console.log('PARAMS RECIPE PAGE: ', this.props.params); 
+    // console.log('USERNAME PARAMETER:', usernameParameter); 
+    // console.log('RECIPE PARAMETER:', recipeParameter); 
+
+    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    .then((result)=> {
+
+      // Parse result object to get relevant recipe data
+      var recipe = result.data; 
+      var servings = recipe.servings.value.split(' '); 
+      var availableIngredients = recipe.ingredients.map((ingredient) => { return ingredient.name}); 
+
+      this.setState({
+        name: recipe.name.value,
+        servings: recipe.servings.value,
+        servingsMin: servings[1],
+        servingsMax: servings[3], 
+        skillLevel: recipe.skillLevel.value, 
+        description: recipe.skillLevel.value, 
+        cookTime: recipe.cookTime.value,
+        picture: recipe.picture.value,
+        ingredients: recipe.ingredients,
+        availableIngredients: availableIngredients, 
+        steps: recipe.steps
+      }); 
+
+    })
+    .catch((error)=> {
+      console.log(error); 
     }); 
-
-    // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
-      --> // Main Server 
   }
 
   _renderIngredientsTest() {
@@ -63,7 +84,7 @@ class EditRecipeMain extends Component {
 
   handleChange (event) {
     if (inputType === 'name'){
-      this.setState({ nameValue: event.target.value });
+      this.setState({ name: event.target.value });
     } 
     if (inputType === 'servingsMin'){
       this.setState({servingsMin: event.target.value}); 
@@ -72,7 +93,7 @@ class EditRecipeMain extends Component {
       this.setState({servingsMax: event.target.value}); 
     } 
     if (inputType === 'description'){
-      this.setState({descriptionValue: event.target.value}); 
+      this.setState({description: event.target.value}); 
     } 
     if (inputType === 'skill'){
       this.setState({skillLevel: event.target.value}); 
@@ -105,11 +126,10 @@ class EditRecipeMain extends Component {
       }
     });
 
-    var ingMap = ingredients.map((ing)=>{return ing.name});
-    // console.log(ingMap);  
+    // Remove the specified ingredient from the recipe via splice
     ingredients.splice(index, 1); 
     ingredientNames = ingredients.map((ing)=>{return ing.name});
-    // console.log(ingMap);  
+
     this.setState({
       ingredients: ingredients,
       availableIngredients: ingredientNames
@@ -137,7 +157,7 @@ class EditRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Name </ControlLabel>
-              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.nameValue} required/>
+              <FormControl type="text" id="name" onChange={this.handleChange.bind(this)} value={this.state.name} required/>
               </FormGroup>
             </form>
         </Col>
@@ -176,14 +196,10 @@ class EditRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Description </ControlLabel>
-              <FormControl componentClass="textarea" id="description" onChange={this.handleChange.bind(this)} value={this.state.descriptionValue} />
+              <FormControl componentClass="textarea" id="description" style={{height: 85}} onChange={this.handleChange.bind(this)} value={this.state.description} />
               </FormGroup>
             </form>
         </Col>
-      </Row>
-      <Row> 
-        <h4> Main Recipe Edit State </h4>
-        {this._renderIngredientsTest()}
       </Row>
       <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients} />
       <EditSteps steps={this.state.steps} availableIngredients={this.state.availableIngredients}/>
@@ -193,3 +209,9 @@ class EditRecipeMain extends Component {
 }
 
 export default EditRecipeMain;
+
+      // Test display for rendering ingredients list 
+      // <Row> 
+        // <h4> Main Recipe Edit State </h4>
+        // {this._renderIngredientsTest()}
+      // </Row>
