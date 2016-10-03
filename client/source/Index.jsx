@@ -23,6 +23,7 @@ render((
 	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
+	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
 	  </Route>
 	</Router>
 ), document.getElementById('app'));
