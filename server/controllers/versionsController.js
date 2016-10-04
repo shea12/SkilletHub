@@ -11,32 +11,34 @@ module.exports = {
   //   changes: { changes }
   // }
   createVersion: (req, res) => {
-    let newVersion;
+    var newVersion;
     helpers.makeVersion(req.body.previous, req.body.changes, req.params.username)
     .then((version) => {
-      newVersion = version;
-      return UserRecipe.find({
+      newVersion = version.toObject();
+      return UserRecipe.findOne({
         username: version.username
       });
-
     }).then(userRecipe => {
-      let recipeLocation = _.findIndex(userRecipe.recipes, 
-        recipe => recipe.rootRecipeId === newVersion.rootRecipeId);
-      let recipe = userRecipe[recipeLocation];
+      let recipeLocation;
+      for (var i = 0; i < userRecipe.recipes.length; i++) {
+        if (userRecipe.recipes[i].rootRecipeId.equals(newVersion.rootVersion)) {
+          recipeLocation = i;
+        }
+      }
+      let recipe = userRecipe.recipes[recipeLocation];
       if (newVersion.branch = 'master') {
         recipe.name = newVersion.name;
       }
-
       let branchLocation = _.findIndex(recipe.branches,
         branch => branch.name === newVersion.branch);
-      let branch = recipe[branchLocation];
+      let branch = recipe.branches[branchLocation];
       branch.mostRecentVersionId = newVersion._id;
 
-      res.status(201).send();
       return UserRecipe.update({
         username: userRecipe.username
       }, userRecipe);
-
+    }).then((updateResults) => {
+      res.status(201).send();
     }).catch(error => {
       res.status(500).send(error)
     });
