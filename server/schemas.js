@@ -9,6 +9,7 @@ let recipeSchema = new Schema({
   deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
   branch: String,            
   username: String,                         //Creator of recipe
+  forkedFrom: String,                       //Creator of recipe forked from
   name: {                                   //Recipe Title / Name
     changed: Boolean,
     value: String

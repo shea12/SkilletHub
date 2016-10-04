@@ -45,6 +45,13 @@ module.exports = {
         username: prev.username
       };
     }
+
+    if (prev.forkedFrom) {
+      newVersion.forkedFrom = prev.forkedFrom
+    }
+    if (changes.username !== prev.username) {
+      newVersion.forkedFrom = prev.username;
+    }
     changes.username = username;
     //build new version object
     _.extend(newVersion, changes);
