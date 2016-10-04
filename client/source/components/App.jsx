@@ -254,6 +254,8 @@ class App extends React.Component {
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     var setUserState = function(token, userAttributes) {
+      console.log(userAttributes); 
+      console.log('USERNAME: ', userAttributes[3].Value); 
       this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
       this.setState({ token: token, password: undefined });
       browserHistory.push(`/User/${userAttributes[3].Value}`);
