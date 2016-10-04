@@ -12,6 +12,7 @@ var addUserRecipesCollection = helpers.addUserRecipesCollection;
 
 var db = require(`${__dirname}/../../server/schemas.js`);
 var Recipe = db.Recipe;
+var UserRecipe = db.UserRecipe;
 
 describe('helpers.js', function() {
 
@@ -257,8 +258,15 @@ describe('helpers.js', function() {
       username = 'don miguel';
       exampleRecipe = {
         _id: generateId(),
-        name: 'potato salad'
+        name: {
+          changed: true,
+          value: 'potato salad'
+        }
       };
+      return UserRecipe.remove({});
+    });
+    after(function() {
+      return UserRecipe.remove({});
     });
 
     it('should be a function', function() {
@@ -272,20 +280,32 @@ describe('helpers.js', function() {
     });
     it('should be assigned to the correct user', function() {
       return addUserRecipesCollection(username, exampleRecipe)
-      .then(function(result) {
+      .then(function() {
+        return UserRecipe.findOne({
+          username: username
+        });
+      }).then(function(result) {
         expect(result.username).to.equal(username);
       });
     });
     it('should add the master recipe', function() {
       return addUserRecipesCollection(username, exampleRecipe)
-      .then(function(result) {
+      .then(function() {
+        return UserRecipe.findOne({
+          username: username
+        });
+      }).then(function(result) {
         expect(result.recipes[0].branches[0].name).to.equal('master');
         expect(result.recipes[0].branches[0].mostRecentVersionId.equals(exampleRecipe._id)).to.be.true;
       });
     });
     it('should have the correct recipe name', function() {
       return addUserRecipesCollection(username, exampleRecipe)
-      .then(function(result) {
+      .then(function() {
+        return UserRecipe.findOne({
+          username: username
+        });
+      }).then(function(result) {
         expect(result.recipes[0].name).to.equal('potato salad');
       });
     });
