@@ -48,7 +48,7 @@ module.exports = {
     //build new version object
     _.extend(newVersion, changes);
     //insert new version
-    return new Recipe(newVersion).save()
+    return new Recipe(newVersion).save();
   },
 
   //retrieve a particular version

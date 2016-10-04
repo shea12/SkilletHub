@@ -1,5 +1,7 @@
 let helpers = require(`${__dirname}/../helpers.js`);
-let UserRecipe = require(`${__dirname}/../schemas.js`).UserRecipe;
+let db = require(`${__dirname}/../schemas.js`);
+let UserRecipe = db.UserRecipe;
+let Recipe = db.Recipe;
 let _ = require('underscore');
 
 module.exports = {
@@ -72,13 +74,15 @@ module.exports = {
   //   version: { version forked from },
   // }
   forkVersion: (req, res) => {
-    let forkedProps = {
-      username: req.body.username,
-      branch: 'master'
-    };
-
-    helpers.makeVersion(req.body.version, forkedProps, req.body.username)
-    .then(forkedVersion => {
+    return Recipe.findOne({
+      _id: req.params.version
+    }).then(version => {
+      let forkedProps = {
+        username: req.body.username,
+        branch: 'master'
+      };
+      return helpers.makeVersion(version.toObject(), forkedProps, req.body.username);
+    }).then(forkedVersion => {
       return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
     })
     .then(userRecipesCollectionResults => {
