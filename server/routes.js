@@ -1,7 +1,7 @@
-var users = require('./controllers/usersController.js');
-var recipes = require('./controllers/recipesController.js');
-var branches = require('./controllers/branchesController.js');
-var versions = require('./controllers/versionsController.js');
+let users = require(`${__dirname}/controllers/usersController.js`);
+let recipes = require(`${__dirname}/controllers/recipesController.js`);
+let branches = require(`${__dirname}/controllers/branchesController.js`);
+let versions = require(`${__dirname}/controllers/versionsController.js`);
 
 module.exports = function(app, express) {
   // /*** Sign up / Sign in / Logout ***/
@@ -26,5 +26,6 @@ module.exports = function(app, express) {
   /*** Versions ***/
   app.post('/:username/:recipe/:branch/create-version', versions.createVersion);
   app.get('/:username/:recipe/:branch/:version', versions.getVersion);
-  app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);
+  app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);  
+  app.post('/:username/:recipe/:branch/:version/fork', versions.forkVersion);
 };

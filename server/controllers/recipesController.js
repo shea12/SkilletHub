@@ -5,9 +5,8 @@ let Recipe = db.Recipe;
 let _ = require('underscore');
 
 module.exports = {
-  // Description: Makes a new recipe
-  // Input: req.body: { recipe changes }
-  // Output: created version
+  // description: Makes a new recipe
+  // body: { recipe changes }
   createRecipe: (req, res) => {
     helpers.makeVersion('new', req.body.recipeObject, req.params.username)
     .then(result => {
@@ -19,9 +18,7 @@ module.exports = {
     });
   },
 
-  // Description: Gets latest version in master
-  // Input: req.params.recipe = recipeId
-  // Output: { Recipe }
+  // description: Gets latest version in master
   getRecipe: (req, res) => {
     let branch = 'master';
     UserRecipe.findOne({
@@ -36,6 +33,7 @@ module.exports = {
       return Recipe.findOne({
         _id: version.mostRecentVersionId
       });
+      
     }).then(version => {
       return helpers.retrieveVersion(version);
     }).then(result => {
@@ -45,9 +43,7 @@ module.exports = {
     })
   },
   
-  //Description: Removes versions with no downstream, makes others unavailable
-  //Input: 
-  //Output: 
+  // description: Removes versions with no downstream, makes others unavailable
   deleteRecipe: (req, res) => {
 
   }

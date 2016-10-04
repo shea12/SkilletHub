@@ -3,13 +3,11 @@ let UserRecipe = require(`${__dirname}/../schemas.js`).UserRecipe;
 let _ = require('underscore');
 
 module.exports = {
-  // Description: Makes a new version from an existing version
-  // Input: 
-  //   req.body: {
-  //     previous: { previous version },
-  //     changes: { changes }
-  //   }
-  // Output: Created version
+  // description: Makes a new version from an existing version
+  // body: {
+  //   previous: { previous version },
+  //   changes: { changes }
+  // }
   createVersion: (req, res) => {
     let newVersion;
     helpers.makeVersion(req.body.previous, req.body.changes, req.params.username)
@@ -18,6 +16,7 @@ module.exports = {
       return UserRecipe.find({
         username: version.username
       });
+
     }).then(userRecipe => {
       let recipeLocation = _.findIndex(userRecipe.recipes, 
         recipe => recipe.rootRecipeId === newVersion.rootRecipeId);
@@ -35,12 +34,13 @@ module.exports = {
       return UserRecipe.update({
         username: userRecipe.username
       }, userRecipe);
+
     }).catch(error => {
       res.status(500).send(error)
     });
   },
 
-  //gets a specific version
+  // description: gets a specific version
   getVersion: (req, res) => {
     let branch = req.params.branch;
     UserRecipe.find({
@@ -53,6 +53,7 @@ module.exports = {
         branch: branch
       });
       return helpers.retrieveVersion(version)
+
     }).then(result => {
       res.status(200).send(result);
     }).catch(error => {
@@ -60,8 +61,31 @@ module.exports = {
     })
   },
   
-  //removes versions with no downstream, makes others unavailable
+  // description: removes versions with no downstream, makes others unavailable
   deleteVersion: (req, res) => {
 
+  },
+
+  // description: fork a version
+  // body: {
+  //   username: 'username of person making the fork'
+  //   version: { version forked from },
+  // }
+  forkVersion: (req, res) => {
+    let forkedProps = {
+      username: req.body.username,
+      branch: 'master'
+    };
+
+    helpers.makeVersion(req.body.version, forkedProps, req.body.username)
+    .then(forkedVersion => {
+      return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
+    })
+    .then(userRecipesCollectionResults => {
+      res.status(201).send(userRecipesCollectionResults);
+    })
+    .catch(error => {
+      res.status(500).send(error);
+    });
   }
 };
