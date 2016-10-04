@@ -35,8 +35,9 @@ class App extends React.Component {
       firstname: 'First Name',
       lastname: 'Last Name',
       email: 'email',
-      currentProfile: null 
-    }; 
+      currentProfile: null,
+      otherUser: false 
+  	}; 
   }
 
   handleChange (event) {
@@ -83,9 +84,12 @@ class App extends React.Component {
     event.preventDefault(); 
     console.log('Clicked on username!'); 
     console.log(event.target); 
+    console.log('USERNAME STATE');
+    console.log(this.state.username);
     var username = event.target.id;
-    this.setState({currentProfile: username}); 
-    browserHistory.push(`/User/Profile/${username}`);
+    var otherUser = this.state.username !== username ? true : false; 
+    this.setState({otherUser: otherUser}); 
+    browserHistory.push(`/User/${username}`);
   }
 
   handleRecipeViewClick(event) {
@@ -107,10 +111,22 @@ class App extends React.Component {
     browserHistory.push(`/Edit/${username}/${recipe}`);
   }
 
+  handleRecipeForkClick(event) {
+    event.preventDefault(); 
+    console.log('CLICKED FORK IN APP!'); 
+    console.log(event.target); 
+    var recipe = event.target.dataset.recipe;
+    var username = event.target.dataset.username; 
+    browserHistory.push(`/Edit/${username}/${recipe}`);
+  }
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
     console.log('NAVIGATING TO:', route); 
+    if(route === `/User/${this.state.username}/`) {
+      this.setState({otherUser: false}); 
+    }
     browserHistory.push(`${route}`);
   }
 
@@ -252,7 +268,6 @@ class App extends React.Component {
         alert(error);
       }
     });
-    this.getListOfAllUsers();
   };
 
   /************************************************************
@@ -315,21 +330,29 @@ class App extends React.Component {
   /****************    RENDER COMPONENTS    *******************
   ************************************************************/
   render () {
-  const children = React.Children.map(this.props.children, function (child) {
-    return React.cloneElement(child, {
-      handleSignUp: this.handleSignUp.bind(this),
-      userID: this.state.userID,
+
+	const children = React.Children.map(this.props.children, function (child) {
+	  return React.cloneElement(child, {
+	    handleSignUp: this.handleSignUp.bind(this),
+      // userID: this.state.userID,
       username: this.state.username, 
+      otherUser: this.state.otherUser, 
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
-      handleRecipeEditClick: this.handleRecipeEditClick.bind(this)
-    })
-  }.bind(this))
+      handleRecipeEditClick: this.handleRecipeEditClick.bind(this),
+      handleRecipeForkClick: this.handleRecipeForkClick.bind(this)
+	  })
+	}.bind(this))
     return (
-      <div> 
-        <Nav handleLoginUser={this.handleLoginUser.bind(this)} handleLogOutUser={this.handleLogOutUser.bind(this)} userID={this.state.userID} username={this.state.username} handleNavigation={this.handleNavigation.bind(this)} />
-        { children }
-      </div>
+    	<div> 
+    		<Nav 
+          userID={this.state.userID} 
+          username={this.state.username} 
+          handleLogOutUser={this.handleLogOutUser.bind(this)} 
+          handleLoginUser={this.handleLoginUser.bind(this)} 
+          handleNavigation={this.handleNavigation.bind(this)} />
+    		{ children }
+    	</div>
     ); 
   }
 }; 

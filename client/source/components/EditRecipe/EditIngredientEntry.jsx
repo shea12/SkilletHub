@@ -46,8 +46,8 @@ class EditIngredientEntry extends React.Component {
 	}
 
 	componentWillReceiveProps(){
-		console.log('INDIVIDUAL COMPONENT RECEIVING PROPS!'); 
-		console.log(this.props.ingredient.name); 
+		// console.log('INDIVIDUAL COMPONENT RECEIVING PROPS!'); 
+		// console.log(this.props.ingredient.name); 
 		var unitsMenu = units.slice(0);
 		unitsMenu[0] = this.props.ingredient.unit;  
 		this.setState({
@@ -58,14 +58,14 @@ class EditIngredientEntry extends React.Component {
 			unitsMenu: unitsMenu, 
 			prep: this.props.ingredient.prep,
 			optional: this.props.ingredient.optional,
-			position: this.props.ingredient.position
+			position: this.props.ingredient.position,
+			display: this.props.ingredient.display
 		}); 
 	}
 
 	handleClick (event) {
 		event.preventDefault(); 
-		console.log('Attempting to edit ingredient!'); 
-		console.log(this.state); 
+		
 		this.setState({
 			changed: true, 
 			disabled: false
@@ -74,19 +74,13 @@ class EditIngredientEntry extends React.Component {
 
 	handleDelete (event) {
 		event.preventDefault(); 
-		console.log('Attempting to delete ingredient!'); 
-		console.log(this.state.name); 
-		// this.props.handleDeleteIngredient(this.state); 
-		// this.setState({
-		// 	display: 'none'
-		// }); 
-		var promiseDelete = Promise.promisify(this.props.handleDeleteIngredient);
-		promiseDelete(this.state)
-		.then(function(result) {
-			console.log('THE PROMISE WORKED!'); 
-			console.log(this);
-			this.forceUpdate();
-		}).bind(this); 
+
+		var ingredient = this.state;
+		ingredient.display = 'none'; 
+		// console.log('DELETING FROM ENTRY: ');
+		// console.log(ingredient); 
+		this.props.handleDeleteIngredient(ingredient); 
+		this.setState({display: 'none'}); 
 	}
 
 	handleChange (event) {

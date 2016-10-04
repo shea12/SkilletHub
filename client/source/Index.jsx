@@ -18,7 +18,6 @@ render((
 	  	<IndexRoute component={LandingPage} />
 	  	<Route path="/User" component={User} />
       <Route path="/User/:username" component={User} />
-      <Route path="/User/Profile/:username" component={AltUser} />
 	  	<Route path="/Recipe" component={RecipeMain} />
 	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
