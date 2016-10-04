@@ -118,10 +118,17 @@ class App extends React.Component {
   handleRecipeForkClick(event) {
     event.preventDefault(); 
     console.log('CLICKED FORK IN APP!'); 
-    console.log(event.target); 
-    var recipe = event.target.dataset.recipe;
+    console.log(event.target.dataset); 
     var username = event.target.dataset.username; 
-    browserHistory.push(`/Edit/${username}/${recipe}`);
+    var recipe = event.target.dataset.recipe;
+    var branch = event.target.dataset.branch;
+    var version = event.target.dataset.version; 
+    axios.post(`/${username}/${recipe}/${branch}/${version}`)
+    .then((result) => {
+      console.log('SUCCESSFUL FORK!');
+      console.log(result); 
+      browserHistory.push(`/User/${this.state.username}`);
+    })
   }
 
   handleNavigation(event) {
