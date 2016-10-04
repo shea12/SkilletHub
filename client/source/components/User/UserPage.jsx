@@ -68,7 +68,7 @@ class UserProfile extends React.Component {
       axios.get(`/${username}/profile`)
       .then((results) => {
         console.log('SUCCESSFULLY REQUESTED PROFILE'); 
-        console.log(results); 
+        console.log(results.data.recipe); 
         this.setState({
           username: username, 
           date: 'May 4th, 2012', 
@@ -102,9 +102,9 @@ class UserProfile extends React.Component {
       return (
         this.state.recipeList.map((recipe, i) => (
           <RecipeListEntry 
-            key={recipe.branches[0].mostRecentVersionId} 
+            key={recipe.rootRecipeId} 
             recipe={recipe} 
-            username={this.props.username}
+            username={this.state.username}
             buttonText={buttonText}
             handleUserClick={this.props.handleUserClick} 
             handleRecipeClick={this.props.handleRecipeViewClick}

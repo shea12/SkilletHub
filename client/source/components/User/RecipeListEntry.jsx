@@ -18,7 +18,7 @@ export default ({recipe, username, handleUserClick, handleRecipeClick, handleBut
           </Col>
           <Col xs={2} md={2} style={{marginTop: 20}}> 
             <h4> forks <Badge>{Math.floor(Math.random() * 20)}</Badge></h4> 
-            <Button data-username={username} data-recipe={recipe.rootRecipeId} onClick={handleButtonClick.bind(this)}> {buttonText} </Button> 
+            <Button data-username={username} data-recipe={recipe.rootRecipeId} data-branch={'master'} data-version={recipe.branches[0].mostRecentVersionId} onClick={handleButtonClick.bind(this)}> {buttonText} </Button> 
           </Col>
         </Row>
     )
