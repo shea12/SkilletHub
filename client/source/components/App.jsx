@@ -202,9 +202,9 @@ class App extends React.Component {
     attList.push(timeStamp);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Username }); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
       this.setState({ token: token, password: undefined });
-      browserHistory.push(`/User/${userAttributes[3].Username}`);
+      browserHistory.push(`/User/${userAttributes[3].Value}`);
       this.createUser(token, userAttributes);
     }.bind(this); 
 
@@ -254,9 +254,11 @@ class App extends React.Component {
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Username }); 
+      console.log(userAttributes); 
+      console.log('USERNAME: ', userAttributes[3].Value); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
       this.setState({ token: token, password: undefined });
-      browserHistory.push(`/User/${userAttributes[3].Username}`);
+      browserHistory.push(`/User/${userAttributes[3].Value}`);
       this.setUserToken(token, userAttributes);
     }.bind(this); 
     
