@@ -202,7 +202,7 @@ class App extends React.Component {
     attList.push(timeStamp);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value });
       this.setState({ token: token, password: undefined });
       browserHistory.push(`/User/${userAttributes[3].Value}`);
       this.createUser(token, userAttributes);
@@ -244,6 +244,8 @@ class App extends React.Component {
   NOTE: After user has been authenticated, we need to remove 
         their password from the state! 
   ALSO: Need to add auth token to our user db on login
+  ALSO: Need to set up error messages, input box highlighting
+        on incorrect username/password or user non-existent
   ************************************************************/
   loginUser (user) {
     var authData = { Username: user.username, Password: user.password };

@@ -18,7 +18,7 @@ module.exports = {
       createdAt: req.body.userObject.createdAt,
       token: req.body.userObject.token
     }).save().then(function(result) {
-      console.log('save in db result: ', result);
+      console.log('Saved user in db, result: ', result);
       res.status(200).send(result);
     });
 
