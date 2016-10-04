@@ -113,14 +113,14 @@ var testStep4 = {
 
 var testStep5 = {
   changed: true, 
-  position: 4, 
+  position: 5, 
   description: "Season the beef fillets, then place them on top of the mushroom-covered ham. Using the cling film, roll the Parma ham over the beef, then roll and tie the cling film to get a nice, evenly thick log. Repeat this step with the other beef fillet, then chill for at least 30 minutes.",
   ingredients: ['beef fillets', 'wild mushrooms', 'Parma ham'] 
 }
 
 var testStep6 = {
   changed: true, 
-  position: 4, 
+  position: 6, 
   description: "Prepare the red wine sauce. Heat the oil in a large pan, then fry the beef trimmings for a few minutes until browned on all sides. Stir in the shallots with the peppercorns, bay and thyme and continue to cook for about 5 minutes, stirring frequently, until the shallots turn golden brown.",
   ingredients: ['bottle red wine', 'beef trimmings', 'shallots', 'peppercorns'] 
 }
@@ -146,7 +146,7 @@ var wellingtonRecipe = {
   },  
   cookTime: {                              
     changed: true,
-    value: '2 hours',  //Cook time in minutes                         
+    value: 120  //Cook time in minutes                         
   },     
   skillLevel: {                             //Recipe difficulty [easy, medium, hard]
     changed: true,
