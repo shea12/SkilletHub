@@ -293,6 +293,18 @@ class App extends React.Component {
     var userData = { Username: user.username, Pool: userPool };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
+    var userObject = {username: user.username};
+    console.log('In log out, user.username: ', user.username);
+
+    axios.post(`/user/logout`, { 
+      userObject
+    }).then(function(response) {
+      console.log('RESPONSE LOG OUT USER: ', response); 
+      // browserHistor  y.push(`/User/${requestUsername}`);
+    }).catch(function(error) {
+      console.log(error); 
+    });
+
     cognitoUser.signOut();
     console.log('logged out user: ', cognitoUser);
 
@@ -305,18 +317,6 @@ class App extends React.Component {
     window.AWS.config.credentials.params.Logins.token = '';
     // console.log("after logout: ", window.AWS.config.credentials);
 
-    var userObject = {username: user.username};
-
-    axios.post(`/user/login`, { 
-      userObject
-    })
-    .then(function(response) {
-      console.log('RESPONSE LOG OUT USER: ', response); 
-      // browserHistor  y.push(`/User/${requestUsername}`);
-    })
-    .catch(function(error) {
-      console.log(error); 
-    });
 
 
     //redirect to the landing page after logging out
