@@ -123,12 +123,19 @@ class App extends React.Component {
     var recipe = event.target.dataset.recipe;
     var branch = event.target.dataset.branch;
     var version = event.target.dataset.version; 
-    axios.post(`/${username}/${recipe}/${branch}/${version}`)
+    var forkUser = this.state.username; 
+    console.log('FORK USER: ', forkUser); 
+    axios.post(`/${username}/${recipe}/${branch}/${version}/fork`, {
+      username: forkUser
+    })
     .then((result) => {
       console.log('SUCCESSFUL FORK!');
       console.log(result); 
-      browserHistory.push(`/User/${this.state.username}`);
+      // browserHistory.push(`/User/${forkUser}`);
     })
+    .catch((error) => {
+      console.log(error); 
+    }); 
   }
 
   handleNavigation(event) {
