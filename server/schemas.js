@@ -106,7 +106,10 @@ let userSchema = new Schema({
   firstname: String,                    // First name
   lastname: String,                     // Last Name
   email: String,                        // email address
-  createdAt: String,                    // Timestamp
+  createdAt: {                          // Timestamp
+    type: Date, 
+    default: Date.now
+  },                    
   bio: String,                          // Optional: user can edit profile page
   picture: String,                      // Optional: url of hosted picture
   token: String                         // Session token from AWS Cognito
