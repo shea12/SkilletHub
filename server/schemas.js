@@ -115,11 +115,23 @@ let userSchema = new Schema({
   token: String                         // Session token from AWS Cognito
 }); 
 
+let pullRequestSchema = new Schema({
+  sendingUser: String,
+  receivingUser: String,
+  sentVersion: Schema.Types.ObjectId,
+  receivingVersion: Schema.Types.ObjectId,
+  resultVersion: Schema.Types.ObjectId,
+  status: String,
+  createdAt: { type: Date, default: Date.now },
+  resolvedAt: Date
+});
+
 module.exports = {
   Recipe: mongoose.model('Recipe', recipeSchema),
   UserRecipe: mongoose.model('UserRecipe', userRecipeSchema),
   Dependency: mongoose.model('Dependency', dependencySchema),
   Tag: mongoose.model('Tag', tagSchema),
   Issue: mongoose.model('Issue', issueSchema),
-  User: mongoose.model('User', userSchema)
+  User: mongoose.model('User', userSchema),
+  PullRequest: mongoose.model('PullRequest', pullRequestSchema)
 };
