@@ -252,7 +252,7 @@ class App extends React.Component {
         alert(error);
       }
     });
-    this.getListOfAllUsers();
+    // this.getListOfAllUsers();
   };
 
   /************************************************************

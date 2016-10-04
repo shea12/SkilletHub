@@ -9,7 +9,8 @@ export default ({recipe, forkRecipe}) => {
       <div>
         <span className="title">{recipe.name}</span>
         <span className="forkedSource"> forked from {'Austin Riedel'} </span>
-		<button onClick={forkRecipe.bind(this)}> Fork </button> 
+		    <button onClick={forkRecipe.bind(this)}> Fork </button> 
+        <button onClick={cookRecipe.bind(this)}> Cook </button> 
       </div>
     </li>
   ); 
