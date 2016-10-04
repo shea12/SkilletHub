@@ -39,8 +39,8 @@ class UserProfile extends React.Component {
 
     axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
-      console.log('USER PROFILE RESULTS'); 
-      console.log(results); 
+      // console.log('USER PROFILE RESULTS'); 
+      // console.log(results); 
       console.log('USER PROFILE RESULTS DATA'); 
       console.log(results.data); 
       this.setState({
@@ -57,13 +57,13 @@ class UserProfile extends React.Component {
   }
 
    componentWillReceiveProps(nextProps) {
-      console.log('RECEIVING PROPS!'); 
-      console.log('PARAMS USER PAGE: ', nextProps.params);
-      console.log(nextProps); 
+      // console.log('RECEIVING PROPS!'); 
+      // console.log('PARAMS USER PAGE: ', nextProps.params);
+      // console.log(nextProps); 
       var username = nextProps.params.username; 
       var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
       var otherUser = this.props.username !== username; 
-      console.log('OTHER USER: ', otherUser); 
+      // console.log('OTHER USER: ', otherUser); 
 
       axios.get(`/${username}/profile`)
       .then((results) => {

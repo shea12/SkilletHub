@@ -131,7 +131,7 @@ class App extends React.Component {
     .then((result) => {
       console.log('SUCCESSFUL FORK!');
       console.log(result); 
-      // browserHistory.push(`/User/${forkUser}`);
+      browserHistory.push(`/User/${forkUser}`);
     })
     .catch((error) => {
       console.log(error); 
