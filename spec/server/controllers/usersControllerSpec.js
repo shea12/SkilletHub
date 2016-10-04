@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var db = require(`${__dirname}/../../../server/schemas.js`);
 var UserRecipe = db.UserRecipe;
+var User = db.User;
 var generateId = mongoose.Types.ObjectId;
 
 var expect = require('chai').expect;
@@ -19,13 +20,15 @@ describe('userController.js', function() {
   after(function() {
     return UserRecipe.remove({})
     .then(function() {
+      return User.remove({});
+    }).then(function() {
       mongoose.connection.close();
     });
   });
 
   describe('getProfile()', function() {
     var exampleUserRecipes = {
-      userId: generateId(),
+      username: 'justin',
       recipes: [
         {
           name: 'salad',
@@ -49,11 +52,24 @@ describe('userController.js', function() {
         }
       ]
     }
+    var exampleUser = {
+      username: 'justin',
+      firstname: 'justin',
+      lastname: 'justin',
+      email: 'justin@justin.justin',
+      createdAt: Date.now(),
+      bio: 'he\'s a cool dude',
+      picture: 'justin.jpg'
+    }; 
+
     var req, res;
     beforeEach(function() {
       req = httpMocks.createRequest({
         method: 'GET',
-        url: '/justin/profile'
+        url: '/justin/profile',
+        params: {
+          username: 'justin'
+        }
       });
       res = httpMocks.createResponse();
     });
@@ -61,16 +77,20 @@ describe('userController.js', function() {
     it('should be a function', function() {
       expect(getProfile).to.be.a('function');
     });
-    // it('should return 200 when succesful', function() {
-    //   return UserRecipe.remove({})
-    //   .then(function() {
-    //     return new UserRecipe(exampleUserRecipes).save();
-    //   }).then(function() {
-    //     return getProfile(req, res);
-    //   }).then(function() {
-    //     expect(res.statusCode).to.equal(200);
-    //   });
-    // });
+    it('should return 200 when succesful', function() {
+      return UserRecipe.remove({})
+      .then(function() {
+        return User.remove({});
+      }).then(function() {
+        return new UserRecipe(exampleUserRecipes).save();
+      }).then(function() {
+        return new User(exampleUser).save();
+      }).then(function() {
+        return getProfile(req, res);
+      }).then(function() {
+        expect(res.statusCode).to.equal(200);
+      });
+    });
     // it('should return a 404 when error', function() {
     //   req.url = '/tosh/profile';
     //   return getProfile(req, res)
