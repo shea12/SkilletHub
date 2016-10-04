@@ -41,6 +41,7 @@ class CreateRecipeMain extends Component {
     console.log('Create recipe page is mounting!'); 
     // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
       --> // Main Server 
+    console.log(wellingtonRecipe); 
   }
 
   handleChange (event) {
