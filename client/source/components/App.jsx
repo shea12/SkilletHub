@@ -118,10 +118,24 @@ class App extends React.Component {
   handleRecipeForkClick(event) {
     event.preventDefault(); 
     console.log('CLICKED FORK IN APP!'); 
-    console.log(event.target); 
-    var recipe = event.target.dataset.recipe;
+    console.log(event.target.dataset); 
     var username = event.target.dataset.username; 
-    browserHistory.push(`/Edit/${username}/${recipe}`);
+    var recipe = event.target.dataset.recipe;
+    var branch = event.target.dataset.branch;
+    var version = event.target.dataset.version; 
+    var forkUser = this.state.username; 
+    console.log('FORK USER: ', forkUser); 
+    axios.post(`/${username}/${recipe}/${branch}/${version}/fork`, {
+      username: forkUser
+    })
+    .then((result) => {
+      console.log('SUCCESSFUL FORK!');
+      console.log(result); 
+      browserHistory.push(`/User/${forkUser}`);
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
   }
 
   handleNavigation(event) {
@@ -246,6 +260,8 @@ class App extends React.Component {
   ALSO: Need to add auth token to our user db on login
   ************************************************************/
   loginUser (user) {
+    console.log('LOGGING USER IN FUNCTION: ');
+    console.log(user); 
     var authData = { Username: user.username, Password: user.password };
     var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
     var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
@@ -254,6 +270,8 @@ class App extends React.Component {
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     var setUserState = function(token, userAttributes) {
+      console.log(userAttributes); 
+      console.log('USERNAME: ', userAttributes[3].Value); 
       this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
       this.setState({ token: token, password: undefined });
       browserHistory.push(`/User/${userAttributes[3].Value}`);
