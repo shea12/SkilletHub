@@ -246,6 +246,8 @@ class App extends React.Component {
   ALSO: Need to add auth token to our user db on login
   ************************************************************/
   loginUser (user) {
+    console.log('LOGGING USER IN FUNCTION: ');
+    console.log(user); 
     var authData = { Username: user.username, Password: user.password };
     var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
     var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
