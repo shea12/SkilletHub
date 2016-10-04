@@ -11,13 +11,13 @@ class EditStepEntry extends React.Component {
     this.state = {
       changed: false,
       disabled: true, 
-      ingredient: null,
-      name: null,
-      amount: null,
-      unit: null, 
-      prep: null, 
-      optional: null,
-      position: null
+      description: null,
+      lines: null,
+      ingredients: null,
+      parsedIngredients: null, 
+      availableIngredients: null, 
+      time: null,
+      display: ''
     }; 
   }
 
@@ -31,7 +31,8 @@ class EditStepEntry extends React.Component {
       ingredients: this.props.step.ingredients,
       parsedIngredients: this.props.step.ingredients, 
       availableIngredients: this.props.availableIngredients, 
-      time: this.props.step.time
+      time: this.props.step.time,
+      position: this.props.step.position
     }); 
   }
 
@@ -47,6 +48,12 @@ class EditStepEntry extends React.Component {
     event.preventDefault(); 
     console.log('Attempting to delete step!'); 
     console.log(this.state.description); 
+
+    var step = this.state; 
+    console.log(step); 
+    console.log(typeof this.props.handleDeleteStep);
+    this.props.handleDeleteStep(step); 
+    this.setState({display: 'none'}); 
   }
 
   timeParse (string) {
@@ -89,6 +96,14 @@ class EditStepEntry extends React.Component {
       }); 
 
       // Parse for time 
+      var time = this.timeParse(description); 
+      var stepTime = this.state.time; 
+      if (time && !stepTime) {
+        console.log('SETTING TIME: ', time); 
+        this.setState({
+          time: time[0]
+        }); 
+      }
     }
   }
 
@@ -138,7 +153,7 @@ class EditStepEntry extends React.Component {
 
   render() {
     return (
-      <Grid>
+      <Grid style={{display: this.state.display}}>
         <Row> 
           <Col xs={8} md={8} style={{margin: 5}}>
             <FormGroup>

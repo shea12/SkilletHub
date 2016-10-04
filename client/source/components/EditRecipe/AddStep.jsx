@@ -4,102 +4,112 @@ import React from 'react';
 import { Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
 var units = ['unit', 'tsp.', 'tbsp.', 'fl.oz.', 'cup', 'pt.', 'qt.', 'gal.', 'g', 'kg', 'oz.', 'lbs', 'whole']; 
+const timesRegEx = [/\d+\s?sec/, /\d+\s?min/, /\d+\s?hr/, /\d+\s?hour/]; 
 
 class AddStep extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      changed: true,
-      name: null,
-      amount: null,
-      unit: null, 
-      prep: null, 
-      optional: null,
-      position: null,
-      validationState: ""   
+      changed: false,
+      disabled: false, 
+      description: null,
+      lines: null,
+      ingredients: null,
+      parsedIngredients: [], 
+      availableIngredients: null, 
+      time: null
     }; 
-  }
-
-  componentWillMount(){
-    this.setState({
-      unitsMenu: units
-    }); 
   }
 
   handleClick (event) {
     event.preventDefault(); 
     console.log('Clicking in Add Step!'); 
-    // if (this.state.name === null || this.state.amount === null || this.state.unit === null) {
-    //   this.setState({
-    //     validationState: "error"
-    //   }); 
-    // } else {
-    //   this.setState({
-    //     changed: true,
-    //     name: "",
-    //     amount: "",
-    //     unit: "", 
-    //     prep: "", 
-    //     optional: "",
-    //     position: "",
-    //     validationState: ""     
-    //   }); 
-    // }
+    var step = this.state; 
+    this.props.handleAddStep(step)
+
+    this.setState({
+      changed: false,
+      disabled: false, 
+      description: "",
+      lines: "",
+      ingredients: "",
+      parsedIngredients: [], 
+      time: ""
+    }); 
+  }
+
+  timeParse (string) {
+    var match = []; 
+    timesRegEx.forEach((timeRegEx) => {
+      var time = timeRegEx.exec(string); 
+      if (time) {
+        match.push(time); 
+      } 
+    });
+    return match; 
   }
 
   handleChange (event) {
     var inputType = event.target.id; 
-    if (inputType === 'name') {
-      this.setState({name: event.target.value}); 
-    } else if (inputType === 'amount') {
-      this.setState({amount: event.target.value}); 
-    } else if (inputType === 'unit') {
-      this.setState({unit: event.target.value}); 
-    } else if (inputType === 'prep') {
-      this.setState({prep: event.target.value}); 
-    } else if (inputType === 'optional') {
-      this.setState({optional: event.target.value}); 
-    } 
+    if (inputType === 'description') {
+      var description = event.target.value; 
+
+      // Set height of the text box based on string length 
+      var lines = Math.ceil(description.length / 100) * 30; 
+      this.setState({
+        changed: true, 
+        description: description,
+        line: lines
+      }); 
+
+      // Parse for ingredients 
+      var availableIngredients = this.props.availableIngredients; 
+      var parsedIngredients = this.state.parsedIngredients;
+
+      availableIngredients.forEach((ingredient) => {
+        var regEx = RegExp(ingredient, 'i');
+        var parsedIngredient = regEx.exec(description); 
+        if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
+          parsedIngredients.push(parsedIngredient[0])
+        }
+      });
+      this.setState({
+        parsedIngredients: parsedIngredients,
+        ingredients: parsedIngredients
+      }); 
+
+      // Parse for time 
+      var time = this.timeParse(description); 
+      var stepTime = this.state.time; 
+      if (time && !stepTime) {
+        console.log('SETTING TIME: ', time); 
+        this.setState({
+          time: time[0]
+        }); 
+      }
+    }
   }
 
   render() {
     return (
+      <Grid>
       <Row> 
-        <Form inline >
-        <Col xs={2} md={2} style={{margin: 5}}>
-          <FormGroup controlId="name" validationState={this.state.validationState}>
-            <FormControl type="text" placeholder={'add ingredient here'} value={this.state.name} onChange={this.handleChange.bind(this)} required={'true'} />
+        <Col xs={8} md={8} style={{margin: 5}}>
+          <FormGroup>
+            <ControlLabel> Step Description </ControlLabel>
+            <FormControl componentClass="textarea" type="text" style={{height: this.state.lines}} id="description" value={this.state.description} onChange={this.handleChange.bind(this)} disabled={this.state.disabled} />
           </FormGroup>
         </Col>
         <Col xs={2} md={2} style={{margin: 5}}>
-          <FormGroup controlId="amount" validationState={this.state.validationState}>
-            <FormControl type="number" value={this.state.amount} onChange={this.handleChange.bind(this)} required={'true'} />
-          </FormGroup>
-        </Col>
-        <Col xs={1} md={1} style={{margin: 5}}>
-              <FormGroup controlId="unit" validationState={this.state.validationState}>
-                <FormControl componentClass="select" onChange={this.handleChange.bind(this)} required={true}>
-                  {this.state.unitsMenu.map((unit, i)=> (
-                    <option key={'unit' + i} value={unit}>{unit}</option>
-                  ))}
-                </FormControl>
-              </FormGroup>
-        </Col>
-        <Col xs={2} md={2} style={{margin: 5}}>
-          <FormGroup controlId="prep">
-            <FormControl type="text" value={this.state.prep} onChange={this.handleChange.bind(this)}/>
-          </FormGroup>
-        </Col>
-        <Col xs={2} md={2} style={{margin: 5}}>
-          <FormGroup controlId="optional">
-            <FormControl type="text" value={this.state.optional} onChange={this.handleChange.bind(this)}/>
-          </FormGroup>
-        </Col> 
           <Button type="submit" style={{margin: 5}} onClick={this.handleClick.bind(this)} onSubmit={this.handleClick.bind(this)} >
             Add
           </Button>
-        </Form>
+        </Col>
       </Row>
+      <Row>
+        <h4> {JSON.stringify(this.props.availableIngredients)} </h4>
+      </Row>
+      </Grid>
     )
   }
 }

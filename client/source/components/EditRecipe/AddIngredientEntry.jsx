@@ -9,16 +9,14 @@ class AddIngredientEntry extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			changed: true,
 			name: 'sour cream',
 			amount: 2,
 			unit: 'cup', 
 			prep: null, 
 			optional: null,
-			position: null,
 			validationState: ""   
 		}; 
-	}
+	} 
 
 	componentWillMount(){
 		this.setState({
@@ -35,19 +33,13 @@ class AddIngredientEntry extends React.Component {
 			}); 
 		} else {
 			var ingredientObject = this.state; 
-			// delete ingredientObject.validationState; 
-			// delete ingredientObject.unitsMenu; 
-			console.log('ADDING INGREDIENT:'); 
-			console.log(ingredientObject); 
 			this.props.handleAddIngredient(ingredientObject); 
 			this.setState({
-				changed: true,
 				name: "",
 				amount: "",
 				unit: "", 
 				prep: "", 
 				optional: "",
-				position: "",
 				validationState: ""   	
 			}); 
 		}
