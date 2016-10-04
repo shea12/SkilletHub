@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import Nav from './NavigationBar'; 
 
+// Axios 
+var axios = require('axios'); 
+
+
 /************************************************************
 *****************    AWS COGNITO CONFIG    ******************
 ************************************************************/
@@ -130,138 +134,145 @@ class App extends React.Component {
     browserHistory.push(`${route}`);
   }
 
+  createUser(token, userAttributes) {
+    console.log('sending create user request');
+
+    var userObject = {};
+    userObject.createdAt = userAttributes[2].Value;
+    userObject.username = userAttributes[3].Value;
+    userObject.firstname = userAttributes[4].Value;
+    userObject.lastname = userAttributes[5].Value;
+    userObject.email = userAttributes[6].Value;
+    userObject.token = token;
+
+    console.log('userObject: ', userObject);
+
+    axios.post(`/user/signup`, { 
+      userObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE CREATE USER: ', response); 
+      // browserHistory.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+  }
+
+  setUserToken(token, userAttributes) {
+    console.log('sending request to set user token');
+
+    var userTokenObject = {};
+    userTokenObject.token = token;
+    userTokenObject.username = userAttributes[3].Value;
+
+    axios.post(`/user/login`, { 
+      userTokenObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE LOG IN USER: ', response); 
+      // browserHistory.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    }); 
+  }
+
+
   /************************************************************
   *****************    SIGN UP A NEW USER    ******************
+  ALSO: Need to add user to our db, 
   ************************************************************/
   signUpUser (user) {
-    console.log('signing up user');
-    console.log('username: ', user.username);
-    console.log('username: ', user.password);
-    console.log('firstname: ', user.firstname);
-    console.log('lastname: ', user.lastname);
-    console.log('email: ', user.email);
-
-    var poolConfig = {
-      UserPoolId: USER_POOL_ID,
-      ClientId: USER_POOL_APP_CLIENT_ID
-    };
-
+    var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolConfig);
-    var attList = [];
     var currentTime = Date.now().toString();
 
-    var prefusername = {Name: 'preferred_username', Value: user.username};
-    var firstname = {Name: 'given_name', Value: user.firstname};
-    var lastname = {Name: 'family_name', Value: user.lastname};
-    var email = {Name: 'email', Value: user.email};
-    var timestamp = {Name: 'updated_at', Value: currentTime };
+    var prefUsername = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'preferred_username', Value: user.username});
+    var firstname = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'given_name', Value: user.firstname});
+    var lastname = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'family_name', Value: user.lastname});
+    var email = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'email', Value: user.email});
+    var timeStamp = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'updated_at', Value: currentTime});
 
-    var attPrefUsername = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(prefusername);
-    var attFirstname = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(firstname);
-    var attLastname = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(lastname);
-    var attEmail = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(email);
-    var attTimeStamp = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute(timestamp);
+    var attList = [];
+    attList.push(prefUsername);
+    attList.push(firstname);
+    attList.push(lastname);
+    attList.push(email);
+    attList.push(timeStamp);
 
-    attList.push(attPrefUsername);
-    attList.push(attFirstname);
-    attList.push(attLastname);
-    attList.push(attEmail);
-    attList.push(attTimeStamp);
-
-    var un = user.username;
-    var pw = user.password;
-
-    console.log('BEFORE USERPOOL THIS IS:', this); 
-
-    var setUserState = function(userID, token) {
-      this.setState({userID: userID, username: authData.Username}); 
-      this.setState({token: token});
-      browserHistory.push(`/User/${authData.Username}`);
+    var setUserState = function(token, userAttributes) {
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Username }); 
+      this.setState({ token: token, password: undefined });
+      browserHistory.push(`/User/${userAttributes[3].Username}`);
+      this.createUser(token, userAttributes);
     }.bind(this); 
 
-    userPool.signUp(un, pw, attList, null, function(error, result) {
-      if (error) {
-        console.log('Error signing up user: ', error);
-      }
-      var cognitoUser = result.user;
-      var authData = {
-        Username: un,
-        Password: pw
-      };
-      var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
-      cognitoUser.authenticateUser(authDetails, {
-        onSuccess: function (result) {
-          var token = result.getAccessToken().getJwtToken();
-          AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId : COGNITO_IDENTITY_POOL_ID,
-            Logins : { 'token': token }
-          });
-          console.log('auth success result: ', result);
+    userPool.signUp(user.username, user.password, attList, null, function(error, result) {
+      if (error) { console.log('Error signing up user: ', error); }
 
-          cognitoUser.getUserAttributes(function(error, result) {
-            if (error) { 
-              console.log('error in deets: ', error); 
-            }
-            else { 
-              var userID = result[0].Value;
-              setUserState(userID, token); 
-            }
+      var cognitoUser = result.user;
+      var authData = { Username: user.username, Password: user.password };
+
+      var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
+      
+      cognitoUser.authenticateUser(authDetails, {
+        onSuccess: function (authResult) {
+          var token = authResult.getAccessToken().getJwtToken();
+
+          AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
+            Logins: { 'token': token }
           });
+
+          cognitoUser.getUserAttributes(function(error, userAttributes) {
+            if (error) { console.log('error in getUserAttributes: ', error); } 
+            setUserState(token, userAttributes);
+          });
+
         },
         onFailure: function(error) {
           console.log('Error authenticating user: ' + error);
           alert(error);
         }
       });
-      // console.log('sign up successful: ', cognitoUser);
     });
-    // console.log('THIS AT THE END!', this); 
   }
 
   /************************************************************
   /**************    LOG IN EXISTING USER    ******************
+  NOTE: After user has been authenticated, we need to remove 
+        their password from the state! 
+  ALSO: Need to add auth token to our user db on login
   ************************************************************/
   loginUser (user) {
-    var authData = {
-      Username: user.username,
-      Password: user.password
-    }
+    var authData = { Username: user.username, Password: user.password };
     var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
-    var poolConfig = {
-      UserPoolId: USER_POOL_ID,
-      ClientId: USER_POOL_APP_CLIENT_ID
-    }
+    var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolConfig);
-    var userData = {
-      Username: user.username,
-      Pool: userPool
-    };
+    var userData = { Username: user.username, Pool: userPool };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
-    console.log('cognitoUser is: ', cognitoUser);
 
-    var setUserState = function(userID, token) {
-      this.setState({userID: userID, username: authData.Username}); 
-      this.setState({token: token});
-      browserHistory.push(`/User/${authData.Username}`);
+    var setUserState = function(token, userAttributes) {
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Username }); 
+      this.setState({ token: token, password: undefined });
+      browserHistory.push(`/User/${userAttributes[3].Username}`);
+      this.setUserToken(token, userAttributes);
     }.bind(this); 
     
     cognitoUser.authenticateUser(authDetails, {
-      onSuccess: function (result) {
-        var token = result.getAccessToken().getJwtToken();
+      onSuccess: function (authResult) {
+        var token = authResult.getAccessToken().getJwtToken();
+
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-          IdentityPoolId : COGNITO_IDENTITY_POOL_ID,
-          Logins : { 'token': token }
-        });
-        console.log('auth success result: ', result);
-
-        cognitoUser.getUserAttributes(function(error, result) {
-          if (error) {console.log('error in getUserAttributes: ', error);}
-          else { 
-            var userID = result[0].Value;
-            setUserState(userID, token); 
-          }
+          IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
+          Logins: {'token': token }
         });
 
+        cognitoUser.getUserAttributes(function(error, userAttributes) {
+          if (error) { console.log('error in getUserAttributes: ', error); } 
+          setUserState(token, userAttributes);
+        });
       },
       onFailure: function(error) {
         console.log('Error authenticating user: ', error);
@@ -275,15 +286,9 @@ class App extends React.Component {
   ************************************************************/
   logOutUser (user) {
     // console.log("before logout: ", window.AWS.config.credentials);
-    var poolData = { 
-      UserPoolId: USER_POOL_ID,
-      ClientId: USER_POOL_APP_CLIENT_ID
-    };
+    var poolData = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
-    var userData = {
-      Username : user.username,
-      Pool : userPool
-    };
+    var userData = { Username: user.username, Pool: userPool };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     cognitoUser.signOut();
@@ -324,7 +329,6 @@ class App extends React.Component {
   //     }
   //   });
   // };
-
 
   /************************************************************
   /****************    RENDER COMPONENTS    *******************
