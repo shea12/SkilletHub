@@ -10,14 +10,17 @@ module.exports = {
     //  username, firstname, lastname, email, createdAt, and token
     console.log('in /user/signup controller, REQ.BODY: ', req.body);
 
-    var newUser = new User({
-      username: req.body.username,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      createdAt: req.body.createdAt,
-      token: req.body.token
-    }).save();
+    return new User({
+      username: req.body.userObject.username,
+      firstname: req.body.userObject.firstname,
+      lastname: req.body.userObject.lastname,
+      email: req.body.userObject.email,
+      createdAt: req.body.userObject.createdAt,
+      token: req.body.userObject.token
+    }).save().then(function(result) {
+      console.log('save in db result: ', result);
+      res.status(200).send(result);
+    });
 
   },
 
@@ -27,13 +30,15 @@ module.exports = {
 
     //find user entry in db by username,
     //set user's auth token 
-    User.update({username: req.body.username}, { 
-      token: req.body.token
+    User.update({username: req.body.userTokenObject.username}, { 
+      token: req.body.userTokenObject.token
     }, function(error, response) {
       if (error) {
         console.log('Error setting user token: ', error);
+        res.status(400).send(error);
       } 
       console.log('Set user token. Response: ', response);
+      res.status(200).send(response);
     });
   },
 
@@ -43,13 +48,15 @@ module.exports = {
 
     //find user entry in db by username,
     //set user's auth token to empty string
-    User.update({username: req.body.username}, { 
+    User.update({username: req.body.userObject.username}, { 
       token: ''
     }, function(error, response) {
       if (error) {
         console.log('Error removing user token: ', error);
+        res.status(400).send(error);
       } 
       console.log('Remove user token. Response: ', response);
+      res.status(200).send(response);
     });
   },
 
