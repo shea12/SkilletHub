@@ -3,7 +3,10 @@ let UserRecipe = require(`${__dirname}/../schemas.js`).UserRecipe;
 let _ = require('underscore');
 
 module.exports = {
-  //creates a new version an existing version with a new branch name
+  // description: creates a new version an existing version with a new branch name
+  // body: {
+  //   version: { version object branched from }
+  // }
   createBranch: (req, res) => {
     let versionId, rootId;
     let branch = {
@@ -16,8 +19,8 @@ module.exports = {
       return UserRecipe.findOne({
         username: req.params.username
       });
-    })
-    .then((userRecipeCollection) => {
+
+    }).then((userRecipeCollection) => {
       let recipe = _.find(userRecipeCollection.recipes, recipe => {
         return recipe.rootRecipeId.equals(rootId);
       });
@@ -28,15 +31,15 @@ module.exports = {
       return UserRecipe.update({
         username: req.params.username
       }, userRecipeCollection);
-    })
-    .then((updateResults) => {
+
+    }).then((updateResults) => {
       res.status(201).send(updateResults);
-    })
-    .catch(error => {
+    }).catch(error => {
       res.status(500).send(error);
     });
   },
-  //gets the latest version in a branch
+
+  // description: gets the latest version in a branch
   getBranch: (req, res) => {
     UserRecipe.findOne({
       username: req.params.username
@@ -50,6 +53,7 @@ module.exports = {
       return Recipe.findOne({
         _id: version.mostRecentVersionId
       });
+
     }).then(version => {
       return helpers.retrieveVersion(version);
     }).then(result => {
@@ -58,6 +62,7 @@ module.exports = {
       res.status(404).send(error);
     })
   },
+
   //removes versions with no downstream, makes rest unavailable
   deleteBranch: (req, res) => {
 

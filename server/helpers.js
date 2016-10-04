@@ -113,6 +113,9 @@ module.exports = {
 
   },
 
+  // description: adds a collection of a user's recipes
+  // username: username of collection owner
+  // recipe: intial recipe to be added
   addUserRecipesCollection: (username, recipe) => {
     return UserRecipe.findOne({
       username: username
