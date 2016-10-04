@@ -10,16 +10,14 @@ module.exports = {
     //  username, firstname, lastname, email, createdAt, and token
     console.log('in /user/signup controller, REQ.BODY: ', req.body);
 
-    let newUser = {
+    var newUser = new User({
       username: req.body.username,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       email: req.body.email,
       createdAt: req.body.createdAt,
       token: req.body.token
-    };
-
-    new User(newUser).save();
+    }).save();
 
   },
 
