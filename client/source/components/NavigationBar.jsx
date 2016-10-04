@@ -19,8 +19,7 @@ class NavigationBar extends React.Component {
     console.log('RECEIVING PROPS: ', this.props); 
     this.setState({
       userID: this.props.userID,
-      // username: this.props.username
-      username: 'austinriedel'
+      username: this.props.username
     });
   }
 
