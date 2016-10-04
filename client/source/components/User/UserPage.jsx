@@ -18,8 +18,8 @@ class UserProfile extends React.Component {
     super(props); 
     this.state = {
       username: '',
-      userID: null,  
-      password: '',
+      userID: null,
+      otherUser: false,   
       firstname: '',
       lastname: '',
       email: '',
@@ -37,16 +37,13 @@ class UserProfile extends React.Component {
     var username = this.props.params.username; 
     var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
-    this.setState({
-      username: this.props.params.username, 
-      userID: this.props.userID,
-      date: 'May 4th, 2012', 
-      image: userImage
-    }); 
-
     axios.get(`/${this.props.params.username}/profile`)
     .then((results) => {
       this.setState({
+        username: this.props.params.username, 
+        userID: this.props.userID,
+        date: 'May 4th, 2012', 
+        image: userImage, 
         recipeList: results.data.recipes
       }); 
     })
@@ -55,27 +52,56 @@ class UserProfile extends React.Component {
     }); 
   }
 
+   componentWillReceiveProps(nextProps) {
+      console.log('RECEIVING PROPS!'); 
+      console.log('PARAMS USER PAGE: ', nextProps.params);
+      var username = nextProps.params.username; 
+      var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
+
+      axios.get(`/${username}/profile`)
+      .then((results) => {
+        console.log('SUCCESSFULLY REQUESTED PROFILE'); 
+        console.log(results); 
+        this.setState({
+          username: username, 
+          date: 'May 4th, 2012', 
+          otherUser: nextProps.otherUser, 
+          image: userImage, 
+          recipeList: results.data.recipes,
+          activeKey: 2
+        }); 
+      })
+      .catch((error) => {
+        console.log(error); 
+      }); 
+    }
+
   handleSelect(eventKey) {
     event.preventDefault(); 
-    console.log('Clicked on this user nav element!'); 
-    console.log(eventKey); 
-    console.log(this); 
     this.setState({activeKey: eventKey}); 
-    console.log(this.state.followingList); 
   }
 
   _renderActiveComponent(){
+    // Determine functionality for button in recipe view 
+      // If loading current user profile page -> cook 
+    if (this.state.otherUser) {
+      var buttonText = 'fork'; 
+      var handleButtonClick = this.props.handleRecipeForkClick; 
+    } else {
+      var buttonText = 'edit'; 
+      var handleButtonClick = this.props.handleRecipeEditClick; 
+    }
     if (this.state.activeKey === 2) {
       return (
         this.state.recipeList.map((recipe, i) => (
           <RecipeListEntry 
             key={recipe.branches[0].mostRecentVersionId} 
             recipe={recipe} 
-            username={this.state.username} 
-            buttonText={'edit'}
+            username={this.props.username}
+            buttonText={buttonText}
             handleUserClick={this.props.handleUserClick} 
             handleRecipeClick={this.props.handleRecipeViewClick}
-            handleButtonClick={this.props.handleRecipeEditClick}
+            handleButtonClick={handleButtonClick}
           />
         ))
       )
