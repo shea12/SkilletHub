@@ -12,7 +12,7 @@ export default ({recipeList}) => {
 		  <div>
 		    <ul className="recipeList" >
 		    {recipeList.map((recipe) => {
-		      return <RecipeListEntry key={recipe.recipeID} recipe={recipe} forkRecipe={forkRecipe}/>
+		    	return <RecipeListEntry key={recipe.recipeID} recipe={recipe} forkRecipe={forkRecipe} cookRecipe={cookRecipe}/>
 		    })}
 		    </ul>
 		  </div>

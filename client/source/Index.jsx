@@ -10,7 +10,8 @@ import User from './components/User/UserPage';
 import AltUser from './components/User/AltUserPage';
 import RecipeMain from './components/Recipe/RecipeMain'; 
 import CreateRecipeMain from './components/CreateRecipe/CreateRecipeMain'; 
-import EditRecipeMain from './components/EditRecipe/EditRecipeMain'; 
+import EditRecipeMain from './components/EditRecipe/EditRecipeMain';
+import CookMeMain from './components/CookRecipe/CookMeMain'; 
 
 render((
 	<Router history={browserHistory}> 
@@ -20,6 +21,7 @@ render((
       <Route path="/User/:username" component={User} />
 	  	<Route path="/Recipe" component={RecipeMain} />
 	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
+	  	<Route path="/Cookme/:username/:recipe" component={CookMeMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
