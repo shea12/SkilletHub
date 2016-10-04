@@ -3,6 +3,7 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import RecipeDescription from './RecipeDescription'
 import RecipeIngredients from './RecipeIngredients'
 import ReadME from './ReadME'
+import CookMe from '../CookRecipe/CookMeMain'
 
 //Bootstrap 
 import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
@@ -61,7 +62,7 @@ class RecipeMain extends Component {
       }); 
     })
     .catch((error)=> {
-      console.log(error); 
+      console.log('Axios error: ', error); 
     }); 
   }
 
@@ -75,6 +76,10 @@ class RecipeMain extends Component {
     if (inputType === 'cook') {
       console.log('Cooking recipe'); 
       // TODO: Implement routing (react || server)
+      event.preventDefault();
+      var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
+      console.log('NAVIGATING TO:', route); 
+      browserHistory.push(`${route}`); 
     }
     if (inputType === 'edit') {
       console.log('Editting recipe'); 
