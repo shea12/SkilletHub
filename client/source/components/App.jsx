@@ -303,6 +303,20 @@ class App extends React.Component {
     window.AWS.config.credentials.params.Logins.token = '';
     // console.log("after logout: ", window.AWS.config.credentials);
 
+    var userObject = {username: user.username};
+
+    axios.post(`/user/login`, { 
+      userObject
+    })
+    .then(function(response) {
+      console.log('RESPONSE LOG OUT USER: ', response); 
+      // browserHistor  y.push(`/User/${requestUsername}`);
+    })
+    .catch(function(error) {
+      console.log(error); 
+    });
+
+
     //redirect to the landing page after logging out
     browserHistory.push('/');
   };
