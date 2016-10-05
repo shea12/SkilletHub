@@ -23,9 +23,9 @@ class EditStepEntry extends React.Component {
   }
 
   componentWillMount(){
-    console.log('MOUNTING EDIT STEP ENTRY!'); 
+    // console.log('MOUNTING EDIT STEP ENTRY!'); 
     var lines = Math.ceil(this.props.step.description.length / 100) * 30; 
-    console.log(lines); 
+    // console.log(lines); 
     this.setState({
       description: this.props.step.description,
       lines: lines,
@@ -56,25 +56,25 @@ class EditStepEntry extends React.Component {
 
   handleDelete (event) {
     event.preventDefault(); 
-    console.log('Attempting to delete step!'); 
-    console.log(this.state.description); 
-
     var step = this.state; 
-    console.log(step); 
-    console.log(typeof this.props.handleDeleteStep);
     this.props.handleDeleteStep(step); 
     this.setState({display: 'none'}); 
+
+    // console.log('Attempting to delete step!'); 
+    // console.log(this.state.description); 
+    // console.log(step); 
+    // console.log(typeof this.props.handleDeleteStep);
   }
 
   handleEdit (event) {
     event.preventDefault(); 
-    console.log('Attempting to edit step!'); 
-
     var step = this.state; 
-    console.log(step); 
-    console.log(typeof this.props.handleEditStep);
     this.props.handleEditStep(step); 
     this.setState({disabled: true}); 
+    
+    // console.log('Attempting to edit step!'); 
+    // console.log(step); 
+    // console.log(typeof this.props.handleEditStep);
   }
 
 
@@ -113,15 +113,15 @@ class EditStepEntry extends React.Component {
         }
       });
 
-      console.log('DELETED INGREDIENTS'); 
-      console.log(deletedIngredients); 
-      console.log('BEFORE DELETING Ingredients'); 
-      console.log(parsedIngredients); 
+      // console.log('DELETED INGREDIENTS'); 
+      // console.log(deletedIngredients); 
+      // console.log('BEFORE DELETING Ingredients'); 
+      // console.log(parsedIngredients); 
       deletedIngredients.forEach((ingredient) => {
         var regEx = RegExp(ingredient, 'i');
         var deletedCheck = regEx.exec(description); 
-        console.log('DELETED CHECK'); 
-        console.log(deletedCheck); 
+        // console.log('DELETED CHECK'); 
+        // console.log(deletedCheck); 
         if (!deletedCheck) {
           var index = parsedIngredients.indexOf(ingredient); 
           if (index !== -1) {
@@ -129,8 +129,8 @@ class EditStepEntry extends React.Component {
           }
         }
       }); 
-      console.log('AFTER DELETING Ingredients'); 
-      console.log(parsedIngredients); 
+      // console.log('AFTER DELETING Ingredients'); 
+      // console.log(parsedIngredients); 
 
       // Parse for time 
       var time = this.timeParse(description); 
