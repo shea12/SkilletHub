@@ -17,7 +17,7 @@ let _ = require('underscore');
   // app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 module.exports = {
   // description: Creates a pull request
-  // params: {
+  // body: {
   //   targetUsername: 'username of target',
   //   sourceVersionId: _id of source version,
   //   targetVersionId: _id of target version
@@ -25,15 +25,13 @@ module.exports = {
   createPullRequest: (req, res) => {
     return new PullRequest({
       sendingUser: req.params.username,
-      receivingUser: req.params.targetUsername,
-      sentVersion: req.params.sourceVersionId,
-      receivingVersion: req.params.targetVersionId,
+      receivingUser: req.body.targetUsername,
+      sentVersion: req.body.sourceVersionId,
+      receivingVersion: req.body.targetVersionId,
       status: 'open',
     }).save().then(pullRequest => {
-      console.log('pullRequest: ', pullRequest);
       res.status(201).send(pullRequest);
     }).catch(error => {
-      console.log('error: ', error);
       res.status(500).send(error);
     });
   },
