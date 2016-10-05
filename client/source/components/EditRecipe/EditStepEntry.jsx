@@ -17,23 +17,33 @@ class EditStepEntry extends React.Component {
       parsedIngredients: null, 
       availableIngredients: null, 
       time: null,
-      display: ''
+      display: '',
+      validation: ''
     }; 
   }
 
   componentWillMount(){
-    console.log('MOUNTING EDIT STEP ENTRY!'); 
+    // console.log('MOUNTING EDIT STEP ENTRY!'); 
     var lines = Math.ceil(this.props.step.description.length / 100) * 30; 
-    console.log(lines); 
+    // console.log(lines); 
     this.setState({
       description: this.props.step.description,
       lines: lines,
       ingredients: this.props.step.ingredients,
       parsedIngredients: this.props.step.ingredients, 
       availableIngredients: this.props.availableIngredients, 
+      deletedIngredients: this.props.deletedIngredients, 
       time: this.props.step.time,
-      position: this.props.step.position
+      position: this.props.step.position,
+      index: this.props.index
     }); 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    var invalidSteps = nextProps.invalidSteps; 
+    if (invalidSteps.indexOf(this.state.index) !== -1) {
+      this.setState({validation: 'error'}); 
+    }
   }
 
   handleClick (event) {
@@ -46,15 +56,28 @@ class EditStepEntry extends React.Component {
 
   handleDelete (event) {
     event.preventDefault(); 
-    console.log('Attempting to delete step!'); 
-    console.log(this.state.description); 
-
     var step = this.state; 
-    console.log(step); 
-    console.log(typeof this.props.handleDeleteStep);
     this.props.handleDeleteStep(step); 
     this.setState({display: 'none'}); 
+
+    // console.log('Attempting to delete step!'); 
+    // console.log(this.state.description); 
+    // console.log(step); 
+    // console.log(typeof this.props.handleDeleteStep);
   }
+
+  handleEdit (event) {
+    event.preventDefault(); 
+    var step = this.state; 
+    this.props.handleEditStep(step); 
+    this.setState({disabled: true}); 
+    
+    // console.log('Attempting to edit step!'); 
+    // console.log(step); 
+    // console.log(typeof this.props.handleEditStep);
+  }
+
+
 
   timeParse (string) {
     var match = []; 
@@ -68,6 +91,7 @@ class EditStepEntry extends React.Component {
     return match; 
   }
 
+
   handleChange (event) {
     var inputType = event.target.id; 
     if (inputType === 'description') {
@@ -75,15 +99,12 @@ class EditStepEntry extends React.Component {
 
       // Set height of the text box based on string length 
       var lines = Math.ceil(description.length / 100) * 30; 
-      this.setState({
-        changed: true, 
-        description: description,
-        line: lines
-      }); 
 
       // Parse for ingredients 
       var availableIngredients = this.props.availableIngredients; 
+      var deletedIngredients = this.props.deletedIngredients
       var parsedIngredients = this.state.parsedIngredients;
+
       availableIngredients.forEach((ingredient) => {
         var regEx = RegExp(ingredient, 'i');
         var parsedIngredient = regEx.exec(description); 
@@ -91,54 +112,54 @@ class EditStepEntry extends React.Component {
           parsedIngredients.push(parsedIngredient[0])
         }
       });
-      this.setState({
-        parsedIngredients: parsedIngredients
+
+      // console.log('DELETED INGREDIENTS'); 
+      // console.log(deletedIngredients); 
+      // console.log('BEFORE DELETING Ingredients'); 
+      // console.log(parsedIngredients); 
+      deletedIngredients.forEach((ingredient) => {
+        var regEx = RegExp(ingredient, 'i');
+        var deletedCheck = regEx.exec(description); 
+        // console.log('DELETED CHECK'); 
+        // console.log(deletedCheck); 
+        if (!deletedCheck) {
+          var index = parsedIngredients.indexOf(ingredient); 
+          if (index !== -1) {
+            parsedIngredients.splice(index, 1); 
+          }
+        }
       }); 
+
+      // console.log('AFTER DELETING Ingredients'); 
+      // console.log(parsedIngredients); 
 
       // Parse for time 
       var time = this.timeParse(description); 
       var stepTime = this.state.time; 
       if (time && !stepTime) {
-        console.log('SETTING TIME: ', time); 
+        // console.log('SETTING TIME: ', time); 
+        // console.log('TIME[0]: ', time[0]); 
+        time = time[0];
+        time = time[0].split(' ');
+        // console.log(time); 
         this.setState({
-          time: time[0]
+          time: time[0],
+          changed: true, 
+          description: description,
+          line: lines,
+          parsedIngredients: parsedIngredients,
+          ingredients: parsedIngredients
+        }); 
+      } else {
+        this.setState({
+          changed: true, 
+          description: description,
+          line: lines,
+          parsedIngredients: parsedIngredients,
+          ingredients: parsedIngredients
         }); 
       }
     }
-  }
-
-
-  handleChange (event) {
-    var inputType = event.target.id; 
-    if (inputType === 'description') {
-      var availableIngredients = this.props.availableIngredients; 
-      // console.log(availableIngredients); 
-      var parsedIngredients = this.state.parsedIngredients; 
-      var description = event.target.value; 
-      // console.log('Description: ', description); 
-      availableIngredients.forEach((ingredient) => {
-        var regEx = RegExp(ingredient, 'i');
-        var parsedIngredient = regEx.exec(description); 
-        // console.log(parsedIngredient); 
-        if (parsedIngredient && parsedIngredients.indexOf(parsedIngredient[0]) === -1) {
-          console.log('Matched an ingredient: ', parsedIngredient); 
-          parsedIngredients.push(parsedIngredient[0])
-        }
-      });
-      this.setState({
-        description: event.target.value,
-        parsedIngredients: parsedIngredients
-      }); 
-      var time = this.timeParse(description); 
-      // console.log('TIME IS: ', time); 
-      var stepTime = this.state.stepTime; 
-      if (time && !stepTime) {
-        console.log('SETTING TIME: ', time); 
-        this.setState({
-          stepTime: time[0]
-        }); 
-      }
-    } 
   }
 
   _renderTime(){
@@ -156,13 +177,16 @@ class EditStepEntry extends React.Component {
       <Grid style={{display: this.state.display}}>
         <Row> 
           <Col xs={8} md={8} style={{margin: 5}}>
-            <FormGroup>
+            <FormGroup validationState={this.state.validation}>
               <ControlLabel> Step Description </ControlLabel>
-              <FormControl componentClass="textarea" type="text" style={{height: this.state.lines}} id="description" value={this.state.description} onChange={this.handleChange.bind(this)} disabled={this.state.disabled} />
+              <FormControl componentClass="textarea" type="text" style={{height: this.state.lines}} id="description" value={this.state.description} onChange={this.handleChange.bind(this)} disabled={this.state.disabled}/>
             </FormGroup>
           </Col>
           <Button type="submit" style={{marginTop: 30, padding: 10}} onClick={this.handleClick.bind(this)}>
             Edit
+          </Button>
+          <Button type="submit" style={{marginTop: 30, padding: 10}} onClick={this.handleEdit.bind(this)} disabled={this.state.disabled}>
+            Commit Edit
           </Button>
           <Button type="submit" style={{marginTop: 30, padding: 10}} onClick={this.handleDelete.bind(this)} disabled={this.state.disabled}>
             Delete
