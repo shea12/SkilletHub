@@ -216,7 +216,7 @@ class App extends React.Component {
     attList.push(timeStamp);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value });
       this.setState({ token: token, password: undefined });
       browserHistory.push(`/User/${userAttributes[3].Value}`);
       this.createUser(token, userAttributes);
@@ -258,6 +258,8 @@ class App extends React.Component {
   NOTE: After user has been authenticated, we need to remove 
         their password from the state! 
   ALSO: Need to add auth token to our user db on login
+  ALSO: Need to set up error messages, input box highlighting
+        on incorrect username/password or user non-existent
   ************************************************************/
   loginUser (user) {
     console.log('LOGGING USER IN FUNCTION: ');
@@ -309,6 +311,18 @@ class App extends React.Component {
     var userData = { Username: user.username, Pool: userPool };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
+    var userObject = {username: user.username};
+    console.log('In log out, user.username: ', user.username);
+
+    axios.post(`/user/logout`, { 
+      userObject
+    }).then(function(response) {
+      console.log('RESPONSE LOG OUT USER: ', response); 
+      // browserHistor  y.push(`/User/${requestUsername}`);
+    }).catch(function(error) {
+      console.log(error); 
+    });
+
     cognitoUser.signOut();
     console.log('logged out user: ', cognitoUser);
 
@@ -321,18 +335,6 @@ class App extends React.Component {
     window.AWS.config.credentials.params.Logins.token = '';
     // console.log("after logout: ", window.AWS.config.credentials);
 
-    var userObject = {username: user.username};
-
-    axios.post(`/user/login`, { 
-      userObject
-    })
-    .then(function(response) {
-      console.log('RESPONSE LOG OUT USER: ', response); 
-      // browserHistor  y.push(`/User/${requestUsername}`);
-    })
-    .catch(function(error) {
-      console.log(error); 
-    });
 
 
     //redirect to the landing page after logging out

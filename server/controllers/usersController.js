@@ -18,7 +18,7 @@ module.exports = {
       createdAt: req.body.userObject.createdAt,
       token: req.body.userObject.token
     }).save().then(function(result) {
-      console.log('save in db result: ', result);
+      console.log('Saved user in db, result: ', result);
       res.status(200).send(result);
     });
 
@@ -27,7 +27,7 @@ module.exports = {
   login: (req, res) => {
     //req.body should include:
     //  username and token
-
+    console.log('login req.body: ', req.body);
     //find user entry in db by username,
     //set user's auth token 
     User.update({username: req.body.userTokenObject.username}, { 
