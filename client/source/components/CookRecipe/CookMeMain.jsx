@@ -12,69 +12,51 @@ class CookMeMain extends Component {
     super(props);
 
     this.state = {
-      name: '',
-      servingsMin: '',
-      servingsMax: '', 
-      skillLevel: '', 
-      description: '', 
-      cookTime: '',
-      picture: "",
-      ingredients: [],
-      availableIngredients: [], 
-      steps: [],
-      recipe: {}
+      recipe: {
+        name: {
+          value: ''
+        }
+      },
+      username: ''
     }; 
   }
 
   componentWillMount() {
     console.log('Cook Me main page is componentWillMounting!');
-    // TODO: Implement request that loads the recipe data for this recipe to the component's state. 
-    var usernameParameter = this.props.params.username; 
-    console.log('USERNAME PARAMETER:', usernameParameter); 
 
-    var recipeParameter = this.props.params.recipe; 
-    console.log('RECIPE PARAMETER:', recipeParameter);  
-
-    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    axios.get(`/${this.props.params.username}/${this.props.params.recipe}`)
     .then((result)=> {
-      // console.log(Object.keys(result)); 
-      console.log(result.data); 
-      console.log(Object.keys(result.data)); 
       var recipe = result.data; 
-
-      console.log('NAME: ', recipe.name.value); 
-      console.log('DESCRIPTION:', recipe.description.value); 
-      
       this.setState({
         recipe: recipe,
-        username: usernameParameter, 
-        recipeName: recipe.name.value,
-        recipeDescription: recipe.description.value, 
-        recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps
+        username: this.props.params.username
       }); 
     })
     .catch((error)=> {
       console.log(error); 
     }); 
-
     //use fn 'retreive version' to get full recipe
   }
 
 
   render() {
     return (
-      <Grid className='cookMeMain'>
+      <Grid className='cookMeMain' fluid='true'>
+
         <div className='jumbotron'>
-          <div className='container'>
-            <h1>Time to cook!</h1>
+          <div className='container-fluid'>
+            <h1>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col-md-12">col-md-12</div>
+        </div>
+        
       </Grid>
     );
   }
 }
-
 
 
 export default CookMeMain;
