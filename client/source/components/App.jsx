@@ -196,7 +196,6 @@ class App extends React.Component {
 
   /************************************************************
   *****************    SIGN UP A NEW USER    ******************
-  ALSO: Need to add user to our db, 
   ************************************************************/
   signUpUser (user) {
     var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
