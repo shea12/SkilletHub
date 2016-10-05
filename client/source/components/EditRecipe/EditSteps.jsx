@@ -20,7 +20,13 @@ class EditStepsMain extends React.Component {
       <Grid>
         <Row> 
           {this.props.steps.map((step, i) => (
-            <EditStepEntry key={'step' + i} step={step} handleDeleteStep={this.props.handleDeleteStep.bind(this)}/>
+            <EditStepEntry key={'step' + i} step={step} index={i} 
+              handleDeleteStep={this.props.handleDeleteStep.bind(this)} 
+              handleEditStep={this.props.handleEditStep.bind(this)}
+              invalidSteps={this.props.invalidSteps} 
+              availableIngredients={this.props.availableIngredients}
+              deletedIngredients={this.props.deletedIngredients}
+            />
           ))}
         </Row>
         <Row>   
