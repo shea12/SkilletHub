@@ -67,17 +67,24 @@ class CookMeMain extends Component {
 
         <div className="row" style={{margin: '0 auto'}}>
           {this.state.stepsArray.map((step, index) => (
-            <div className="col-md-12" style={{padding: '10px', margin: '0 auto', 'margin-bottom': '10px', 'background-color': '#B9BCBD', 'border-radius': '6px', 'background-color': '#B5C2C7'}}>
+          <div className="col-md-12" style={{padding: '10px', margin: '0 auto', 'margin-bottom': '10px', 'background-color': '#B9BCBD', 'border-radius': '6px', 'background-color': '#B5C2C7'}}>
               
               <div className="col-md-1" style={{border: '1px solid green', 'margin-right': '20px', 'height': '100%', 'border-radius': '6px'}}>
                   {step.time} minutes
               </div>
 
-              <div className="col-md-6" style={{border: '1px solid blue', 'border-radius': '6px'}}>
+            <div className="col-md-12" style={{border: '1px solid black', padding: '10px', margin: '0 auto', 'margin-bottom': '10px'}}>
+              
+              <div className="col-md-1" style={{border: '1px solid green', 'margin-right': '20px', 'height': '100%'}}>
+                  {step.time} minutes
+              </div>
+
+              <div className="col-md-6" style={{border: '1px solid blue'}}>
                 {step.stepDescription}
               </div>
 
             </div>
+          </div>
           ))}
         </div>
         
