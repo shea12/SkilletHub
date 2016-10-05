@@ -45,11 +45,6 @@ class EditRecipeMain extends Component {
     var usernameParameter = this.props.params.username; 
     var recipeParameter = this.props.params.recipe; 
 
-    // console.log('Create recipe page is mounting!'); 
-    // console.log('PARAMS RECIPE PAGE: ', this.props.params); 
-    // console.log('USERNAME PARAMETER:', usernameParameter); 
-    // console.log('RECIPE PARAMETER:', recipeParameter); 
-
     axios.get(`/${usernameParameter}/${recipeParameter}`)
     .then((result)=> {
 
@@ -68,15 +63,6 @@ class EditRecipeMain extends Component {
         ingredient.changed = false; 
         return ingredient; 
       }); 
-
-      // console.log('STEPS AFTER CHANGE'); 
-      // console.log(steps); 
-
-      // console.log('INGREDIENTS AFTER CHANGE'); 
-      // console.log(ingredients); 
-
-      console.log('CHECKING FOR BRANCH'); 
-      console.log(recipe.branch); 
 
       this.setState({
         name: recipe.name.value,
@@ -165,8 +151,8 @@ class EditRecipeMain extends Component {
     var inputType = event.target.id;
     if (inputType === 'name'){
       editRecipe['name'] = true; 
-      console.log('Changing name!'); 
-      console.log(editRecipe); 
+      // console.log('Changing name!'); 
+      // console.log(editRecipe); 
       this.setState({ name: event.target.value, editRecipe: editRecipe });
     } 
     if (inputType === 'servingsMin'){
@@ -202,6 +188,29 @@ class EditRecipeMain extends Component {
     }); 
   }
 
+  handleEditIngredient(ingredient) {
+    // Determine current state of ingredients
+    var ingredients = this.state.ingredients;
+    var editIngredient = ingredient;
+    var position = editIngredient.position; 
+
+    ingredients.forEach((ingredient) => {
+      if (ingredient.position === position) {
+        ingredient.changed = editIngredient.changed; 
+        ingredient.name = editIngredient.name; 
+        ingredient.amount = editIngredient.amount; 
+        ingredient.unit = editIngredient.unit; 
+        ingredient.prep = editIngredient.prep; 
+        ingredient.optional = editIngredient.optional;
+      }
+    }); 
+
+    // Set the new state 
+    this.setState({
+      ingredients: ingredients
+    }); 
+  }
+
   handleDeleteIngredient(ingredient) {
     // Determine current state of ingredients 
     var deletedIngredient = ingredient.name; 
@@ -234,9 +243,8 @@ class EditRecipeMain extends Component {
 
     // console.log('STATUS CHECK ON INGREDIENTS'); 
     // console.log(ingredients); 
-
-    console.log('STATUS CHECK ON AVAIL INGREDIENTS'); 
-    console.log(availableIngredients); 
+    // console.log('STATUS CHECK ON AVAIL INGREDIENTS'); 
+    // console.log(availableIngredients); 
 
     this.setState({
       ingredients: ingredients,
@@ -247,13 +255,13 @@ class EditRecipeMain extends Component {
 
   handleAddStep(step) {
     // Determine current state of steps 
-    console.log('ADDING A STEP IN MAIN');
-    console.log(this.state.availableIngredients); 
     var steps = this.state.steps;
     var step = step; 
     step.added = true; 
     step.changed = true; 
     steps.push(step); 
+    // console.log('ADDING A STEP IN MAIN');
+    // console.log(this.state.availableIngredients); 
 
     // Set the new state 
     this.setState({
@@ -263,31 +271,22 @@ class EditRecipeMain extends Component {
 
   handleEditStep(step) {
     // Determine current state of steps 
-    console.log('EDITTING A STEP IN MAIN');
     var steps = this.state.steps;
     var editStep = step;
-    console.log(editStep); 
     var position = editStep.position; 
-
-    var findStep = function(step) {
-      return editStep.position === position; 
-    }
-
-    var edittedStep = steps.find(findStep)
-    console.log(edittedStep); 
+    // console.log('EDITTING A STEP IN MAIN');
+    // console.log(editStep); 
 
     steps.forEach((step) => {
       if (step.position === position) {
-        console.log('FOUND MATCHING STEP!');
+        // console.log('FOUND MATCHING STEP!');
         step.changed = editStep.changed; 
         step.description = editStep.description; 
         step.ingredients = editStep.ingredients; 
         step.time = editStep.time; 
-        console.log(step); 
+        // console.log(step); 
       }
     }); 
-
-    console.log(steps); 
 
     // Set the new state 
     this.setState({
@@ -298,15 +297,15 @@ class EditRecipeMain extends Component {
   handleDeleteStep(step) {
     // Determine current state of ingredients 
     var deletedStep = step; 
-    console.log('DELETED STEP OBJECT: '); 
-    console.log(deletedStep);
     var steps = this.state.steps;
     var index = 0; 
+    // console.log('DELETED STEP OBJECT: '); 
+    // console.log(deletedStep);
 
     // Search based on ingredient name and modify properties as necessary
     steps.forEach((step, i) => {
-      console.log('CHECKING STEP OBJECT: '); 
-      console.log(step);
+      // console.log('CHECKING STEP OBJECT: '); 
+      // console.log(step);
       if (step.position === deletedStep.position) {
         step.deleted = true; 
         step.changed = true; 
@@ -314,15 +313,11 @@ class EditRecipeMain extends Component {
       }
     });
 
-    console.log(steps); 
+    // console.log(steps); 
 
     this.setState({
       steps: steps
     }); 
-  }
-
-  handleClick (event) {
-    console.log('Clicked on button!'); 
   }
 
   reconcileSteps(steps) {
@@ -425,42 +420,18 @@ class EditRecipeMain extends Component {
     }); 
 
     if (invalidSteps.length > 0) {
-
-      // Check to see if that ingredient has been editted out 
-      // var editSteps = steps.filter((step) => {
-      //   if (step.changed) {
-      //     return step; 
-      //   }
-      // }); 
-
-      // console.log(editSteps); 
-
-      // editSteps.forEach((step, i) => {
-      //   deletedIngredients.forEach((ingredient) => {
-      //     var regEx = RegExp(ingredient, 'i');
-      //     var parsedIngredient = regEx.exec(step.description); 
-      //     if (!parsedIngredient) {
-      //       console.log('EDiTTED TO REMOVE INGREDIENT'); 
-      //       if (invalidSteps.indexOf(step.position) !== -1) {
-      //         console.log('REMOVE STEP FROM LIST'); 
-      //       }
-      //     }
-      //   })
-      // }); 
-
-      // 
+      // Set state of invalid steps and display warning modal 
       this.state.invalidSteps = invalidSteps; 
       this.state.showModal = true;
       this.forceUpdate();        
     } else {
-
+      // editRecipeObject is valid, execute the 'POST' request
       var usernameParameter = this.props.params.username; 
       var recipeParameter = this.props.params.recipe; 
       var originalRecipeObject = this.state.originalRecipeObject; 
       var branch = originalRecipeObject.branch; 
-
-      console.log('EDIT RECIPE OBJECT:'); 
-      console.log(editRecipeObject); 
+      // console.log('EDIT RECIPE OBJECT:'); 
+      // console.log(editRecipeObject); 
 
       axios.post(`/${usernameParameter}/${recipeParameter}/${branch}/create-version`, {
         previous: originalRecipeObject, 
@@ -532,7 +503,11 @@ class EditRecipeMain extends Component {
             </form>
         </Col>
       </Row>
-      <EditIngredients handleAddIngredient={this.handleAddIngredient.bind(this)} handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} ingredients={this.state.ingredients} />
+      <EditIngredients 
+        ingredients={this.state.ingredients} 
+        handleAddIngredient={this.handleAddIngredient.bind(this)} 
+        handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} 
+      />
       <EditSteps 
         steps={this.state.steps} 
         invalidSteps={this.state.invalidSteps} 
@@ -542,21 +517,23 @@ class EditRecipeMain extends Component {
         handleDeleteStep={this.handleDeleteStep.bind(this)} 
         handleEditStep={this.handleEditStep.bind(this)}
       />
-      <Row> 
-        <h4> Ingredients State </h4>
-        {this._renderIngredientsTest()}
-      </Row>
-      <Row> 
-        <h4> Edit Recipe Output </h4>
-        {this._renderIngredientsTest2()}
-      </Row>
-      <Row> 
-        <h4> Edit Recipe Output </h4>
-        {this._renderObjectTest()}
-      </Row>
       </Grid> 
     );
   }
 }
 
 export default EditRecipeMain;
+
+// Unused functions for rendering test data 
+// <Row> 
+  // <h4> Ingredients State </h4>
+  // {this._renderIngredientsTest()}
+// </Row>
+// <Row> 
+//   <h4> Edit Recipe Output </h4>
+//   {this._renderIngredientsTest2()}
+// </Row>
+// <Row> 
+//   <h4> Edit Recipe Output </h4>
+//   {this._renderObjectTest()}
+// </Row>
