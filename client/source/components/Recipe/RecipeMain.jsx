@@ -4,6 +4,7 @@ import RecipeDescription from './RecipeDescription'
 import RecipeIngredients from './RecipeIngredients'
 import ReadME from './ReadME'
 import CookMe from '../CookRecipe/CookMeMain'
+import VersionControl from '../VersionControl/VersionControlMain'
 
 //Bootstrap 
 import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
@@ -88,9 +89,6 @@ class RecipeMain extends Component {
     }    
   }
 
-  // TODO: Implement conditional render to display forked from. 
-  // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
-
   render() {
     return (
       <Grid className="recipeMain">
@@ -105,9 +103,8 @@ class RecipeMain extends Component {
             <RecipeDescription recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
           </Col> 
         </Row> 
-        <div style={{marginTop: 10}}>
-            <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
-        </div>
+        <VersionControl /> 
+        <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         <div>
             <ReadME readME={this.state.recipeReadME}/>
         </div>
