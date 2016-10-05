@@ -103,7 +103,19 @@ module.exports = {
           }
         });
       }
-      return built;
+      return UserRecipe.findOne({
+        username: built.username
+      }).then(userRecipeCollection => {
+        let branches;
+        userRecipeCollection.recipes.forEach(recipe => {
+          if (built.rootVersion.equals(recipe.rootRecipeId)) {
+            built.branches = recipe.branches;
+          }
+        });
+        return built;
+      }).catch(error => {
+        return error;
+      });
     });
   },
   //from a particular point,
