@@ -11,6 +11,7 @@ import AltUser from './components/User/AltUserPage';
 import RecipeMain from './components/Recipe/RecipeMain'; 
 import CreateRecipeMain from './components/CreateRecipe/CreateRecipeMain'; 
 import EditRecipeMain from './components/EditRecipe/EditRecipeMain';
+import PullRequest from './components/PullRequest/PullRequestMain';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
 
 render((
@@ -25,6 +26,7 @@ render((
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
+	  	<Route path="/Pull" component={PullRequest} />
 	  </Route>
 	</Router>
 ), document.getElementById('app'));
