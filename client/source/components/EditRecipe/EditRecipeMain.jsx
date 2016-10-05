@@ -294,6 +294,40 @@ class EditRecipeMain extends Component {
     }); 
   }
 
+  handleEditStep(step) {
+    // Determine current state of steps 
+    console.log('EDITTING A STEP IN MAIN');
+    var steps = this.state.steps;
+    var editStep = step;
+    console.log(editStep); 
+    var position = editStep.position; 
+
+    var findStep = function(step) {
+      return editStep.position === position; 
+    }
+
+    var edittedStep = steps.find(findStep)
+    console.log(edittedStep); 
+
+    steps.forEach((step) => {
+      if (step.position === position) {
+        console.log('FOUND MATCHING STEP!');
+        step.changed = editStep.changed; 
+        step.description = editStep.description; 
+        step.ingredients = editStep.ingredients; 
+        step.time = editStep.time; 
+        console.log(step); 
+      }
+    }); 
+
+    console.log(steps); 
+
+    // Set the new state 
+    this.setState({
+      steps: steps
+    }); 
+  }
+
   handleDeleteStep(step) {
     // Determine current state of ingredients 
     var deletedStep = step; 
@@ -430,6 +464,7 @@ class EditRecipeMain extends Component {
       var recipeParameter = this.props.params.recipe; 
       var originalRecipeObject = this.state.originalRecipeObject; 
       var branch = originalRecipeObject.branch; 
+
       // console.log('EDIT RECIPE OBJECT:'); 
       // console.log(editRecipeObject); 
 

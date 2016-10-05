@@ -129,6 +129,7 @@ class EditStepEntry extends React.Component {
           }
         }
       }); 
+
       // console.log('AFTER DELETING Ingredients'); 
       // console.log(parsedIngredients); 
 
