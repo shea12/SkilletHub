@@ -120,6 +120,9 @@ module.exports = {
     return UserRecipe.findOne({
       username: username
     }).then(result => {
+      // console.log('recipe: ', recipe);
+      // console.log('recipe name: ', recipe.name);
+      // console.log('recipe.name.value: ', recipe.name.value);
       //first recipe by users
       if (result === null) {
         return new UserRecipe({
