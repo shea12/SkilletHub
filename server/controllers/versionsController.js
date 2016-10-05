@@ -65,6 +65,61 @@ module.exports = {
     })
   },
   
+  // description: Retrieve a list of all versions
+  //username
+  //recipe
+  //branch
+  getAllVersions: (req, res) => {
+    let mostRecent;
+    return UserRecipe.findOne({
+      username: req.params.username
+    }).then(userRecipeCollection => {
+      let branches;
+      userRecipeCollection.recipes.forEach(recipe => {
+        if (recipe.rootRecipeId.equals(req.params.recipe)) {
+          branches = recipe.branches;
+        }
+      });
+      console.log('branches: ', branches);
+
+      branches.forEach(branch => {
+        if (branch.name === req.params.branch) {
+          mostRecent = branch.mostRecentVersionId;
+        }
+      })
+      console.log('id: ', mostRecent);
+
+      return Recipe.find().or([
+        {
+          _id: req.params.recipe
+        }, 
+        {
+          rootVersion: req.params.recipe
+        }
+      ]);
+    }).then(recipes => {
+      recipes = recipes.toObject();
+      console.log('RECIPES: ', recipes);
+
+      let versions = [];
+      let findVersion = (id) => {
+        let result = _.find(recipes, recipe => {
+          return id.equals(recipe._id);
+        });
+        versions.push(result);
+        if (result.previousVersion !== null) {
+          findVersion(result.previousVersion);
+        }
+      };
+      findVersion(mostRecent);
+      
+      console.log('versions: ', versions);
+      res.status(200).send(versions);
+    }).catch(error => {
+      res.status(404).send(error);
+    })
+  },
+
   // description: removes versions with no downstream, makes others unavailable
   deleteVersion: (req, res) => {
 

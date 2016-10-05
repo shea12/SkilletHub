@@ -28,4 +28,5 @@ module.exports = function(app, express) {
   app.get('/:username/:recipe/:branch/:version', versions.getVersion);
   app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);  
   app.post('/:username/:recipe/:branch/:version/fork', versions.forkVersion);
+  app.get('/:username/:recipe/:branch/versions', versions.getAllVersions);
 };
