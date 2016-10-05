@@ -26,8 +26,8 @@ module.exports = {
         }
       }
       let recipe = userRecipe.recipes[recipeLocation];
-      if (newVersion.branch = 'master') {
-        recipe.name = newVersion.name;
+      if (newVersion.branch === 'master' && newVersion.name) {
+        recipe.name = newVersion.name.value;
       }
       let branchLocation = _.findIndex(recipe.branches,
         branch => branch.name === newVersion.branch);
