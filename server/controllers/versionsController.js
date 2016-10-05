@@ -3,6 +3,7 @@ let db = require(`${__dirname}/../schemas.js`);
 let UserRecipe = db.UserRecipe;
 let Recipe = db.Recipe;
 let _ = require('underscore');
+let Promise = require('bluebird')
 
 module.exports = {
   // description: Makes a new version from an existing version
@@ -62,13 +63,10 @@ module.exports = {
       res.status(200).send(result);
     }).catch(error => {
       res.status(404).send(error)
-    })
+    });
   },
   
   // description: Retrieve a list of all versions
-  //username
-  //recipe
-  //branch
   getAllVersions: (req, res) => {
     let mostRecent;
     return UserRecipe.findOne({
@@ -80,27 +78,21 @@ module.exports = {
           branches = recipe.branches;
         }
       });
-      console.log('branches: ', branches);
 
       branches.forEach(branch => {
         if (branch.name === req.params.branch) {
           mostRecent = branch.mostRecentVersionId;
         }
-      })
-      console.log('id: ', mostRecent);
+      });
 
       return Recipe.find().or([
         {
           _id: req.params.recipe
-        }, 
-        {
+        }, {
           rootVersion: req.params.recipe
         }
       ]);
     }).then(recipes => {
-      recipes = recipes.toObject();
-      console.log('RECIPES: ', recipes);
-
       let versions = [];
       let findVersion = (id) => {
         let result = _.find(recipes, recipe => {
@@ -112,12 +104,10 @@ module.exports = {
         }
       };
       findVersion(mostRecent);
-      
-      console.log('versions: ', versions);
       res.status(200).send(versions);
     }).catch(error => {
       res.status(404).send(error);
-    })
+    });
   },
 
   // description: removes versions with no downstream, makes others unavailable
