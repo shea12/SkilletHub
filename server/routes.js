@@ -35,5 +35,5 @@ module.exports = function(app, express) {
   app.post('/:username/create-pull', pullRequests.createPullRequest);
   app.put('/:username/:pullId', pullRequests.updatePullRequestStatus);
   app.get('/:username/:pullId', pullRequests.getPullRequest);
-  app.get('/:username/get-pulls', pullRequests.getAllPullRequests)
+  app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 };

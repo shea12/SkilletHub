@@ -10,24 +10,45 @@ let _ = require('underscore');
   // status: String,
   // createdAt: { type: Date, default: Date.now },
   // resolvedAt: Date
+
+  // app.post('/:username/create-pull', pullRequests.createPullRequest);
+  // app.put('/:username/:pullId', pullRequests.updatePullRequestStatus);
+  // app.get('/:username/:pullId', pullRequests.getPullRequest);
+  // app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 module.exports = {
   // description: Creates a pull request
-  createPullRequest: {
-
+  // params: {
+  //   targetUsername: 'username of target',
+  //   sourceVersionId: _id of source version,
+  //   targetVersionId: _id of target version
+  // }
+  createPullRequest: (req, res) => {
+    return new PullRequest({
+      sendingUser: req.params.username,
+      receivingUser: req.params.targetUsername,
+      sentVersion: req.params.sourceVersionId,
+      receivingVersion: req.params.targetVersionId,
+      status: 'open',
+    }).save().then(pullRequest => {
+      res.status(201).send(pullRequest);
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send(error);
+    });
   },
 
   // description: Updates the status of a pull request
-  updatePullRequestStatus: {
-
+  updatePullRequestStatus: (req, res) => {
+    //update resolvedAt, status
   },
 
   // description: Retrieves a list of all the user's pull requests
-  getAllPullRequests: {
+  getAllPullRequests: (req, res) => {
 
   },
 
   // description: Retrieve a single pull request
-  getPullRequest: {
+  getPullRequest: (req, res) => {
 
   }
 };
