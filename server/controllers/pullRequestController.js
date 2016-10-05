@@ -30,6 +30,7 @@ module.exports = {
       receivingVersion: req.params.targetVersionId,
       status: 'open',
     }).save().then(pullRequest => {
+      console.log('pullRequest: ', pullRequest);
       res.status(201).send(pullRequest);
     }).catch(error => {
       console.log('error: ', error);
