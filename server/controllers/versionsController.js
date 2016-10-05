@@ -29,9 +29,6 @@ module.exports = {
       if (newVersion.branch === 'master' && newVersion.name) {
         recipe.name = newVersion.name.value;
       }
-      console.log('recipe: ', recipe);
-      console.log('new version: ', newVersion);
-      console.log('newversion.name: ', newVersion.name);
       let branchLocation = _.findIndex(recipe.branches,
         branch => branch.name === newVersion.branch);
       let branch = recipe.branches[branchLocation];
@@ -41,10 +38,8 @@ module.exports = {
         username: userRecipe.username
       }, userRecipe);
     }).then((updateResults) => {
-      console.log('success');
       res.status(201).send();
     }).catch(error => {
-      console.log('error: ', error);
       res.status(500).send(error)
     });
   },
