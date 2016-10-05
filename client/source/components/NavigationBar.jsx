@@ -28,6 +28,7 @@ class NavigationBar extends React.Component {
     console.log(this.state.username, this.state.password);
     var user = this.state; 
     this.props.handleLoginUser(user);
+    this.setState({password: null});
   }
 
   handleChange (event) {
