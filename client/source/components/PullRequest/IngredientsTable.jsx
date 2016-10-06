@@ -23,34 +23,6 @@ class IngredientsTable extends React.Component {
     }
   } 
 
-  // _renderIngredientStatus(ingredient) {
-  //   if (ingredient.changed) {
-  //     return (
-  //       <tr style={{background: 'yellow'}}>
-  //         <td> {this._renderIngredientName(ingredient)} </td>
-  //         <td> {ingredient.amount} </td>
-  //         <td> {ingredient.unit} </td>
-  //       </tr>
-  //     )
-  //   } else if (ingredient.added) {
-  //     return (
-  //       <tr style={{background: 'yellow'}}>
-  //         <td> {this._renderIngredientName(ingredient)} </td>
-  //         <td> {ingredient.amount} </td>
-  //         <td> {ingredient.unit} </td>
-  //       </tr>
-  //     )
-  //   } else if (ingredient.deleted) {
-  //     return (
-  //       <tr style={{background: 'red'}}>
-  //         <td> {this._renderIngredientName(ingredient)} </td>
-  //         <td> {ingredient.amount} </td>
-  //         <td> {ingredient.unit} </td>
-  //       </tr>
-  //     )
-  //   }
-  // }
-
   _renderIngredientStatus(ingredient) {
     if (ingredient.edited) {
       // return 'rgba(224, 209, 41, 0.5)'; 

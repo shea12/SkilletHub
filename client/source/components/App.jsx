@@ -82,7 +82,7 @@ class App extends React.Component {
     // console.log(event.target); 
     var usernameParameter = event.target.dataset.username; 
     var recipeParameter = event.target.dataset.recipe;
-    browserHistory.push(`/Edit/${username}/${recipe}`);
+    browserHistory.push(`/Edit/${usernameParameter}/${recipeParameter}`);
   }
 
   handleRecipeForkClick(event) {
