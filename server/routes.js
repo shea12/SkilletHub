@@ -9,10 +9,10 @@ module.exports = function(app, express) {
   app.post('/user/signup', users.signup);
   app.post('/user/login', users.login);
   app.post('/user/logout', users.logout);
-  
+
   /*** Pull Requests ***/
   app.post('/:username/create-pull', pullRequests.createPullRequest);
-  app.put('/:username/:pullId/update', pullRequests.updatePullRequestStatus);
+  app.put('/:username/:pullId/update-pull', pullRequests.updatePullRequestStatus);
   app.get('/:username/:pullId/get-pull', pullRequests.getPullRequest);
   app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 
