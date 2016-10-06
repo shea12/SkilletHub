@@ -107,8 +107,11 @@ module.exports = {
         username: built.username
       }).then(userRecipeCollection => {
         let branches;
+
+        built = built.toObject();
+        let rootVer = version.rootVersion || version._id;
         userRecipeCollection.recipes.forEach(recipe => {
-          if (built.rootVersion.equals(recipe.rootRecipeId)) {
+          if (rootVer.equals(recipe.rootRecipeId)) {
             built.branches = recipe.branches;
           }
         });

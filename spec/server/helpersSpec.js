@@ -113,22 +113,40 @@ describe('helpers.js', function() {
           rootVersion: null,
           previousVersion: null,
           deleted: false,
-          branch: 'master'
+          branch: 'master',
+          username: 'justin',
+          name: {
+            changed: true,
+            value: 'someRecipe'
+          }
         };
         version2 = {
           _id: generateId(),
           rootVersion: rootVersion._id,
           previousVersion: rootVersion._id,
           deleted: false,
-          branch: 'master'
+          branch: 'master',
+          username: 'justin'
         };
         version3 = {
           _id: generateId(),
           rootVersion: rootVersion._id,
           previousVersion: version2._id,
           deleted: false,
-          branch: 'master'
+          branch: 'master',
+          username: 'justin'
         };
+        return new UserRecipe({
+          username: 'justin',
+          recipes: [{
+            name: 'someRecipe',
+            rootRecipeId: rootVersion._id,
+            branches: [{
+              name: 'master',
+              mostRecentVersionId: version3._id
+            }]
+          }]
+        }).save();
       });
     });
 
@@ -234,8 +252,6 @@ describe('helpers.js', function() {
         return retrieveVersion(version3);
       })
       .then(function(result) {
-        expect(result.name.changed).to.be.undefined;
-        expect(result.name.value).to.be.undefined;
         expect(result.description.changed).to.be.true;
         expect(result.description.value).to.equal('this is a salad');
         expect(result.ingredients[0].changed).to.be.true;
