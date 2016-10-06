@@ -252,8 +252,6 @@ describe('helpers.js', function() {
         return retrieveVersion(version3);
       })
       .then(function(result) {
-        expect(result.name.changed).to.be.undefined;
-        expect(result.name.value).to.be.undefined;
         expect(result.description.changed).to.be.true;
         expect(result.description.value).to.equal('this is a salad');
         expect(result.ingredients[0].changed).to.be.true;
