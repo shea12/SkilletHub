@@ -29,7 +29,7 @@ class CreateRecipeMain extends Component {
       skillLevel: '', 
       description: '', 
       cookTime: '',
-      picture: "",
+      picture: '',
       ingredients: [],
       availableIngredients: [], 
       steps: [],
@@ -37,12 +37,12 @@ class CreateRecipeMain extends Component {
     }; 
   }
 
-  componentWillMount() {
-    console.log('Create recipe page is mounting!'); 
-    // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
-      --> // Main Server 
-    console.log(wellingtonRecipe); 
-  }
+  // componentWillMount() {
+  //   console.log('Create recipe page is mounting!'); 
+  //   // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
+  //     --> // Main Server 
+  //   console.log(wellingtonRecipe); 
+  // }
 
   handleChange (event) {
     var inputType = event.target.id; 
@@ -79,27 +79,28 @@ class CreateRecipeMain extends Component {
 
   handleAddStep(step) {
     var steps = this.state.steps;
+    console.log(step);
     steps.push(step); 
     this.setState({
       steps: steps
     }); 
   }
 
-  handleClick (event) {
-    console.log('Clicked on button!'); 
-  }
+  // handleClick (event) {
+  //   console.log('Clicked on button!'); 
+  // }
 
-  _renderRecipeObjects(recipe) {
-    var keys = Object.keys(recipe); 
-    var testString = keys.map((property) => {
-      return `${property}: ${recipe[property]}`; 
-    }); 
-    return (
-      testString.map((property, i) => (
-        <h4 key={'test' + i}> {property} </h4>
-      ))
-    )
-  }
+  // _renderRecipeObjects(recipe) {
+  //   var keys = Object.keys(recipe); 
+  //   var testString = keys.map((property) => {
+  //     return `${property}: ${recipe[property]}`; 
+  //   }); 
+  //   return (
+  //     testString.map((property, i) => (
+  //       <h4 key={'test' + i}> {property} </h4>
+  //     ))
+  //   )
+  // }
 
   createMeatloaf(event){
     event.preventDefault(); 
@@ -190,28 +191,21 @@ class CreateRecipeMain extends Component {
     recipeObject.steps = this.state.steps; 
     recipeObject.tags = []; 
     recipeObject.issues = []; 
-    this.setState({ recipe: recipeObject }); 
+    // this.setState({ recipe: recipeObject }); 
 
-    console.log('CREATING RECIPE FOR:', this.props.username); 
-
-    var requestUsername = this.props.username; 
-    console.log('RECIPE: ', recipeObject); 
-    axios.post(`/${requestUsername}/create-recipe`, { 
+    var usernameParameter = this.props.username; 
+    axios.post(`/${usernameParameter}/create-recipe`, { 
       recipeObject
     })
     .then(function(response) {
       console.log('RESPONSE CREATE RECIPE: ', response); 
-      browserHistory.push(`/User/${requestUsername}`);
+      browserHistory.push(`/User/${usernameParameter}`);
     })
     .catch(function(error) {
       console.log(error); 
     }); 
 
   }
-
-
-  // TODO: Implement conditional render to display forked from. 
-  // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
 
   render() {
     return (
@@ -274,20 +268,13 @@ class CreateRecipeMain extends Component {
           <form>
             <FormGroup style={{padding: 5}}>
             <ControlLabel> Recipe Image </ControlLabel>
-            <FormControl type="text" id="picture" onChange={this.handleChange.bind(this)} value={this.state.picture} required/>
+            <FormControl type="text" id="picture" onChange={this.handleChange.bind(this)} value={this.state.picture} />
             </FormGroup>
           </form>
       </Col>
       </Row> 
-        <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length}/>
+        <IngredientsForm handleAddIngredient={this.handleAddIngredient.bind(this)} ingredientCount={this.state.ingredients.length} ingredients={this.state.ingredients}/>
         <StepsForm handleAddStep={this.handleAddStep.bind(this)} stepCount={this.state.steps.length} availableIngredients={this.state.availableIngredients}/>
-      <Row> 
-      <Col xs={6} md={6}>
-        {this._renderRecipeObjects(this.state.recipe)}
-      </Col>
-      <Col xs={6} md={6}>
-      </Col>
-      </Row>
       </Grid> 
     );
   }

@@ -33,9 +33,9 @@ class RecipeIngredients extends React.Component {
 					    </tr>
 					  </thead>
 					  <tbody> 
-					    {this.props.ingredientList.map((ingredient) => {
+					    {this.props.ingredientList.map((ingredient, i) => {
 					      return (
-						  	<tr key={ingredient.position}>
+						  	<tr key={ingredient.position + ' ' + i}>
 						  		<td> {this._renderIngredientName(ingredient)} </td>
 						  		<td> {ingredient.amount} </td>
 						  		<td> {ingredient.unit} </td>
