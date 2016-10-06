@@ -7,7 +7,7 @@ import CookMe from '../CookRecipe/CookMeMain'
 import VersionControl from '../VersionControl/VersionControlMain'
 
 //Bootstrap 
-import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Table, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders'
@@ -26,7 +26,9 @@ class RecipeMain extends Component {
       recipeName: '',
       recipeDescription: '',
       recipeIngredients: [],
-      recipeReadME: []
+      recipeReadME: [],
+      selectedBranch: '', 
+      branchVersions: []
     }; 
   }
 
@@ -59,8 +61,13 @@ class RecipeMain extends Component {
         recipeName: recipe.name.value,
         recipeDescription: recipe.description.value, 
         recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps
+        recipeReadME: recipe.steps,
+        recipeBranches: recipe.branches
       }); 
+
+      var branch = recipe.branch; 
+      this.requestVersionData(branch); 
+
     })
     .catch((error)=> {
       console.log('Axios error: ', error); 
@@ -89,6 +96,34 @@ class RecipeMain extends Component {
     }    
   }
 
+  requestVersionData(branch) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branch}/versions`)
+    .then((result) => {
+      console.log('REQUESTED VERSIONS!'); 
+      console.log(result.data); 
+      var branchVersions = result.data; 
+      console.log(branchVersions); 
+      this.setState({
+        branchVersions: branchVersions
+      }); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleBranchSelect(event) {
+    event.preventDefault(); 
+    console.log('SELECTED BRANCH!'); 
+    var branch = event.target.value; 
+    console.log('BRANCH IS:', branch); 
+    this.setState({
+      selectedBranch: branch
+    }); 
+  }
+
   render() {
     return (
       <Grid className="recipeMain">
@@ -104,6 +139,16 @@ class RecipeMain extends Component {
           </Col> 
         </Row> 
         <VersionControl /> 
+        <Row> 
+          <FormGroup>
+            <ControlLabel>Branch</ControlLabel>
+            <FormControl componentClass="select" id="unit" onChange={this.handleBranchSelect.bind(this)} >
+              {this.state.recipeBranches.map((branch, i)=> (
+                <option key={'branch' + i} value={branch.name}>{branch.name}</option>
+              ))}
+            </FormControl>
+          </FormGroup>
+        </Row> 
         <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         <div>
             <ReadME readME={this.state.recipeReadME}/>

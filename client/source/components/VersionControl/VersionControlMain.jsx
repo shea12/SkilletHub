@@ -26,25 +26,11 @@ export default () => {
             </Col> 
           </Row> 
           <Row> 
-            <Col vs={12} md={12}>
-              <ProgressBar>
-                {numbers.map((number, i)=> (
-                  <ProgressBar bsStyle={colors[i]} now={number} key={'progress'+i} />
-                ))}
-                </ProgressBar>
-            </Col> 
-          </Row> 
-          <Row> 
-            <DropdownButton title={'branch'} id={'branch'}> 
-              {branchNames.map((branch, i)=> (
-                <MenuItem key={'branch'+i} value={branch}>{branch}</MenuItem>
+            <ProgressBar>
+              {numbers.map((number, i)=> (
+                <ProgressBar bsStyle={colors[i]} now={number} key={'progress'+i} />
               ))}
-            </DropdownButton> 
-            <DropdownButton title={'version'} id={'version'}>
-              {versionNames.map((version, i)=> (
-                <MenuItem key={'branch'+i} value={versionNames}>{versionNames.slice(0,7)}</MenuItem>
-              ))}
-            </DropdownButton> 
+              </ProgressBar>
           </Row> 
         </Grid> 
   ); 
