@@ -66,14 +66,13 @@ class App extends React.Component {
     browserHistory.push(`/User/${selectedUser}`);
   }
 
-  // TODO: Fix parameters from event, using too many different types of input 
   handleRecipeViewClick(event) {
     event.preventDefault(); 
     // console.log('Clicked on username!'); 
     // console.log(event.target); 
     // console.log('USERNAME: ', event.target.dataset.username); 
     var usernameParameter = event.target.dataset.username; 
-    var recipeParameter = event.target.id;
+    var recipeParameter = event.target.dataset.recipe; 
     browserHistory.push(`/Recipe/${usernameParameter}/${recipeParameter}`);
   }
 
