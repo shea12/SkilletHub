@@ -9,6 +9,12 @@ module.exports = function(app, express) {
   app.post('/user/signup', users.signup);
   app.post('/user/login', users.login);
   app.post('/user/logout', users.logout);
+  
+  /*** Pull Requests ***/
+  app.post('/:username/create-pull', pullRequests.createPullRequest);
+  app.put('/:username/:pullId/update', pullRequests.updatePullRequestStatus);
+  app.get('/:username/:pullId/get-pull', pullRequests.getPullRequest);
+  app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 
   // /*** Users ***/
   app.get('/:username/profile', users.getProfile); //gets recipes
@@ -31,9 +37,4 @@ module.exports = function(app, express) {
   app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);  
   app.post('/:username/:recipe/:branch/:version/fork', versions.forkVersion);
 
-  /*** Pull Requests ***/
-  app.post('/:username/create-pull', pullRequests.createPullRequest);
-  app.put('/:username/:pullId', pullRequests.updatePullRequestStatus);
-  app.get('/:username/:pullId', pullRequests.getPullRequest);
-  app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 };
