@@ -40,7 +40,7 @@ class UserProfile extends React.Component {
     var usernameParameter = this.props.params.username; 
 
     // TODO: Remove this to user a user's actual picture. 
-    var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
+    var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
     axios.get(`/${usernameParameter}/profile`)
     .then((results) => {
@@ -63,7 +63,7 @@ class UserProfile extends React.Component {
 
    componentWillReceiveProps(nextProps) {
       var usernameParameter = nextProps.params.username; 
-      var userImage = placeholders.images[username] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
+      var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
       // var otherUser = this.props.username !== username; 
       // console.log('OTHER USER: ', otherUser); 
 
