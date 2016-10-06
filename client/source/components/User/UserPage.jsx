@@ -68,7 +68,7 @@ class UserProfile extends React.Component {
       axios.get(`/${username}/profile`)
       .then((results) => {
         console.log('SUCCESSFULLY REQUESTED PROFILE'); 
-        console.log(results.data.recipe); 
+        console.log(results.data.recipes); 
         this.setState({
           username: username, 
           date: 'May 4th, 2012', 

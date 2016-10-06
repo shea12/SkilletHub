@@ -5,14 +5,10 @@ import Nav from './NavigationBar';
 // Axios 
 var axios = require('axios'); 
 
-
 /************************************************************
 *****************    AWS COGNITO CONFIG    ******************
 ************************************************************/
 var AWS = require('aws-sdk');
-// var passport = require('passport');
-// var session = require('express-session');
-// var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
 var USER_POOL_APP_CLIENT_ID = '3998t3ftof3q7k5f0cqn260smk';
@@ -32,106 +28,81 @@ class App extends React.Component {
   constructor(props) {
     super(props); 
     this.state = {
-      siteName: 'SkilletHub',
       userID: null,
       username: 'Rachel_Ray', 
       password: 'Password',
-      firstname: 'First Name',
-      lastname: 'Last Name',
-      email: 'email',
       currentProfile: null,
-      otherUser: false 
+      loggedInUserProfile: true 
   	}; 
   }
 
-  handleChange (event) {
-    var inputType = event.target.id; 
-    if (inputType === 'username') {
-      this.setState({username: event.target.value}); 
-    } else if (inputType === 'password') {
-      this.setState({password: event.target.value}); 
-    } else if (inputType === 'firstname') {
-      this.setState({firstname: event.target.value}); 
-    } else if (inputType === 'lastname') {
-      this.setState({lastname: event.target.value}); 
-    } else if (inputType === 'email') {
-      this.setState({email: event.target.value}); 
-    }
-  }
-
   handleSignUp(user){
-    console.log('Attempting sign up!'); 
-    console.log('User info: ', user.username); 
-    this.setState({
-      username: user.username,
-      password: user.password,
-      firstname: user.firstname,
-      lastname:user.lastname,
-      email: user.email
-    }); 
+    // console.log('Attempting sign up!'); 
+    // console.log('User info: ', user.username); 
     this.signUpUser(user).bind(this); 
   }
 
   handleLoginUser(user){
-    console.log('In App.jsx, attempting login!'); 
-    console.log('User info: ', user.username); 
+    // console.log('In App.jsx, attempting login!'); 
+    // console.log('User info: ', user.username); 
     this.loginUser(user); 
   }
 
   handleLogOutUser(user){
-    console.log('In App.jsx, attempting logout!'); 
-    console.log('User info: ', user.username); 
+    // console.log('In App.jsx, attempting logout!'); 
+    // console.log('User info: ', user.username); 
     this.logOutUser(user); 
   }
   
   handleUserClick(event) {
     event.preventDefault(); 
-    console.log('Clicked on username!'); 
-    console.log(event.target); 
-    console.log('USERNAME STATE');
-    console.log(this.state.username);
-    var username = event.target.id;
-    var otherUser = this.state.username !== username ? true : false; 
-    this.setState({otherUser: otherUser}); 
-    browserHistory.push(`/User/${username}`);
+    // console.log('Clicked on username!'); 
+    // console.log(event.target); 
+    // console.log('USERNAME STATE');
+    // console.log(this.state.username);
+    var selectedUser = event.target.id;
+    var loggedInUserProfile = this.state.username === selectedUser ? true : false; 
+    this.setState({loggedInUserProfile: loggedInUserProfile}); 
+    browserHistory.push(`/User/${selectedUser}`);
   }
 
+  // TODO: Fix parameters from event, using too many different types of input 
   handleRecipeViewClick(event) {
     event.preventDefault(); 
-    console.log('Clicked on username!'); 
-    console.log(event.target); 
-    console.log('USERNAME: ', event.target.dataset.username); 
-    var recipe = event.target.id;
-    var username = event.target.dataset.username; 
-    browserHistory.push(`/Recipe/${username}/${recipe}`);
+    // console.log('Clicked on username!'); 
+    // console.log(event.target); 
+    // console.log('USERNAME: ', event.target.dataset.username); 
+    var usernameParameter = event.target.dataset.username; 
+    var recipeParameter = event.target.id;
+    browserHistory.push(`/Recipe/${usernameParameter}/${recipeParameter}`);
   }
 
   handleRecipeEditClick(event) {
     event.preventDefault(); 
-    console.log('CLICKED EDIT IN APP!'); 
-    console.log(event.target); 
-    var recipe = event.target.dataset.recipe;
-    var username = event.target.dataset.username; 
+    // console.log('CLICKED EDIT IN APP!'); 
+    // console.log(event.target); 
+    var usernameParameter = event.target.dataset.username; 
+    var recipeParameter = event.target.dataset.recipe;
     browserHistory.push(`/Edit/${username}/${recipe}`);
   }
 
   handleRecipeForkClick(event) {
     event.preventDefault(); 
-    console.log('CLICKED FORK IN APP!'); 
-    console.log(event.target.dataset); 
-    var username = event.target.dataset.username; 
-    var recipe = event.target.dataset.recipe;
-    var branch = event.target.dataset.branch;
-    var version = event.target.dataset.version; 
-    var forkUser = this.state.username; 
-    console.log('FORK USER: ', forkUser); 
-    axios.post(`/${username}/${recipe}/${branch}/${version}/fork`, {
-      username: forkUser
+    // console.log('CLICKED FORK IN APP!'); 
+    // console.log(event.target.dataset); 
+    var usernameParameter = event.target.dataset.username; 
+    var recipeParameter = event.target.dataset.recipe;
+    var branchParameter = event.target.dataset.branch;
+    var versionParameter = event.target.dataset.version; 
+    var loggedInUser = this.state.username; 
+    // console.log('FORK USER: ', forkUser); 
+    axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/fork`, {
+      username: loggedInUser
     })
     .then((result) => {
-      console.log('SUCCESSFUL FORK!');
-      console.log(result); 
-      browserHistory.push(`/User/${forkUser}`);
+      // console.log('SUCCESSFUL FORK!');
+      // console.log(result); 
+      browserHistory.push(`/User/${loggedInUser}`);
     })
     .catch((error) => {
       console.log(error); 
@@ -141,9 +112,13 @@ class App extends React.Component {
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
-    console.log('NAVIGATING TO:', route); 
-    if(route === `/User/${this.state.username}/`) {
-      this.setState({otherUser: false}); 
+    // console.log('NAVIGATING TO:', route); 
+    // if (route === `/User/${this.state.username}/`) {
+    //   this.setState({loggedInUserProfile: true}); 
+    // }
+    if (route === '/User') {
+      this.setState({loggedInUserProfile: true}); 
+      route = `/User/${this.state.username}/`; 
     }
     browserHistory.push(`${route}`);
   }
@@ -166,7 +141,6 @@ class App extends React.Component {
     })
     .then(function(response) {
       console.log('RESPONSE CREATE USER: ', response); 
-      // browserHistory.push(`/User/${requestUsername}`);
     })
     .catch(function(error) {
       console.log(error); 
@@ -209,17 +183,12 @@ class App extends React.Component {
     var timeStamp = new AWS.CognitoIdentityServiceProvider.CognitoUserAttribute({Name: 'updated_at', Value: currentTime});
 
     var attList = [];
-    attList.push(prefUsername);
-    attList.push(firstname);
-    attList.push(lastname);
-    attList.push(email);
-    attList.push(timeStamp);
+    attList.push(prefUsername, firstname, lastname, email, timeStamp);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value });
-      this.setState({ token: token, password: undefined });
-      browserHistory.push(`/User/${userAttributes[3].Value}`);
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: undefined });
       this.createUser(token, userAttributes);
+      browserHistory.push(`/User/${userAttributes[3].Value}`);
     }.bind(this); 
 
     userPool.signUp(user.username, user.password, attList, null, function(error, result) {
@@ -262,8 +231,8 @@ class App extends React.Component {
         on incorrect username/password or user non-existent
   ************************************************************/
   loginUser (user) {
-    console.log('LOGGING USER IN FUNCTION: ');
-    console.log(user); 
+    // console.log('LOGGING USER IN FUNCTION: ');
+    // console.log(user); 
     var authData = { Username: user.username, Password: user.password };
     var authDetails = new AWS.CognitoIdentityServiceProvider.AuthenticationDetails(authData);
     var poolConfig = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
@@ -272,12 +241,11 @@ class App extends React.Component {
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     var setUserState = function(token, userAttributes) {
-      console.log(userAttributes); 
-      console.log('USERNAME: ', userAttributes[3].Value); 
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value }); 
-      this.setState({ token: token, password: undefined });
-      browserHistory.push(`/User/${userAttributes[3].Value}`);
+      // console.log(userAttributes); 
+      // console.log('USERNAME: ', userAttributes[3].Value); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: undefined }); 
       this.setUserToken(token, userAttributes);
+      browserHistory.push(`/User/${userAttributes[3].Value}`);
     }.bind(this); 
     
     cognitoUser.authenticateUser(authDetails, {
@@ -312,12 +280,12 @@ class App extends React.Component {
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
     var userObject = {username: user.username};
-    console.log('In log out, user.username: ', user.username);
+    // console.log('In log out, user.username: ', user.username);
 
     axios.post(`/user/logout`, { 
       userObject
     }).then(function(response) {
-      console.log('RESPONSE LOG OUT USER: ', response); 
+      // console.log('RESPONSE LOG OUT USER: ', response); 
       // browserHistor  y.push(`/User/${requestUsername}`);
     }).catch(function(error) {
       console.log(error); 
@@ -326,43 +294,15 @@ class App extends React.Component {
     cognitoUser.signOut();
     console.log('logged out user: ', cognitoUser);
 
-    this.setState({username: null});
-    this.setState({password: null});
-    this.setState({userID: null});
-    this.setState({token: null});
+    this.setState({username: null, password: null, userID: null, token: null });
 
     window.AWS.config.credentials.params.IdentityPoolId = '';
     window.AWS.config.credentials.params.Logins.token = '';
     // console.log("after logout: ", window.AWS.config.credentials);
 
-
-
     //redirect to the landing page after logging out
     browserHistory.push('/');
   };
-
-  /************************************************************
-  /******************    GET ALL USERS    *********************
-  ************************************************************/
-  // getListOfAllUsers() {
-  //   var poolData = { 
-  //     UserPoolId: USER_POOL_ID,
-  //     ClientId: USER_POOL_APP_CLIENT_ID
-  //   };
-  //   var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
-  //   var options = {
-  //     "AttributesToGet": [ "username" ],
-  //     "UserPoolId": USER_POOL_ID
-  //   };
-  //   userPool.listUsers(options, {
-  //     onSuccess: function(result) {
-  //       console.log('result in getListUsers: ', result);
-  //     },
-  //     onError: function(error) {
-  //       console.log('error in getListUsers: ', error);
-  //     }
-  //   });
-  // };
 
   /************************************************************
   /****************    RENDER COMPONENTS    *******************
@@ -371,10 +311,10 @@ class App extends React.Component {
 
 	const children = React.Children.map(this.props.children, function (child) {
 	  return React.cloneElement(child, {
-	    handleSignUp: this.handleSignUp.bind(this),
-      // userID: this.state.userID,
+      userID: this.state.userID,
       username: this.state.username, 
-      otherUser: this.state.otherUser, 
+      loggedInUserProfile: this.state.loggedInUserProfile, 
+      handleSignUp: this.handleSignUp.bind(this),
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
       handleRecipeEditClick: this.handleRecipeEditClick.bind(this),

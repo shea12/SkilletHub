@@ -14,6 +14,9 @@ import EditRecipeMain from './components/EditRecipe/EditRecipeMain';
 import PullRequest from './components/PullRequest/PullRequestMain';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
 
+
+//TODO: Enter authentication 
+
 render((
 	<Router history={browserHistory}> 
 	  <Route path="/" component={App}>
