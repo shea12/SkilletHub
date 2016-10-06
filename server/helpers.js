@@ -52,7 +52,24 @@ module.exports = {
   },
 
   //retrieve a particular version
-  retrieveVersion: (version) => {
+  retrieveVersion: (versionId) => {
+    //get specific version object from version id
+    return Recipe.find({
+      _id: versionId
+    }).then(recipe => {
+      //find all recipes that belong to that recipe tree
+      let id = recipe.rootVersion || recipe._id;
+      return Recipe.find().or([{
+        _id: id
+      }, {
+        rootVersion: id
+      }]);
+    }).then(recipes => {
+      //build history out of recipes
+    })
+
+    /************ REFACTOR /\/\/\/\/\/\ **/
+
     let currentVersion = version;
     //get versions for branch
     let versions;

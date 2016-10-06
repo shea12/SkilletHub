@@ -47,21 +47,18 @@ module.exports = {
 
   // description: gets a specific version
   getVersion: (req, res) => {
-    let branch = req.params.branch;
-    UserRecipe.find({
-      username: req.params.username
-    }).then(recipes => {
-      let recipe = _.where(recipes, {
-        rootRecipeId: req.params.version
-      });
-      let version = _.where(recipe, {
-        branch: branch
-      });
+    console.log(req.params.username);
+    console.log(req.params.version);
+    Recipe.find({
+      _id: req.params.version
+    }).then(version => {
+      console.log('version: ', version);
       return helpers.retrieveVersion(version)
-
     }).then(result => {
+      console.log('result: ', result);
       res.status(200).send(result);
     }).catch(error => {
+      console.log('error: ', error);
       res.status(404).send(error)
     });
   },
