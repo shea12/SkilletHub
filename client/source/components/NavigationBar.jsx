@@ -80,12 +80,12 @@ class NavigationBar extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav onClick={this.props.handleNavigation.bind(this)}>
-              <NavItem eventKey={1} title={`/User/${this.state.username}`}> Profile </NavItem>
-              <NavItem eventKey={2} title={'/Recipe'}> Recipe </NavItem>
-              <NavItem eventKey={3} title={'/Create'}> Create Recipe </NavItem>
-              <NavItem eventKey={4} title={'/Edit'}> Edit Recipe </NavItem>
-              <NavItem eventKey={5} title={'/Pull'}> Pull Request </NavItem>
-              <NavItem eventKey={6} style={{display: 'none'}}> userID: {this.props.userID} </NavItem>
+              <NavItem title={'/User'}> Profile </NavItem>
+              <NavItem title={'/Recipe'}> Recipe </NavItem>
+              <NavItem title={'/Create'}> Create Recipe </NavItem>
+              <NavItem title={'/Edit'}> Edit Recipe </NavItem>
+              <NavItem title={'/Pull'}> Pull Request </NavItem>
+              <NavItem title={'username'}> app username: {this.props.username} </NavItem>
             </Nav>
             <Nav pullRight>
               <Navbar.Form >
@@ -99,3 +99,5 @@ class NavigationBar extends React.Component {
 }
 
 export default NavigationBar; 
+
+
