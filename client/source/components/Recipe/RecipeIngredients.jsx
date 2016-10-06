@@ -11,7 +11,6 @@ class RecipeIngredients extends React.Component {
 	}
 
 	_renderIngredientName(ingredient){ 
-		console.log('Firing render function!'); 
 		if (ingredient.prep) {
 			return (
 				<p> {`${ingredient.name}, ${ingredient.prep}`} </p>
