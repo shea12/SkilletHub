@@ -28,7 +28,7 @@ class CookMeMain extends Component {
 
     axios.get(`/${this.props.params.username}/${this.props.params.recipe}`)
     .then((result)=> {
-      var recipe = result.data; 
+      var recipe = result.data;
 
       var stepsArray = [];
       for (var i = 0; i < recipe.steps.length; i++) {
