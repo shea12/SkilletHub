@@ -84,7 +84,7 @@ class NavigationBar extends React.Component {
               <NavItem eventKey={2} title={'/Recipe'}> Recipe </NavItem>
               <NavItem eventKey={3} title={'/Create'}> Create Recipe </NavItem>
               <NavItem eventKey={4} title={'/Edit'}> Edit Recipe </NavItem>
-              <NavItem eventKey={5} style={{display: 'none'}}> username: {this.props.username} </NavItem>
+              <NavItem eventKey={5} title={'/Pull'}> Pull Request </NavItem>
               <NavItem eventKey={6} style={{display: 'none'}}> userID: {this.props.userID} </NavItem>
             </Nav>
             <Nav pullRight>

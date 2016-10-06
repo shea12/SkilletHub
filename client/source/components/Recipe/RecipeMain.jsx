@@ -4,9 +4,10 @@ import RecipeDescription from './RecipeDescription'
 import RecipeIngredients from './RecipeIngredients'
 import ReadME from './ReadME'
 import CookMe from '../CookRecipe/CookMeMain'
+import VersionControl from '../VersionControl/VersionControlMain'
 
 //Bootstrap 
-import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Table, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders'
@@ -25,7 +26,10 @@ class RecipeMain extends Component {
       recipeName: '',
       recipeDescription: '',
       recipeIngredients: [],
-      recipeReadME: []
+      recipeReadME: [],
+      selectedBranch: '', 
+      branchVersions: [],
+      recipeBranches: []
     }; 
   }
 
@@ -58,8 +62,14 @@ class RecipeMain extends Component {
         recipeName: recipe.name.value,
         recipeDescription: recipe.description.value, 
         recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps
+        recipeReadME: recipe.steps,
+        recipeBranches: recipe.branches,
+        selectedBranch: recipe.branch
       }); 
+
+      var branch = recipe.branch; 
+      this.requestVersionData(branch); 
+
     })
     .catch((error)=> {
       console.log('Axios error: ', error); 
@@ -88,8 +98,74 @@ class RecipeMain extends Component {
     }    
   }
 
-  // TODO: Implement conditional render to display forked from. 
-  // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
+  requestVersionData(branch) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branch}/versions`)
+    .then((result) => {
+      console.log('REQUESTED VERSIONS!'); 
+      console.log(result.data); 
+      var branchVersions = result.data; 
+      console.log(branchVersions); 
+      this.setState({
+        branchVersions: branchVersions
+      }); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  requestSelectedVersion(event) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    var branchParameter = this.state.selectedBranch;
+    var versionParemeter = event.target.value; 
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParemeter}`)
+    .then((result) => {
+      console.log(result.data); 
+      console.log(Object.keys(result.data)); 
+      var recipe = result.data; 
+
+      console.log('NAME: ', recipe.name.value); 
+      console.log('DESCRIPTION:', recipe.description.value); 
+      
+      this.setState({
+        recipe: recipe,
+        username: usernameParameter, 
+        recipeName: recipe.name.value,
+        recipeDescription: recipe.description.value, 
+        recipeIngredients: recipe.ingredients, 
+        recipeReadME: recipe.steps,
+        recipeBranches: recipe.branches
+      });
+
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleBranchSelect(event) {
+    event.preventDefault(); 
+    console.log('SELECTED BRANCH!'); 
+    var branch = event.target.value; 
+    console.log('BRANCH IS:', branch); 
+    this.setState({
+      selectedBranch: branch
+    }); 
+  }
+
+  handleVersionSelect(event) {
+    event.preventDefault(); 
+    console.log('SELECTED VERSION!'); 
+    var version = event.target.value; 
+    console.log('VERSION IS:', version); 
+    // this.setState({
+    //   selectedBranch: branch
+    // }); 
+    this.requestSelectedVersion(event); 
+  }
 
   render() {
     return (
@@ -105,9 +181,30 @@ class RecipeMain extends Component {
             <RecipeDescription recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
           </Col> 
         </Row> 
-        <div style={{marginTop: 10}}>
-            <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
-        </div>
+        <VersionControl /> 
+        <Row> 
+          <Col xs={3} md={3}> 
+          <FormGroup>
+            <ControlLabel>Branch</ControlLabel>
+            <FormControl componentClass="select" id="unit" onChange={this.handleBranchSelect.bind(this)}>
+              {this.state.recipeBranches.map((branch, i)=> (
+                <option key={'branch' + i} value={branch.name}>{branch.name}</option>
+              ))}
+            </FormControl>
+          </FormGroup>
+          </Col> 
+          <Col xs={3} md={3}>
+            <FormGroup>
+              <ControlLabel>Version</ControlLabel>
+              <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
+                {this.state.branchVersions.map((version, i)=> (
+                  <option key={'version' + i} value={version._id}>{version.name.value} : version {i}</option>
+                ))}
+              </FormControl>
+            </FormGroup>
+          </Col>
+        </Row> 
+        <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
         <div>
             <ReadME readME={this.state.recipeReadME}/>
         </div>

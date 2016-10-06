@@ -34,7 +34,7 @@ class App extends React.Component {
     this.state = {
       siteName: 'SkilletHub',
       userID: null,
-      username: 'Username', 
+      username: 'Rachel_Ray', 
       password: 'Password',
       firstname: 'First Name',
       lastname: 'Last Name',
