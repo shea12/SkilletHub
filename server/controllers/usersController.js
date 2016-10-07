@@ -8,15 +8,14 @@ module.exports = {
   signup: (req, res) => {
     //req.body should include:
     //  username, firstname, lastname, email, createdAt, and token
-    console.log('in /user/signup controller, REQ.BODY: ', req.body);
 
     return new User({
-      username: req.body.userObject.username,
-      firstname: req.body.userObject.firstname,
-      lastname: req.body.userObject.lastname,
-      email: req.body.userObject.email,
-      createdAt: req.body.userObject.createdAt,
-      token: req.body.userObject.token
+      username: req.body.username,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      email: req.body.email,
+      createdAt: req.body.createdAt,
+      token: req.body.token
     }).save().then(function(result) {
       console.log('Saved user in db, result: ', result);
       res.status(200).send(result);
@@ -27,11 +26,11 @@ module.exports = {
   login: (req, res) => {
     //req.body should include:
     //  username and token
-    console.log('login req.body: ', req.body);
+
     //find user entry in db by username,
     //set user's auth token 
-    User.update({username: req.body.userTokenObject.username}, { 
-      token: req.body.userTokenObject.token
+    User.update({username: req.body.username}, { 
+      token: req.body.token
     }, function(error, response) {
       if (error) {
         console.log('Error setting user token: ', error);
@@ -40,6 +39,8 @@ module.exports = {
       console.log('Set user token. Response: ', response);
       res.status(200).send(response);
     });
+
+    //NOTE: may be prudent to check if valid token already exists
   },
 
   logout: (req, res) => {
@@ -48,7 +49,7 @@ module.exports = {
 
     //find user entry in db by username,
     //set user's auth token to empty string
-    User.update({username: req.body.userObject.username}, { 
+    User.update({username: req.body.username}, { 
       token: ''
     }, function(error, response) {
       if (error) {
