@@ -136,6 +136,14 @@ class App extends React.Component {
     }); 
   }
 
+  handleRecipeVersionPull(recipeObject) {
+    var usernameParameter = recipeObject.username; 
+    var recipeParameter = recipeObject.recipe;
+    var branchParameter = recipeObject.branch;
+    var versionParameter = recipeObject.version; 
+    browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
+  }
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
@@ -347,7 +355,8 @@ class App extends React.Component {
       handleRecipeEditClick: this.handleRecipeEditClick.bind(this),
       handleRecipeForkClick: this.handleRecipeForkClick.bind(this),
       handleRecipeVersionFork: this.handleRecipeVersionFork.bind(this),
-      handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this)
+      handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this),
+      handleRecipeVersionPull: this.handleRecipeVersionPull.bind(this)
 	  })
 	}.bind(this))
     return (
