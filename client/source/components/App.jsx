@@ -14,7 +14,6 @@ var CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
 var USER_POOL_APP_CLIENT_ID = '3998t3ftof3q7k5f0cqn260smk';
 var USER_POOL_ID = 'us-west-2_P8tGz1Tx6';
 var COGNITO_IDENTITY_POOL_ID = 'us-west-2:ea2abcb1-10a0-4964-8c13-97067e5b50bb';
-
 AWS.config.region = 'us-west-2';
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: COGNITO_IDENTITY_POOL_ID
@@ -29,8 +28,9 @@ class App extends React.Component {
     super(props); 
     this.state = {
       userID: null,
-      username: 'Rachel_Ray', 
-      password: 'Password',
+      token: null,
+      username: null, 
+      password: null,
       currentProfile: null,
       loggedInUserProfile: true 
   	}; 
@@ -109,8 +109,6 @@ class App extends React.Component {
       username: loggedInUser
     })
     .then((result) => {
-      // console.log('SUCCESSFUL FORK!');
-      // console.log(result); 
       browserHistory.push(`/User/${loggedInUser}`);
     })
     .catch((error) => {
@@ -139,13 +137,14 @@ class App extends React.Component {
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
-    // console.log('NAVIGATING TO:', route); 
-    // if (route === `/User/${this.state.username}/`) {
-    //   this.setState({loggedInUserProfile: true}); 
-    // }
-    if (route === '/User') {
+
+    if (route === '/User' && this.state.username) {
       this.setState({loggedInUserProfile: true}); 
       route = `/User/${this.state.username}/`; 
+    } else if (route === '/User' && !this.state.username) {
+      console.log('not logged in');
+      alert('Please log in or sign up!');
+      route = '/';
     }
     browserHistory.push(`${route}`);
   }
@@ -153,36 +152,28 @@ class App extends React.Component {
   createUser(token, userAttributes) {
     console.log('sending create user request');
 
-    var userObject = {};
-    userObject.createdAt = userAttributes[2].Value;
-    userObject.username = userAttributes[3].Value;
-    userObject.firstname = userAttributes[4].Value;
-    userObject.lastname = userAttributes[5].Value;
-    userObject.email = userAttributes[6].Value;
-    userObject.token = token;
-
-    console.log('userObject: ', userObject);
-
     axios.post(`/user/signup`, { 
-      userObject
+      createdAt: userAttributes[2].Value,
+      username: userAttributes[3].Value,
+      firstname: userAttributes[4].Value,
+      lastname: userAttributes[5].Value,
+      email: userAttributes[6].Value,
+      token: token
     })
     .then(function(response) {
       console.log('RESPONSE CREATE USER: ', response); 
     })
     .catch(function(error) {
       console.log(error); 
-    }); 
+    });
   }
 
   setUserToken(token, userAttributes) {
     console.log('sending request to set user token');
 
-    var userTokenObject = {};
-    userTokenObject.token = token;
-    userTokenObject.username = userAttributes[3].Value;
-
     axios.post(`/user/login`, { 
-      userTokenObject
+      token: token,
+      username: userAttributes[3].Value
     })
     .then(function(response) {
       console.log('RESPONSE LOG IN USER: ', response); 
@@ -212,7 +203,7 @@ class App extends React.Component {
     attList.push(prefUsername, firstname, lastname, email, timeStamp);
 
     var setUserState = function(token, userAttributes) {
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: undefined });
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: null });
       this.createUser(token, userAttributes);
       browserHistory.push(`/User/${userAttributes[3].Value}`);
     }.bind(this); 
@@ -269,7 +260,7 @@ class App extends React.Component {
     var setUserState = function(token, userAttributes) {
       // console.log(userAttributes); 
       // console.log('USERNAME: ', userAttributes[3].Value); 
-      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: undefined }); 
+      this.setState({ userID: userAttributes[0].Value, username: userAttributes[3].Value, token: token, password: null }); 
       this.setUserToken(token, userAttributes);
       browserHistory.push(`/User/${userAttributes[3].Value}`);
     }.bind(this); 
@@ -305,11 +296,8 @@ class App extends React.Component {
     var userData = { Username: user.username, Pool: userPool };
     var cognitoUser = new AWS.CognitoIdentityServiceProvider.CognitoUser(userData);
 
-    var userObject = {username: user.username};
-    // console.log('In log out, user.username: ', user.username);
-
     axios.post(`/user/logout`, { 
-      userObject
+      username: user.username
     }).then(function(response) {
       // console.log('RESPONSE LOG OUT USER: ', response); 
       // browserHistor  y.push(`/User/${requestUsername}`);
