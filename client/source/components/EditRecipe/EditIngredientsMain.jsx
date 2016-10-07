@@ -26,7 +26,12 @@ class EditIngredientsMain extends React.Component {
 					))}
 				</Row>
 					{this.props.ingredients.map((ingredient, i) => (
-						<EditIngredientEntry key={i} ingredient={ingredient} handleDeleteIngredient={this.props.handleDeleteIngredient}/>
+						<EditIngredientEntry 
+							key={i} 
+							ingredient={ingredient} 
+							handleEditIngredient={this.props.handleEditIngredient}
+							handleDeleteIngredient={this.props.handleDeleteIngredient} 
+						/>
 					))}
 					<AddIngredientEntry handleAddIngredient={this.props.handleAddIngredient.bind(this)} />
 			</Grid>

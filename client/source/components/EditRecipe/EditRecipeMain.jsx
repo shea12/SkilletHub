@@ -189,12 +189,11 @@ class EditRecipeMain extends Component {
     // Determine current state of ingredients
     var ingredients = this.state.ingredients;
     var editIngredient = ingredient;
-    var position = editIngredient.position; 
+    var name = editIngredient.name; 
 
     ingredients.forEach((ingredient) => {
-      if (ingredient.position === position) {
+      if (ingredient.name === name) {
         ingredient.changed = editIngredient.changed; 
-        ingredient.name = editIngredient.name; 
         ingredient.amount = editIngredient.amount; 
         ingredient.unit = editIngredient.unit; 
         ingredient.prep = editIngredient.prep; 
@@ -480,6 +479,7 @@ class EditRecipeMain extends Component {
       <EditIngredients 
         ingredients={this.state.ingredients} 
         handleAddIngredient={this.handleAddIngredient.bind(this)} 
+        handleEditIngredient={this.handleEditIngredient.bind(this)}
         handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} 
       />
       <EditSteps 
