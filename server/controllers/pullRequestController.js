@@ -69,12 +69,11 @@ module.exports = {
         _id: pullRequest.targetVersion
       });
     }).then(recipe => {
-      console.log('RECIPE: ', recipe);
       //was modified
       if (req.body.hasOwnProperty('changes')) {
-        let postData = querystring.stringify({
-          'prev': recipe,
-          'changes': req.body.changes
+        let postData = JSON.stringify({
+          previous: recipe,
+          changes: req.body.changes
         });
 
         let options = {
@@ -83,7 +82,7 @@ module.exports = {
           path: `/${recipe.username}/${recipe.rootVersion || recipe._id}/${recipe.branch}/create-version`,
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(postData)
           }
         };
@@ -106,7 +105,6 @@ module.exports = {
 
       //was not modified
       } else {
-        console.log('updated');
         res.status(200).send();      
       }
     }).catch(error => {
