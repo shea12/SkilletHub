@@ -291,6 +291,7 @@ class App extends React.Component {
   ************************************************************/
   logOutUser (user) {
     // console.log("before logout: ", window.AWS.config.credentials);
+
     var poolData = { UserPoolId: USER_POOL_ID, ClientId: USER_POOL_APP_CLIENT_ID };
     var userPool = new AWS.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
     var userData = { Username: user.username, Pool: userPool };
@@ -302,7 +303,7 @@ class App extends React.Component {
       // console.log('RESPONSE LOG OUT USER: ', response); 
       // browserHistor  y.push(`/User/${requestUsername}`);
     }).catch(function(error) {
-      console.log(error); 
+      console.log('error logging out: ', error); 
     });
 
     cognitoUser.signOut();
