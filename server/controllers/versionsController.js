@@ -107,7 +107,6 @@ module.exports = {
   // description: fork a version
   // body: {
   //   username: 'username of person making the fork'
-  //   version: { version forked from },
   // }
   forkVersion: (req, res) => {
     return Recipe.findOne({

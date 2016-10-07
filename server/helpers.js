@@ -19,7 +19,8 @@ const fields = [
   'skillLevel',            
   'picture',                
   'ingredients',
-  'steps'
+  'steps',
+  'forkedFrom'
 ];
 
 module.exports = {
@@ -120,7 +121,7 @@ module.exports = {
                 }
               }
             //previous ver, deleted, root ver, etc
-            } else if (_.contains(['_id', 'rootVersion', 'previousVersion', 'branch', 'deleted', 'username'], field)) {
+            } else if (_.contains(['_id', 'rootVersion', 'previousVersion', 'branch', 'deleted', 'username', 'forkedFrom'], field)) {
               built[field] = currentHistory[field];
             } else if (currentHistory[field].changed === true) {
               built[field] = currentHistory[field];
