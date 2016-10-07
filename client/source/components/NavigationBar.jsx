@@ -56,23 +56,23 @@ class NavigationBar extends React.Component {
     if (this.props.userID === null) {
       return (
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <FormGroup  style={{padding: 10}}>
-            <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{margin: 5}}/>
-            <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}} />
-            <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5}}>Log In</Button>  
+          <FormGroup  style={{paddingRight: '10px', paddingLeft: '10px'}}>
+            <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{width: '100px', marginRight: 5, height: '30px', textAlign: 'center'}}/>
+            <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{width: '100px', marginRight: 5, height: '30px', textAlign: 'center'}} />
+            <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5, height: '30px'}}>Log In</Button>  
           </FormGroup>
         </form> 
       )
     } else {
       return (
-        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5}}>Log Out</Button>  
+        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5, height: '30px'}}>Log Out</Button>  
       )
     }
   }
 
   render() {
     return (
-        <Navbar style={{'marginBottom': '2px'}}>
+        <Navbar style={{'marginBottom': '2px', height: '40px'}}>
           <Navbar.Header>
             <Navbar.Brand>
               <a>SkilletHub</a>
@@ -89,7 +89,7 @@ class NavigationBar extends React.Component {
 
             </Nav>
             <Nav pullRight>
-              <Navbar.Form >
+              <Navbar.Form>
                 {this._renderAuthentication()}
               </Navbar.Form>
             </Nav>

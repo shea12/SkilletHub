@@ -141,7 +141,7 @@ class App extends React.Component {
     if (route === '/User' && this.state.username) {
       this.setState({loggedInUserProfile: true}); 
       route = `/User/${this.state.username}/`; 
-    } else if (route === '/User' && !this.state.username) {
+    } else if (!this.state.username) {
       console.log('not logged in');
       alert('Please log in or sign up!');
       route = '/';
