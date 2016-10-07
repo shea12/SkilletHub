@@ -16,7 +16,7 @@ import placeholders from '../../../../placeholders';
 import meatloafRecipe from '../../../../meatloafRecipe'
 
 
-class EditRecipeMain extends Component {
+class EditRecipeVersionMain extends Component {
   constructor(props) {
     super(props);
 
@@ -44,9 +44,11 @@ class EditRecipeMain extends Component {
   componentWillMount() {
 
     var usernameParameter = this.props.params.username; 
-    var recipeParameter = this.props.params.recipe;
+    var recipeParameter = this.props.params.recipe; 
+    var branchParameter = this.props.params.branch;
+    var versionParameter = this.props.params.version;
 
-    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`)
     .then((result)=> {
       // Parse result object to get relevant recipe data
       var recipe = result.data; 
@@ -85,48 +87,6 @@ class EditRecipeMain extends Component {
       console.log(error); 
     }); 
   }
-
-  // _renderIngredientsTest() {
-  //   var testIngredients = this.state.ingredients; 
-  //   var testString = testIngredients.map((ingredient) => {
-  //     return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
-  //   }); 
-  //   return (
-  //     testString.map((ingredient) => (
-  //       <h4> {ingredient} </h4>
-  //     ))
-  //   )
-  // }
-
-  // _renderIngredientsTest2() {
-  //   var testIngredients = this.state.testIngredients; 
-  //   var display = this.state.displayOutput; 
-
-  //   if (display) {
-  //     var testString = testIngredients.map((ingredient) => {
-  //       return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
-  //     }); 
-  //     return (
-  //        testString.map((ingredient) => (
-  //          <h4> {ingredient} </h4>
-  //        ))
-  //     ) 
-  //   }
-  // }
-
-  // _renderObjectTest() {
-  //   var testObject = this.state.editRecipeObject; 
-  //   var display = this.state.displayOutput; 
-
-  //   if (display) {
-  //     var testObjectKeys = Object.keys(testObject); 
-  //     return (
-  //       testObjectKeys.map((key) => (
-  //         <h4> {key} : {JSON.stringify(testObject[key])} </h4>
-  //       ))
-  //     ) 
-  //   }
-  // }
 
   closeModal() {
     // console.log('FIRING CLOSE MODAL IN APP!'); 
@@ -496,18 +456,4 @@ class EditRecipeMain extends Component {
   }
 }
 
-export default EditRecipeMain;
-
-// Unused functions for rendering test data 
-// <Row> 
-  // <h4> Ingredients State </h4>
-  // {this._renderIngredientsTest()}
-// </Row>
-// <Row> 
-//   <h4> Edit Recipe Output </h4>
-//   {this._renderIngredientsTest2()}
-// </Row>
-// <Row> 
-//   <h4> Edit Recipe Output </h4>
-//   {this._renderObjectTest()}
-// </Row>
+export default EditRecipeVersionMain;
