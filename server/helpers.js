@@ -135,7 +135,6 @@ module.exports = {
           built.branches = recipe.branches;
         }
       });
-
       return built;
     });
   },
