@@ -6,6 +6,7 @@ let UserRecipe = db.UserRecipe;
 let Dependency = db.Dependency;
 
 const fields = [
+  '_id',
   'rootVersion',
   'previousVersion',  
   'deleted',                      
@@ -52,28 +53,45 @@ module.exports = {
   },
 
   //retrieve a particular version
-  retrieveVersion: (version) => {
-    let currentVersion = version;
-    //get versions for branch
-    let versions;
-    return Recipe.find({
-      branch: currentVersion.branch
-    }).then(results => {
-      versions = results;
+  retrieveVersion: (versionId) => {
+    let built, mostRecentRecipe;
 
-      //build up history
-      let history = [version];
-      //until reach root
-      while (currentVersion.previousVersion !== null) {
-        //find previous version
-        currentVersion = _.find(versions, ver => {
-          return ver._id.equals(currentVersion.previousVersion);
+    //get specific version object from version id
+    return Recipe.findOne({
+      _id: versionId
+    }).then(recipe => {
+      mostRecentRecipe = recipe;
+
+      //find all recipes that belong to that recipe tree
+      let id = recipe.rootVersion || recipe._id;
+      return Recipe.find().or([{
+        _id: id
+      }, {
+        rootVersion: id
+      }]);
+    }).then(recipes => {
+      //convert to plain objects
+      recipes.forEach((recipe, i) => {
+        recipes[i] = recipe.toObject();
+      });
+
+      //build history out of recipes
+      let history = [];
+      let addVersionToHistory = (id) => {
+        //find matching version
+        matchingVersion = _.find(recipes, recipe => {
+          return recipe._id.equals(id);
         });
-        //add previous version to history
-        history.unshift(currentVersion);
-      }
+        history.unshift(matchingVersion);
+
+        //if previous exists
+        if (matchingVersion.previousVersion) {
+          addVersionToHistory(matchingVersion.previousVersion);
+        }
+      };
+      addVersionToHistory(versionId);
       //iterate through history
-      let built = history[0];
+      built = history[0];
       for (let i = 1; i < history.length; i++) {
         let currentHistory = history[i];
         //apply each change
@@ -89,11 +107,13 @@ module.exports = {
                 //ingredient/step deleted
                 } else {
                   //remove last
-                  built[field].pop();
+                  if (built[field].length > j) {
+                    built[field].pop();
+                  }
                 }
               }
-              //previous ver, deleted, root ver, etc
-            } else if (_.contains(['rootVersion', 'previousVersion', 'branch', 'deleted', 'username'], field)) {
+            //previous ver, deleted, root ver, etc
+            } else if (_.contains(['_id', 'rootVersion', 'previousVersion', 'branch', 'deleted', 'username'], field)) {
               built[field] = currentHistory[field];
             } else if (currentHistory[field].changed === true) {
               built[field] = currentHistory[field];
@@ -105,20 +125,17 @@ module.exports = {
       }
       return UserRecipe.findOne({
         username: built.username
-      }).then(userRecipeCollection => {
-        let branches;
-
-        built = built.toObject();
-        let rootVer = version.rootVersion || version._id;
-        userRecipeCollection.recipes.forEach(recipe => {
-          if (rootVer.equals(recipe.rootRecipeId)) {
-            built.branches = recipe.branches;
-          }
-        });
-        return built;
-      }).catch(error => {
-        return error;
       });
+    }).then(userRecipeCollection => {
+      let branches;
+
+      let rootVerId = mostRecentRecipe.rootVersion || mostRecentRecipe._id;
+      userRecipeCollection.recipes.forEach(recipe => {
+        if (rootVerId.equals(recipe.rootRecipeId)) {
+          built.branches = recipe.branches;
+        }
+      });
+      return built;
     });
   },
   //from a particular point,

@@ -14,7 +14,7 @@ module.exports = {
     }).then(result => {
       res.status(201).send();
     }).catch(error => {
-      res.status(500).send(error)
+      res.status(500).send(error);
     });
   },
 
@@ -30,17 +30,13 @@ module.exports = {
       let version = _.find(recipe.branches, currentBranch => {
         return currentBranch.name === branch;
       });
-      return Recipe.findOne({
-        _id: version.mostRecentVersionId
-      });
-      
-    }).then(version => {
-      return helpers.retrieveVersion(version);
+
+      return helpers.retrieveVersion(version.mostRecentVersionId);
     }).then(result => {
       res.status(200).send(result);
     }).catch(error => {
       res.status(404).send(error);
-    })
+    });
   },
   
   // description: Removes versions with no downstream, makes others unavailable
