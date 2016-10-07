@@ -52,14 +52,17 @@ class RecipeVersionControl extends React.Component {
   _renderButtonGroup(){
     if (this.props.loggedInUserProfile) {
       return (
-        <ButtonGroup style={{marginTop: 25, align: "right"}}>
-          <Button id="edit" type="submit" onClick={this.props.handleClick.bind(this)}>edit recipe</Button>
+        <div style={{marginTop: 25, float: "right"}}> 
+          <ButtonGroup style={{marginRight: 10}}>
+            <Button id="edit" type="submit" onClick={this.props.handleClick.bind(this)}>edit recipe</Button>
+            <Button id="pull" type="submit" onClick={this.props.handleClick.bind(this)}>create pull request</Button>
+          </ButtonGroup>
           <Button id="cook" type="submit" bsStyle="success" onClick={this.props.handleClick.bind(this)}>cook recipe</Button>
-        </ButtonGroup>
+        </div> 
       )
     } else {
       return (
-        <ButtonGroup style={{marginTop: 25, align: "right"}}>
+        <ButtonGroup style={{marginTop: 25, float: "right"}}>
           <Button id="fork" type="submit" bsStyle="success" onClick={this.props.handleClick.bind(this)}>fork recipe</Button>
         </ButtonGroup>
       )
@@ -87,7 +90,7 @@ class RecipeVersionControl extends React.Component {
         <Col xs={3} md={3}>
           {this._renderCreateBranch()}
         </Col>
-        <Col xs={3} md={3} xsOffset={3} mdOffset={3}>
+        <Col xs={6} md={6}>
           {this._renderButtonGroup()}
         </Col> 
       </Row> 
