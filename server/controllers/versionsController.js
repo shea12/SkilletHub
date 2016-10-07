@@ -107,17 +107,16 @@ module.exports = {
   // description: fork a version
   // body: {
   //   username: 'username of person making the fork'
-  //   version: { version forked from },
   // }
   forkVersion: (req, res) => {
-    return Recipe.findOne({
-      _id: req.params.version
-    }).then(version => {
+    return helpers.retrieveVersion(req.params.version)
+    .then(version => {
       let forkedProps = {
         username: req.body.username,
-        branch: 'master'
+        branch: 'master',
+        name: version.name
       };
-      return helpers.makeVersion(version.toObject(), forkedProps, req.body.username);
+      return helpers.makeVersion(version, forkedProps, req.body.username);
     }).then(forkedVersion => {
       return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
     })
