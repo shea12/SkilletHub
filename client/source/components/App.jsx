@@ -85,6 +85,16 @@ class App extends React.Component {
     browserHistory.push(`/Edit/${usernameParameter}/${recipeParameter}`);
   }
 
+  // handler for editing a specific version of a recipe
+  handleRecipeVersionEdit(recipeObject) {
+    event.preventDefault(); 
+    var usernameParameter = recipeObject.username; 
+    var recipeParameter = recipeObject.recipe;
+    var branchParameter = recipeObject.branch;
+    var versionParameter = recipeObject.version; 
+    browserHistory.push(`/Edit/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
+  }
+
   handleRecipeForkClick(event) {
     event.preventDefault(); 
     // console.log('CLICKED FORK IN APP!'); 
@@ -101,6 +111,24 @@ class App extends React.Component {
     .then((result) => {
       // console.log('SUCCESSFUL FORK!');
       // console.log(result); 
+      browserHistory.push(`/User/${loggedInUser}`);
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleRecipeVersionFork(recipeObject) {
+    var usernameParameter = recipeObject.username; 
+    var recipeParameter = recipeObject.recipe;
+    var branchParameter = recipeObject.branch;
+    var versionParameter = recipeObject.version; 
+    var loggedInUser = this.state.username; 
+
+    axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/fork`, {
+      username: loggedInUser
+    })
+    .then((result) => {
       browserHistory.push(`/User/${loggedInUser}`);
     })
     .catch((error) => {
@@ -317,7 +345,9 @@ class App extends React.Component {
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
       handleRecipeEditClick: this.handleRecipeEditClick.bind(this),
-      handleRecipeForkClick: this.handleRecipeForkClick.bind(this)
+      handleRecipeForkClick: this.handleRecipeForkClick.bind(this),
+      handleRecipeVersionFork: this.handleRecipeVersionFork.bind(this),
+      handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this)
 	  })
 	}.bind(this))
     return (
