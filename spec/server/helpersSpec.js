@@ -156,13 +156,13 @@ describe('helpers.js', function() {
     it('should return a object', function() {
       return insertVersions([rootVersion,version2,version3])
       .then(function() {
-        expect(retrieveVersion(version3)).to.be.a('object');
+        expect(retrieveVersion(version3._id)).to.be.a('object');
       });
     }); 
     it('should return the correct recipe', function() {
       return insertVersions([rootVersion,version2,version3])
       .then(function() {
-        return retrieveVersion(version3);
+        return retrieveVersion(version3._id);
       })
       .then(function(result) {
         expect(result._id).to.not.be.undefined;
@@ -202,7 +202,7 @@ describe('helpers.js', function() {
       }];
       return insertVersions([rootVersion,version2,version3])
       .then(function() {
-        return retrieveVersion(version3);
+        return retrieveVersion(version3._id);
       })
       .then(function(result) {
         expect(result.name.changed).to.be.true;
@@ -249,7 +249,7 @@ describe('helpers.js', function() {
       }];
       return insertVersions([rootVersion,version2,version3])
       .then(function() {
-        return retrieveVersion(version3);
+        return retrieveVersion(version3._id);
       })
       .then(function(result) {
         expect(result.description.changed).to.be.true;
