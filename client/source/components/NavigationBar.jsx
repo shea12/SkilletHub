@@ -72,7 +72,7 @@ class NavigationBar extends React.Component {
 
   render() {
     return (
-        <Navbar>
+        <Navbar style={{'margin-bottom': '0px'}}>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="/">SkilletHub</a>
@@ -86,7 +86,7 @@ class NavigationBar extends React.Component {
               <NavItem title={'/Create'}> Create Recipe </NavItem>
               <NavItem title={'/Edit'}> Edit Recipe </NavItem>
               <NavItem title={'/Pull'}> Pull Request </NavItem>
-              <NavItem title={'username'}> app username: {this.props.username} </NavItem>
+
             </Nav>
             <Nav pullRight>
               <Navbar.Form >
