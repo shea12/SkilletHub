@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
-import RecipeDescription from './RecipeDescription'
-import RecipeIngredients from './RecipeIngredients'
-import ReadME from './ReadME'
-import CookMe from '../CookRecipe/CookMeMain'
-import VersionControl from '../VersionControl/VersionControlMain'
+import RecipeDescription from './RecipeDescription';
+import RecipeIngredients from './RecipeIngredients';
+import ReadME from './ReadME';
+import CookMe from '../CookRecipe/CookMeMain';
+import RecipeStats from './RecipeStats'; 
+import VersionControl from './RecipeVersionControl'; 
 
 //Bootstrap 
-import { Grid, Row, Col, Table, Button, Form, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Grid, Row, Col, Table, Button, Form, FormGroup, FormControl, ControlLabel, Well } from 'react-bootstrap';
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders'
@@ -68,28 +69,6 @@ class RecipeMain extends Component {
     .catch((error)=> {
       console.log('Axios error: ', error); 
     }); 
-  }
-
-  handleClick (event) {
-    console.log('Clicked on button!'); 
-    var inputType = event.target.id; 
-    if (inputType === 'fork') {
-      console.log('Forking recipe'); 
-      // TODO: Implement routing (react || server)
-    }
-    if (inputType === 'cook') {
-      console.log('Cooking recipe'); 
-      // TODO: Implement routing (react || server)
-      event.preventDefault();
-      var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
-      console.log('NAVIGATING TO:', route); 
-      browserHistory.push(`${route}`); 
-    }
-    if (inputType === 'edit') {
-      console.log('Editting recipe'); 
-
-      // TODO: Implement routing (react || server)
-    }    
   }
 
   requestVersionData(branch) {
@@ -158,12 +137,12 @@ class RecipeMain extends Component {
     this.requestSelectedVersion(event); 
   }
 
-  handleChange (event) {
-    var inputType = event.target.id; 
-    if (inputType === 'createBranch') {
-      this.setState({createBranch: event.target.value}); 
-    }
-  }
+  // handleChange (event) {
+  //   var inputType = event.target.id; 
+  //   if (inputType === 'createBranch') {
+  //     this.setState({createBranch: event.target.value}); 
+  //   }
+  // }
 
   handleCreateBranch(event) {
     event.preventDefault(); 
@@ -189,6 +168,37 @@ class RecipeMain extends Component {
     .catch((error) => {
       console.log(error); 
     }); 
+  }
+
+  handleClick(event) {
+    event.preventDefault(); 
+    var buttonType = event.target.id; 
+
+    // Fork the selected recipe 
+    if (buttonType === 'fork') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeVersionFork(recipeObject); 
+    }
+
+    if (buttonType === 'cook') {
+      console.log('Cooking recipe'); 
+      var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
+      console.log('NAVIGATING TO:', route); 
+      browserHistory.push(`${route}`); 
+    }
+
+    if (buttonType === 'edit') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeVersionEdit(recipeObject); 
+    }
   }
 
   _renderCreateBranch(){
@@ -227,34 +237,30 @@ class RecipeMain extends Component {
         </Row> 
         <Row>
           <Col xs={6} md={6}>
-            <img style={{maxWidth: '350px', maxHeight: '350px', display: 'block', margin: 'auto'}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
+            <Well>
+              <img style={{maxWidth: '350px', maxHeight: '350px', display: 'block', margin: 'auto'}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
+            </Well>
           </Col>
           <Col xs={6} md={6}>
-            <RecipeDescription recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
+              <RecipeDescription style={{height: '350px'}} recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
           </Col> 
         </Row> 
-        <VersionControl /> 
+        <RecipeStats branches={this.state.recipeBranches}/> 
+        <VersionControl 
+          selectedBranch={this.state.selectedBranch}
+          branchVersions={this.state.branchVersions}
+          recipeBranches={this.state.recipeBranches}
+          handleCreateBranch={this.handleCreateBranch.bind(this)}
+          handleVersionSelect={this.handleVersionSelect.bind(this)}
+          handleBranchSelect={this.handleBranchSelect.bind(this)}
+          handleClick={this.handleClick.bind(this)}
+          loggedInUserProfile={this.props.loggedInUserProfile}
+        />
         <Row> 
-          <Col xs={3} md={3}> 
-          <FormGroup>
-            <ControlLabel>Branch</ControlLabel>
-            <FormControl componentClass="select" id="unit" onChange={this.handleBranchSelect.bind(this)} value={this.state.selectedBranch}>
-              <optgroup label='available branches'> 
-              {this.state.recipeBranches.map((branch, i)=> (
-                <option key={'branch' + i} value={branch.name}>{branch.name}</option>
-              ))}
-              </optgroup>
-              <optgroup label='new branch'>
-                <option key={'create branch'} value={'create branch'}> create branch </option> 
-              </optgroup>
-            </FormControl>
-          </FormGroup>
-          </Col> 
-          <Col xs={3} md={3}>
-            {this._renderCreateBranch()}
-          </Col>
-        </Row> 
-        <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
+          <Well> 
+            <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
+          </Well>
+        </Row>
         <ReadME readME={this.state.recipeSteps}/>
       </Grid> 
     );
@@ -262,12 +268,3 @@ class RecipeMain extends Component {
 }
 
 export default RecipeMain;
-
-            // <FormGroup>
-            //   <ControlLabel>Version</ControlLabel>
-            //   <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
-            //     {this.state.branchVersions.map((version, i)=> (
-            //       <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
-            //     ))}
-            //   </FormControl>
-            // </FormGroup>

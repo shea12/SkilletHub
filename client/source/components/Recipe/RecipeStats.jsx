@@ -8,7 +8,7 @@ var versionNames = ['57f40818a186225f4d8c8257', '57818a1862f4025f4d8c8257', '574
 var numbers = [33, 27, 40]; 
 var colors = ['success', 'warning', 'danger']; 
 
-export default () => {
+export default ({commits, branches, forks, stars}) => {
   return (
         <Grid style={{border: "1px solid rgba(128,128,128, 0.2)", borderRadius: 10, marginTop: 15, marginBottom: 15}}>
           <Row> 
@@ -16,7 +16,7 @@ export default () => {
               <h5 style={{fontWeight: 'bold', marginLeft: 10, textAlign: 'center'}}> <Glyphicon glyph="ok" /> {`${14} commits`} </h5>
             </Col> 
             <Col xs={3} md={3} >
-              <h5 style={{fontWeight: 'bold', marginLeft: 10, textAlign: 'center'}}> <Glyphicon glyph="th-list" /> {`${branchNames.length} branches`} </h5>
+              <h5 style={{fontWeight: 'bold', marginLeft: 10, textAlign: 'center'}}> <Glyphicon glyph="th-list" /> {`${branches.length} branches`} </h5>
             </Col> 
             <Col xs={3} md={3} >
               <h5 style={{fontWeight: 'bold', marginLeft: 10, textAlign: 'center'}}> <Glyphicon glyph="cutlery" /> {`${78} forks`} </h5>
