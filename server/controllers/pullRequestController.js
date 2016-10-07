@@ -9,19 +9,6 @@ let http = require('http');
 let Buffer = require('buffer').Buffer;
 let querystring = require('querystring');
 
-  // sendingUser: String,
-  // receivingUser: String,
-  // sentVersion: Schema.Types.ObjectId,
-  // receivingVersion: Schema.Types.ObjectId,
-  // resultVersion: Schema.Types.ObjectId,
-  // status: String,
-  // createdAt: { type: Date, default: Date.now },
-  // resolvedAt: Date
-
-  // app.post('/:username/create-pull', pullRequests.createPullRequest);
-  // app.put('/:username/:pullId/update-pull', pullRequests.updatePullRequestStatus);
-  // app.get('/:username/:pullId/get-pull', pullRequests.getPullRequest);
-  // app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 module.exports = {
   // description: Creates a pull request
   // body: {
@@ -129,12 +116,27 @@ module.exports = {
   },
 
   // description: Retrieves a list of all the user's pull requests
+  // params : {
+  //   username: "username to get pull requests for"
+  // }
   getAllPullRequests: (req, res) => {
-    //order by puller/pullee, status, time created, time modified
-  },
+    return PullRequest.find().or([{
+      sendingUser: req.params.username
+    }, {
+      targetUser: req.params.username
+    }]).then(pulls => {
+      let sentPulls = _.filter(pulls, pull => { return pull.sendingUser === req.params.username });
+      let receivedPulls = _.filter(pulls, pull => { return pull.targetUser === req.params.username });
+      sentPulls = _.sortBy(sentPulls, 'createdAt');
+      receivedPulls = _.sortBy(receivedPulls, 'createdAt');
 
-  // description: Retrieve a single pull request
-  getPullRequest: (req, res) => {
-
+      let pullRequests = {
+        sent: sentPulls,
+        received: receivedPulls
+      };
+      res.status(200).send(pullRequests);
+    }).catch(error => {
+      res.status(404).send(error);
+    });
   }
 };

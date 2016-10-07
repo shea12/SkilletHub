@@ -13,7 +13,6 @@ module.exports = function(app, express) {
   /*** Pull Requests ***/
   app.post('/:username/create-pull', pullRequests.createPullRequest);
   app.put('/:username/:pullId/update-pull', pullRequests.updatePullRequestStatus);
-  app.get('/:username/:pullId/get-pull', pullRequests.getPullRequest);
   app.get('/:username/get-pulls', pullRequests.getAllPullRequests);
 
   // /*** Users ***/
