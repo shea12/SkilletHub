@@ -38,7 +38,9 @@ var placeholderProfile = {
   },
   description: {
     value: 'This is your basic recipe description'
-  }
+  },
+  ingredients: [], 
+  steps: []
  }, 
  followingList: [
   {
