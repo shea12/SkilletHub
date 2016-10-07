@@ -199,6 +199,15 @@ class RecipeMain extends Component {
       recipeObject.version = this.state.selectedVersion; 
       this.props.handleRecipeVersionEdit(recipeObject); 
     }
+
+    if (buttonType === 'pull') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeVersionPull(recipeObject); 
+    }
   }
 
   _renderCreateBranch(){
