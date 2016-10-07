@@ -185,7 +185,7 @@ class RecipeMain extends Component {
               <ControlLabel>Version</ControlLabel>
               <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
                 {this.state.branchVersions.map((version, i)=> (
-                  <option key={'version' + i} value={version._id}>{version.name.value} : version {i}</option>
+                  <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
                 ))}
               </FormControl>
             </FormGroup>
