@@ -72,7 +72,7 @@ class NavigationBar extends React.Component {
 
   render() {
     return (
-        <Navbar style={{'margin-bottom': '0px'}}>
+        <Navbar style={{'margin-bottom': '2px'}}>
           <Navbar.Header>
             <Navbar.Brand>
               <a href="/">SkilletHub</a>
