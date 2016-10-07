@@ -4,6 +4,10 @@ let PullRequest = db.PullRequest;
 let UserRecipe = db.UserRecipe;
 let Recipe = db.Recipe;
 let _ = require('underscore');
+let Promise = require('bluebird');
+let http = require('http');
+let Buffer = require('buffer').Buffer;
+let querystring = require('querystring');
 
   // sendingUser: String,
   // receivingUser: String,
@@ -28,9 +32,9 @@ module.exports = {
   createPullRequest: (req, res) => {
     return new PullRequest({
       sendingUser: req.params.username,
-      receivingUser: req.body.targetUsername,
+      targetUser: req.body.targetUsername,
       sentVersion: req.body.sourceVersionId,
-      receivingVersion: req.body.targetVersionId,
+      targetVersion: req.body.targetVersionId,
       status: 'open',
     }).save().then(pullRequest => {
       res.status(201).send(pullRequest);
@@ -44,24 +48,72 @@ module.exports = {
   //   status: 'merged or closed',
   //   changes: 'OPTIONAL: { changes }'
   // }
+  // params : {
+  //   username: 'target username',
+  //   pullId: id of pull request
+  // }
   updatePullRequestStatus: (req, res) => {
     //update resolvedAt, status
-    PullRequest.update({
+    return PullRequest.update({
       _id: req.params.pullId
     }, {
       status: req.body.status,
       resolvedAt: new Date()
+
+    }).then((update) => {
+      return PullRequest.findOne({
+        _id: req.params.pullId
+      });
+    }).then(pullRequest => {
+      return Recipe.findOne({
+        _id: pullRequest.targetVersion
+      });
+    }).then(recipe => {
+      console.log('RECIPE: ', recipe);
+      //was modified
+      if (req.body.hasOwnProperty('changes')) {
+        let postData = querystring.stringify({
+          'prev': recipe,
+          'changes': req.body.changes
+        });
+
+        let options = {
+          host: 'localhost',
+          port: '3000',
+          path: `/${recipe.username}/${recipe.rootVersion || recipe._id}/${recipe.branch}/create-version`,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(postData)
+          }
+        };
+
+        let data = '';
+        let versionRequest = http.request(options, (response) => {
+          response.setEncoding('utf8');
+          response.on('data', (chunk) => {
+            data = chunk;
+          });
+          response.on('end', () => {
+            console.log('DATA: ', data);
+            res.status(201).send();
+          });
+        });
+
+        // write the request parameters
+        versionRequest.write(postData);
+        return versionRequest.end();
+
+      //was not modified
+      } else {
+        console.log('updated');
+        res.status(200).send();      
+      }
+    }).catch(error => {
+      console.log('ERROR main: ', error);
+      res.status(500).send();
     });
 
-    //was modified
-    if (req.body.hasOwnProperty(changes)) {
-
-      //PUT CREATE NEW VERSION STUFF HERE
-
-    //was not modified
-    } else {
-
-    }
   },
 
   // description: Retrieves a list of all the user's pull requests

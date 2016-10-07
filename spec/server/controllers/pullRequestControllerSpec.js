@@ -58,9 +58,9 @@ describe('pullRequestController.js', function() {
         var response = res._getData();
 
         expect(response.sendingUser).to.equal('justin');
-        expect(response.receivingUser).to.equal('obama');
+        expect(response.targetUser).to.equal('obama');
         expect(response.sentVersion.equals(req.body.sourceVersionId)).to.be.true;
-        expect(response.receivingVersion.equals(req.body.targetVersionId)).to.be.true;
+        expect(response.targetVersion.equals(req.body.targetVersionId)).to.be.true;
         expect(response.status).to.equal('open');
       });
     });

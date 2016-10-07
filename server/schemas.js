@@ -118,10 +118,9 @@ let userSchema = new Schema({
 
 let pullRequestSchema = new Schema({
   sendingUser: String,
-  receivingUser: String,
+  targetUser: String,
   sentVersion: Schema.Types.ObjectId,
-  receivingVersion: Schema.Types.ObjectId,
-  resultVersion: Schema.Types.ObjectId,
+  targetVersion: Schema.Types.ObjectId,
   status: String,
   createdAt: { type: Date, default: Date.now },
   resolvedAt: Date
