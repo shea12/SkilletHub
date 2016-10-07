@@ -31,7 +31,7 @@ render((
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
-	  	<Route path="/Pull" component={PullRequest} />
+	  	<Route path="/Pull/:username/:recipe/:branch/:version" component={PullRequest} />
 	  </Route>
 	</Router>
 ), document.getElementById('app'));
