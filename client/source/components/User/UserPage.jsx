@@ -37,12 +37,8 @@ class UserProfile extends React.Component {
       loggedInUserProfile: true,   
       activeKey: 2,
       recipeList: [],
-<<<<<<< 6b26c071e7f666c20a46d43e2c3b884989488ac7
-      followingList: []
-=======
       followingList: placeholders.followingList,
       pullRequests: pullRequestsTemplate
->>>>>>> Modify User component to requst and display data for Pull Request
     }; 
   }
 
