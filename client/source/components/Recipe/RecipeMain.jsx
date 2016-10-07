@@ -28,7 +28,8 @@ class RecipeMain extends Component {
       recipeSteps: [],
       selectedBranch: '', 
       branchVersions: [],
-      recipeBranches: []
+      recipeBranches: [], 
+      createBranch: ''
     }; 
   }
 
@@ -47,7 +48,7 @@ class RecipeMain extends Component {
       // console.log(result.data); 
       // console.log(Object.keys(result.data)); 
       var recipe = result.data; 
-      // console.log('NAME: ', recipe.name.value); 
+      console.log('RECIPE: ', recipe); 
       // console.log('DESCRIPTION:', recipe.description.value); 
       
       this.setState({
@@ -56,7 +57,8 @@ class RecipeMain extends Component {
         recipeIngredients: recipe.ingredients, 
         recipeSteps: recipe.steps,
         recipeBranches: recipe.branches,
-        selectedBranch: recipe.branch
+        selectedBranch: recipe.branch,
+        selectedVersion: recipe._id
       }); 
 
       var branch = recipe.branch; 
@@ -127,7 +129,8 @@ class RecipeMain extends Component {
         username: usernameParameter, 
         recipeIngredients: recipe.ingredients, 
         recipeSteps: recipe.steps,
-        recipeBranches: recipe.branches
+        recipeBranches: recipe.branches,
+        selectedVersion: recipe._id
       });
 
     })
@@ -138,12 +141,13 @@ class RecipeMain extends Component {
 
   handleBranchSelect(event) {
     event.preventDefault(); 
-    // console.log('SELECTED BRANCH!'); 
+    console.log('SELECTED BRANCH!'); 
     var branch = event.target.value; 
-    // console.log('BRANCH IS:', branch); 
+    console.log('BRANCH IS:', branch); 
     this.setState({
       selectedBranch: branch
     }); 
+    this.requestVersionData(branch); 
   }
 
   handleVersionSelect(event) {
@@ -152,6 +156,67 @@ class RecipeMain extends Component {
     var version = event.target.value; 
     console.log('VERSION IS:', version); 
     this.requestSelectedVersion(event); 
+  }
+
+  handleChange (event) {
+    var inputType = event.target.id; 
+    if (inputType === 'createBranch') {
+      this.setState({createBranch: event.target.value}); 
+    }
+  }
+
+  handleCreateBranch(event) {
+    event.preventDefault(); 
+    var branch = this.state.createBranch;
+    this.requestCreateBranch(branch); 
+  }
+
+  requestCreateBranch(branch) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    var selectedVersion = this.state.selectedVersion
+    console.log('ATTEMPTING TO CREATE BRANCH!'); 
+    console.log(branch); 
+
+    axios.post(`/${usernameParameter}/${recipeParameter}/${branch}`, {
+      versionId: selectedVersion
+    })
+    .then((result) => {
+      console.log('CREATED NEW BRANCH'); 
+      console.log(result); 
+      browserHistory.push(`/Recipe/${usernameParameter}/${recipeParameter}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  _renderCreateBranch(){
+    var branch = this.state.selectedBranch; 
+    if (branch === 'create branch') {
+      return (
+        <form onSubmit={this.handleCreateBranch.bind(this)}> 
+          <FormGroup>
+            <ControlLabel>New Branch</ControlLabel>
+              <FormControl type="text" id='createBranch' value={this.state.createBranch} onChange={this.handleChange.bind(this)} />
+          </FormGroup>
+          <Button type='submit' style={{display: 'none'}}>
+            submit
+          </Button>
+        </form> 
+      )
+    } else {
+      return (
+        <FormGroup>
+          <ControlLabel>Version</ControlLabel>
+          <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
+            {this.state.branchVersions.map((version, i)=> (
+              <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
+            ))}
+          </FormControl>
+        </FormGroup>
+      )
+    }
   }
 
   render() {
@@ -173,22 +238,20 @@ class RecipeMain extends Component {
           <Col xs={3} md={3}> 
           <FormGroup>
             <ControlLabel>Branch</ControlLabel>
-            <FormControl componentClass="select" id="unit" onChange={this.handleBranchSelect.bind(this)}>
+            <FormControl componentClass="select" id="unit" onChange={this.handleBranchSelect.bind(this)} value={this.state.selectedBranch}>
+              <optgroup label='available branches'> 
               {this.state.recipeBranches.map((branch, i)=> (
                 <option key={'branch' + i} value={branch.name}>{branch.name}</option>
               ))}
+              </optgroup>
+              <optgroup label='new branch'>
+                <option key={'create branch'} value={'create branch'}> create branch </option> 
+              </optgroup>
             </FormControl>
           </FormGroup>
           </Col> 
           <Col xs={3} md={3}>
-            <FormGroup>
-              <ControlLabel>Version</ControlLabel>
-              <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
-                {this.state.branchVersions.map((version, i)=> (
-                  <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
-                ))}
-              </FormControl>
-            </FormGroup>
+            {this._renderCreateBranch()}
           </Col>
         </Row> 
         <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
@@ -200,4 +263,11 @@ class RecipeMain extends Component {
 
 export default RecipeMain;
 
-
+            // <FormGroup>
+            //   <ControlLabel>Version</ControlLabel>
+            //   <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
+            //     {this.state.branchVersions.map((version, i)=> (
+            //       <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
+            //     ))}
+            //   </FormControl>
+            // </FormGroup>
