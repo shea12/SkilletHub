@@ -34,9 +34,10 @@ class EditRecipeMain extends Component {
       deletedIngredients: [],
       steps: [],
       editRecipe: {},
-      displayOutput: false,
+      // displayOutput: false,
       invalidSteps: [],
-      showModal: false
+      showModal: false,
+      originalRecipeObject: {}
     }; 
   }
 
@@ -47,7 +48,6 @@ class EditRecipeMain extends Component {
 
     axios.get(`/${usernameParameter}/${recipeParameter}`)
     .then((result)=> {
-
       // Parse result object to get relevant recipe data
       var recipe = result.data; 
       var servings = recipe.servings.value.split(' '); 
@@ -77,7 +77,6 @@ class EditRecipeMain extends Component {
         availableIngredients: availableIngredients,
         editRecipe: {},  
         steps: steps,
-        editRecipeObject: {},
         originalRecipeObject: recipe
       }); 
 
@@ -87,50 +86,50 @@ class EditRecipeMain extends Component {
     }); 
   }
 
-  _renderIngredientsTest() {
-    var testIngredients = this.state.ingredients; 
-    var testString = testIngredients.map((ingredient) => {
-      return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
-    }); 
-    return (
-      testString.map((ingredient) => (
-        <h4> {ingredient} </h4>
-      ))
-    )
-  }
+  // _renderIngredientsTest() {
+  //   var testIngredients = this.state.ingredients; 
+  //   var testString = testIngredients.map((ingredient) => {
+  //     return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
+  //   }); 
+  //   return (
+  //     testString.map((ingredient) => (
+  //       <h4> {ingredient} </h4>
+  //     ))
+  //   )
+  // }
 
-  _renderIngredientsTest2() {
-    var testIngredients = this.state.testIngredients; 
-    var display = this.state.displayOutput; 
+  // _renderIngredientsTest2() {
+  //   var testIngredients = this.state.testIngredients; 
+  //   var display = this.state.displayOutput; 
 
-    if (display) {
-      var testString = testIngredients.map((ingredient) => {
-        return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
-      }); 
-      return (
-         testString.map((ingredient) => (
-           <h4> {ingredient} </h4>
-         ))
-      ) 
-    }
-  }
+  //   if (display) {
+  //     var testString = testIngredients.map((ingredient) => {
+  //       return `Position: ${ingredient.position} Name: ${ingredient.name} Changed: ${ingredient.changed} Added: ${ingredient.added || 'NA'} Deleted: ${ingredient.deleted || 'NA'}`; 
+  //     }); 
+  //     return (
+  //        testString.map((ingredient) => (
+  //          <h4> {ingredient} </h4>
+  //        ))
+  //     ) 
+  //   }
+  // }
 
-  _renderObjectTest() {
-    var testObject = this.state.editRecipeObject; 
-    var display = this.state.displayOutput; 
+  // _renderObjectTest() {
+  //   var testObject = this.state.editRecipeObject; 
+  //   var display = this.state.displayOutput; 
 
-    if (display) {
-      var testObjectKeys = Object.keys(testObject); 
-      return (
-        testObjectKeys.map((key) => (
-          <h4> {key} : {JSON.stringify(testObject[key])} </h4>
-        ))
-      ) 
-    }
-  }
+  //   if (display) {
+  //     var testObjectKeys = Object.keys(testObject); 
+  //     return (
+  //       testObjectKeys.map((key) => (
+  //         <h4> {key} : {JSON.stringify(testObject[key])} </h4>
+  //       ))
+  //     ) 
+  //   }
+  // }
 
   closeModal() {
-    console.log('FIRING CLOSE MODAL IN APP!'); 
+    // console.log('FIRING CLOSE MODAL IN APP!'); 
     this.setState({showModal: false}); 
   }
 
@@ -151,8 +150,6 @@ class EditRecipeMain extends Component {
     var inputType = event.target.id;
     if (inputType === 'name'){
       editRecipe['name'] = true; 
-      // console.log('Changing name!'); 
-      // console.log(editRecipe); 
       this.setState({ name: event.target.value, editRecipe: editRecipe });
     } 
     if (inputType === 'servingsMin'){
@@ -215,8 +212,6 @@ class EditRecipeMain extends Component {
     // Determine current state of ingredients 
     var deletedIngredient = ingredient.name; 
     var ingredients = this.state.ingredients;
-    var index = 0; 
-
     var deletedIngredients = this.state.deletedIngredients; 
 
     // Search based on ingredient name and modify properties as necessary
@@ -228,7 +223,6 @@ class EditRecipeMain extends Component {
         ingredient.changed = true; 
         console.log('DELETED INGREDIENT OBJECT: '); 
         console.log(ingredient);
-        index = i; 
       }
     });
 
@@ -240,11 +234,6 @@ class EditRecipeMain extends Component {
       }
     })
     .map((ingredient) => {return ingredient.name});
-
-    // console.log('STATUS CHECK ON INGREDIENTS'); 
-    // console.log(ingredients); 
-    // console.log('STATUS CHECK ON AVAIL INGREDIENTS'); 
-    // console.log(availableIngredients); 
 
     this.setState({
       ingredients: ingredients,
@@ -260,8 +249,6 @@ class EditRecipeMain extends Component {
     step.added = true; 
     step.changed = true; 
     steps.push(step); 
-    // console.log('ADDING A STEP IN MAIN');
-    // console.log(this.state.availableIngredients); 
 
     // Set the new state 
     this.setState({
@@ -274,53 +261,15 @@ class EditRecipeMain extends Component {
     var steps = this.state.steps;
     var editStep = step;
     var position = editStep.position; 
-    // console.log('EDITTING A STEP IN MAIN');
-    // console.log(editStep); 
 
     steps.forEach((step) => {
       if (step.position === position) {
-        // console.log('FOUND MATCHING STEP!');
         step.changed = editStep.changed; 
         step.description = editStep.description; 
         step.ingredients = editStep.ingredients; 
         step.time = editStep.time; 
-        // console.log(step); 
       }
     }); 
-
-    // Set the new state 
-    this.setState({
-      steps: steps
-    }); 
-  }
-
-  handleEditStep(step) {
-    // Determine current state of steps 
-    console.log('EDITTING A STEP IN MAIN');
-    var steps = this.state.steps;
-    var editStep = step;
-    console.log(editStep); 
-    var position = editStep.position; 
-
-    var findStep = function(step) {
-      return editStep.position === position; 
-    }
-
-    var edittedStep = steps.find(findStep)
-    console.log(edittedStep); 
-
-    steps.forEach((step) => {
-      if (step.position === position) {
-        console.log('FOUND MATCHING STEP!');
-        step.changed = editStep.changed; 
-        step.description = editStep.description; 
-        step.ingredients = editStep.ingredients; 
-        step.time = editStep.time; 
-        console.log(step); 
-      }
-    }); 
-
-    console.log(steps); 
 
     // Set the new state 
     this.setState({
@@ -333,21 +282,15 @@ class EditRecipeMain extends Component {
     var deletedStep = step; 
     var steps = this.state.steps;
     var index = 0; 
-    // console.log('DELETED STEP OBJECT: '); 
-    // console.log(deletedStep);
 
     // Search based on ingredient name and modify properties as necessary
     steps.forEach((step, i) => {
-      // console.log('CHECKING STEP OBJECT: '); 
-      // console.log(step);
       if (step.position === deletedStep.position) {
         step.deleted = true; 
         step.changed = true; 
         index = i; 
       }
     });
-
-    // console.log(steps); 
 
     this.setState({
       steps: steps
@@ -419,7 +362,7 @@ class EditRecipeMain extends Component {
 
     // Define our request object -> editRecipeObject
     var editRecipe = this.state.editRecipe; 
-    var editRecipeObject = this.state.editRecipeObject; 
+    var editRecipeObject = {}; 
 
     // Assign the values to object properties the database expects 
     var edits = Object.keys(editRecipe);
@@ -463,12 +406,10 @@ class EditRecipeMain extends Component {
       var usernameParameter = this.props.params.username; 
       var recipeParameter = this.props.params.recipe; 
       var originalRecipeObject = this.state.originalRecipeObject; 
-      var branch = originalRecipeObject.branch; 
+      var branchParameter = originalRecipeObject.branch; 
 
-      // console.log('EDIT RECIPE OBJECT:'); 
-      // console.log(editRecipeObject); 
 
-      axios.post(`/${usernameParameter}/${recipeParameter}/${branch}/create-version`, {
+      axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/create-version`, {
         previous: originalRecipeObject, 
         changes: editRecipeObject
       })
@@ -481,8 +422,6 @@ class EditRecipeMain extends Component {
       }) 
     }
   }
-
-
 
   render() {
     return (
@@ -502,7 +441,7 @@ class EditRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Min </ControlLabel>
-              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} optional/>
+              <FormControl type="number" id="servingsMin" onChange={this.handleChange.bind(this)} value={this.state.servingsMin} />
               </FormGroup>
             </form>
         </Col>
@@ -510,7 +449,7 @@ class EditRecipeMain extends Component {
             <form>
               <FormGroup style={{padding: 5}}>
               <ControlLabel> Recipe Servings Max </ControlLabel>
-              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} optional/>
+              <FormControl type="number" id="servingsMax" onChange={this.handleChange.bind(this)} value={this.state.servingsMax} />
               </FormGroup>
             </form>
         </Col>

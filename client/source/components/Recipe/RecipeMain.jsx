@@ -22,11 +22,10 @@ class RecipeMain extends Component {
 
     this.state = {
       recipe: placeholders.recipeTemplate,
-      user: {},
-      recipeName: '',
-      recipeDescription: '',
+      // user: {},
+      username: '', 
       recipeIngredients: [],
-      recipeReadME: [],
+      recipeSteps: [],
       selectedBranch: '', 
       branchVersions: [],
       recipeBranches: []
@@ -34,35 +33,28 @@ class RecipeMain extends Component {
   }
 
   componentWillMount() {
-    console.log('Main recipe page is mounting!'); 
-    // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
-      --> // Main Server 
-    console.log('PARAMS RECIPE PAGE: ', this.props.params); 
+    // console.log('Main recipe page is mounting!'); 
+    // console.log('PARAMS RECIPE PAGE: ', this.props.params); 
     // var usernameParameter = this.props.params.username; 
     var usernameParameter = this.props.params.username; 
-    console.log('USERNAME PARAMETER:', usernameParameter); 
+    // console.log('USERNAME PARAMETER:', usernameParameter); 
 
     var recipeParameter = this.props.params.recipe; 
-    console.log('RECIPE PARAMETER:', recipeParameter); 
-
+    // console.log('RECIPE PARAMETER:', recipeParameter); 
 
     axios.get(`/${usernameParameter}/${recipeParameter}`)
     .then((result)=> {
-      // console.log(Object.keys(result)); 
-      console.log(result.data); 
-      console.log(Object.keys(result.data)); 
+      // console.log(result.data); 
+      // console.log(Object.keys(result.data)); 
       var recipe = result.data; 
-
-      console.log('NAME: ', recipe.name.value); 
-      console.log('DESCRIPTION:', recipe.description.value); 
+      // console.log('NAME: ', recipe.name.value); 
+      // console.log('DESCRIPTION:', recipe.description.value); 
       
       this.setState({
         recipe: recipe,
         username: usernameParameter, 
-        recipeName: recipe.name.value,
-        recipeDescription: recipe.description.value, 
         recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps,
+        recipeSteps: recipe.steps,
         recipeBranches: recipe.branches,
         selectedBranch: recipe.branch
       }); 
@@ -133,10 +125,8 @@ class RecipeMain extends Component {
       this.setState({
         recipe: recipe,
         username: usernameParameter, 
-        recipeName: recipe.name.value,
-        recipeDescription: recipe.description.value, 
         recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps,
+        recipeSteps: recipe.steps,
         recipeBranches: recipe.branches
       });
 
@@ -148,9 +138,9 @@ class RecipeMain extends Component {
 
   handleBranchSelect(event) {
     event.preventDefault(); 
-    console.log('SELECTED BRANCH!'); 
+    // console.log('SELECTED BRANCH!'); 
     var branch = event.target.value; 
-    console.log('BRANCH IS:', branch); 
+    // console.log('BRANCH IS:', branch); 
     this.setState({
       selectedBranch: branch
     }); 
@@ -161,9 +151,6 @@ class RecipeMain extends Component {
     console.log('SELECTED VERSION!'); 
     var version = event.target.value; 
     console.log('VERSION IS:', version); 
-    // this.setState({
-    //   selectedBranch: branch
-    // }); 
     this.requestSelectedVersion(event); 
   }
 
@@ -171,7 +158,7 @@ class RecipeMain extends Component {
     return (
       <Grid className="recipeMain">
         <Row style={{margin: 10}}> 
-          <h3 className="recipeHeader"> {this.state.username} / {this.state.recipeName}</h3>
+          <h3 className="recipeHeader"> {this.state.username} / {this.state.recipe.name.value}</h3>
         </Row> 
         <Row>
           <Col xs={6} md={6}>
@@ -205,9 +192,7 @@ class RecipeMain extends Component {
           </Col>
         </Row> 
         <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
-        <div>
-            <ReadME readME={this.state.recipeReadME}/>
-        </div>
+        <ReadME readME={this.state.recipeSteps}/>
       </Grid> 
     );
   }

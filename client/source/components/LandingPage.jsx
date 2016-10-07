@@ -14,7 +14,6 @@ class LandingPage extends React.Component {
   }
 
   handleSubmit (event) {
-    // debugger;
     event.preventDefault(); 
     console.log(event); 
     console.log(this.state.username, this.state.password);

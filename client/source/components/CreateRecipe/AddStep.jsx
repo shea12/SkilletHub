@@ -22,7 +22,6 @@ class AddStep extends React.Component {
 
 	componentWillMount(){
 		this.setState({
-			changed: this.props.step.changed, 
 			position: this.props.stepNumber
 		}); 
 	}
@@ -38,7 +37,6 @@ class AddStep extends React.Component {
 		timesRegEx.forEach((timeRegEx) => {
 			var time = timeRegEx.exec(string); 
 			if (time) {
-				// console.log(time); 
 				match.push(time); 
 			} 
 		});
@@ -49,10 +47,10 @@ class AddStep extends React.Component {
 	  var inputType = event.target.id; 
 	  if (inputType === 'description') {
 	  	var availableIngredients = this.props.availableIngredients; 
-	  	// console.log(availableIngredients); 
 	  	var parsedIngredients = this.state.parsedIngredients; 
 	  	var description = event.target.value; 
-	  	// console.log('Description: ', description); 
+
+	  	// Iterate through available ingredients to check for matches in step description
 	  	availableIngredients.forEach((ingredient) => {
 	  		var regEx = RegExp(ingredient, 'i');
 	  		var parsedIngredient = regEx.exec(description); 
@@ -62,12 +60,13 @@ class AddStep extends React.Component {
 	  			parsedIngredients.push(parsedIngredient[0])
 	  		}
 	  	});
+
 	  	this.setState({
 	  		description: event.target.value,
 	  		parsedIngredients: parsedIngredients
 	  	}); 
+
 	  	var time = this.timeParse(description); 
-	  	// console.log('TIME IS: ', time); 
 	  	var stepTime = this.state.stepTime; 
 	  	if (time && !stepTime) {
 	  		console.log('SETTING TIME: ', time); 
@@ -84,10 +83,10 @@ class AddStep extends React.Component {
 			<form onSubmit={this.handleClick.bind(this)}>
 			<Row className="show-grid">
 			  <Col xs={8} md={8}> 
-			  		<FormGroup>
-			        <ControlLabel> Step Description </ControlLabel>
-			        <FormControl type="text" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
-			        </FormGroup>
+		  		<FormGroup>
+		        <ControlLabel> Step Description </ControlLabel>
+		        <FormControl type="text" id="description" onChange={this.handleChange.bind(this)} value={this.state.description} />
+		       </FormGroup>
 			  </Col>
 			</Row>
 			<div>
