@@ -109,9 +109,6 @@ module.exports = {
   //   username: 'username of person making the fork'
   // }
   forkVersion: (req, res) => {
-    // return Recipe.findOne({
-    //   _id: req.params.version
-    // }).then(version => {
     return helpers.retrieveVersion(req.params.version)
     .then(version => {
       let forkedProps = {
