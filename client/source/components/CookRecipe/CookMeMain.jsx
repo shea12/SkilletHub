@@ -51,15 +51,14 @@ class CookMeMain extends Component {
     })
     .catch((error) => {
       console.log(error);
-    }); 
-    //use fn 'retreive version' to get full recipe
+    });
   }
 
   render() {
     return (
       <Grid className='cookMeMain' fluid={true}>
 
-        <div className='jumbotron' style={{'background-image': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")'}}>
+        <div className='jumbotron' style={{'backgroundImage': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")'}}>
           <div className='container-fluid'>
             <h1 style={{textAlign: 'center', color: '#0AF7E8'}}>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
           </div>
@@ -67,12 +66,12 @@ class CookMeMain extends Component {
 
         <div className="row" style={{margin: '0 auto'}}>
           {this.state.stepsArray.map((step, index) => (
-            <div className="col-md-12" style={{padding: '10px', margin: '0 auto', 'margin-bottom': '10px', 'background-color': '#B9BCBD', 'border-radius': '6px', 'background-color': '#B5C2C7'}}>
+            <div className="col-md-12" style={{padding: '10px', margin: '0 auto', marginBottom: '10px', borderRadius: '6px'}}>
               
-              <div className="col-md-1" style={{border: '1px solid green', 'margin-right': '20px', 'height': '100%', 'border-radius': '6px'}}>
+              <div className="col-md-1" style={{backgroundColor: '#DDF7BC', marginRight: '20px', height: '80px', borderRadius: '6px'}}>
                   {step.time} minutes
               </div>
-              <div className="col-md-6" style={{border: '1px solid blue', 'border-radius': '6px'}}>
+              <div className="col-md-6" style={{borderRadius: '6px', backgroundColor: '#F7F7BC', height: '80px'}}>
                 {step.stepDescription}
               </div>
             </div>
