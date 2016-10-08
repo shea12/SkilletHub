@@ -31,7 +31,7 @@ class UserProfile extends React.Component {
       loggedInUserProfile: true,   
       activeKey: 2,
       recipeList: [],
-      followingList: placeholders.followingList
+      followingList: []
     }; 
   }
 

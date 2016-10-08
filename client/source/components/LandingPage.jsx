@@ -5,19 +5,19 @@ class LandingPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '1UserTest', 
-      password: '8Characters!',
-      firstname: 'test',
-      lastname: 'user3',
-      email: 'testuser3@email.com'
+      username: '', 
+      password: '',
+      firstname: '',
+      lastname: '',
+      email: ''
     }; 
   }
 
   handleSubmit (event) {
-    event.preventDefault(); 
-    console.log(event); 
+    event.preventDefault();
+    console.log(event);
     console.log(this.state.username, this.state.password);
-    var user = this.state; 
+    var user = this.state;
     this.props.handleSignUp(user);
   }
 
@@ -46,16 +46,16 @@ class LandingPage extends React.Component {
          'height': 940
         }}> 
           <Row className="show-grid">
-            <Col xs={4} xsOffset={7} md={4} mdOffset={7}> 
-            <form onSubmit={this.handleSubmit.bind(this)} style={{'background':'white', 'height': 300, 'borderRadius': 10}}>
-              <FormGroup style={{padding: 10}}>
-                <ControlLabel> Sign Up For SkilletHub </ControlLabel>
-                <FormControl type="text" id="username" onChange={this.handleChange.bind(this)} value={this.state.username} name="username" style={{margin: 5}}/>
-                <FormControl type="password" id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{margin: 5}}/>
-                <FormControl type="text" id="firstname" onChange={this.handleChange.bind(this)} value={this.state.firstname} name="firstname" style={{margin: 5}}/>
-                <FormControl type="text" id="lastname" onChange={this.handleChange.bind(this)} value={this.state.lastname} name="lastname" style={{margin: 5}}/>
-                <FormControl type="text" id="email" onChange={this.handleChange.bind(this)} value={this.state.email} name="email" style={{margin: 5}}/>
-                <Button type="submit" style={{margin: 5}} bsSize="large" block>Sign Up</Button>  
+            <Col xs={4} xsOffset={7} md={4} mdOffset={8}> 
+            <form onSubmit={this.handleSubmit.bind(this)} style={{height: '280px', width: '280px', borderRadius: '10px', border: '2px solid gray'}}>
+              <FormGroup style={{padding: '10px', height: '280px', textAlign: 'center'}}>
+                <ControlLabel style={{marginBottom: '10px', fontSize: '20px', color: 'white'}}> Sign Up For SkilletHub </ControlLabel>
+                <FormControl type="text" id="username" placeholder='Username' onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <FormControl type="password" id="password" placeholder='Password' onChange={this.handleChange.bind(this)} value={this.state.password} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <FormControl type="text" id="firstname" placeholder='First Name' onChange={this.handleChange.bind(this)} value={this.state.firstname} style={{margin: '0 auto', width: '100px', textAlign: 'center', display: 'inline-block', marginBottom: '5px', marginRight: '10px'}}/>
+                <FormControl type="text" id="lastname" placeholder='Last Name' onChange={this.handleChange.bind(this)} value={this.state.lastname} style={{margin: '0 auto', width: '100px', textAlign: 'center', display: 'inline-block', marginBottom: '5px'}}/>
+                <FormControl type="text" id="email" placeholder='Email Address' onChange={this.handleChange.bind(this)} value={this.state.email} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <Button type="submit" style={{width: '210px', margin: '0 auto', marginTop: '10px'}} bsSize="large" block>Sign Up</Button>  
               </FormGroup>
             </form>
             </Col>

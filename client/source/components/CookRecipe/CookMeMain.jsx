@@ -12,69 +12,76 @@ class CookMeMain extends Component {
     super(props);
 
     this.state = {
-      name: '',
-      servingsMin: '',
-      servingsMax: '', 
-      skillLevel: '', 
-      description: '', 
-      cookTime: '',
-      picture: "",
-      ingredients: [],
-      availableIngredients: [], 
-      steps: [],
-      recipe: {}
+      recipe: {
+        name: {
+          value: ''
+        }
+      },
+      stepsArray: [],
+      username: ''
     }; 
+
   }
 
   componentWillMount() {
     console.log('Cook Me main page is componentWillMounting!');
-    // TODO: Implement request that loads the recipe data for this recipe to the component's state. 
-    var usernameParameter = this.props.params.username; 
-    console.log('USERNAME PARAMETER:', usernameParameter); 
 
-    var recipeParameter = this.props.params.recipe; 
-    console.log('RECIPE PARAMETER:', recipeParameter);  
-
-    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    axios.get(`/${this.props.params.username}/${this.props.params.recipe}`)
     .then((result)=> {
-      // console.log(Object.keys(result)); 
-      console.log(result.data); 
-      console.log(Object.keys(result.data)); 
       var recipe = result.data; 
 
-      console.log('NAME: ', recipe.name.value); 
-      console.log('DESCRIPTION:', recipe.description.value); 
-      
+      var stepsArray = [];
+      for (var i = 0; i < recipe.steps.length; i++) {
+        if (recipe.steps[i].time === null) {
+          recipe.steps[i].time = '-';
+        }
+        stepsArray.push({
+          stepDescription: recipe.steps[i].description,  //string
+          ingredients: recipe.steps[i].ingredients,      //array of strings
+          time: recipe.steps[i].time,                    //int
+          position: recipe.steps[i].position             //int
+        });
+      }
+
       this.setState({
         recipe: recipe,
-        username: usernameParameter, 
-        recipeName: recipe.name.value,
-        recipeDescription: recipe.description.value, 
-        recipeIngredients: recipe.ingredients, 
-        recipeReadME: recipe.steps
+        stepsArray: stepsArray,
+        username: this.props.params.username
       }); 
     })
-    .catch((error)=> {
-      console.log(error); 
-    }); 
-
-    //use fn 'retreive version' to get full recipe
+    .catch((error) => {
+      console.log(error);
+    });
   }
-
 
   render() {
     return (
-      <Grid className='cookMeMain'>
-        <div className='jumbotron'>
-          <div className='container'>
-            <h1>Time to cook!</h1>
+      <Grid className='cookMeMain' fluid={true}>
+
+        <div className='jumbotron' style={{'backgroundImage': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")'}}>
+          <div className='container-fluid'>
+            <h1 style={{textAlign: 'center', color: '#0AF7E8'}}>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
           </div>
         </div>
+
+        <div className="row" style={{margin: '0 auto'}}>
+          {this.state.stepsArray.map((step, index) => (
+            <div className="col-md-12" style={{padding: '10px', margin: '0 auto', marginBottom: '10px', borderRadius: '6px'}}>
+              
+              <div className="col-md-1" style={{backgroundColor: '#DDF7BC', marginRight: '20px', height: '80px', borderRadius: '6px'}}>
+                  {step.time} minutes
+              </div>
+              <div className="col-md-6" style={{borderRadius: '6px', backgroundColor: '#F7F7BC', height: '80px'}}>
+                {step.stepDescription}
+              </div>
+            </div>
+          ))}
+        </div>
+        
       </Grid>
     );
   }
 }
-
 
 
 export default CookMeMain;
