@@ -34,7 +34,6 @@ class EditRecipeMain extends Component {
       deletedIngredients: [],
       steps: [],
       editRecipe: {},
-      // displayOutput: false,
       invalidSteps: [],
       showModal: false,
       originalRecipeObject: {}

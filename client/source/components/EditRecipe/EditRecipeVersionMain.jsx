@@ -34,7 +34,6 @@ class EditRecipeVersionMain extends Component {
       deletedIngredients: [],
       steps: [],
       editRecipe: {},
-      // displayOutput: false,
       invalidSteps: [],
       showModal: false,
       originalRecipeObject: {}
@@ -66,6 +65,9 @@ class EditRecipeVersionMain extends Component {
         return ingredient; 
       }); 
 
+      var pullId = this.props.params.pullId || ''; 
+      console.log('pullId: ', pullId); 
+
       this.setState({
         name: recipe.name.value,
         servings: recipe.servings.value,
@@ -79,7 +81,8 @@ class EditRecipeVersionMain extends Component {
         availableIngredients: availableIngredients,
         editRecipe: {},  
         steps: steps,
-        originalRecipeObject: recipe
+        originalRecipeObject: recipe,
+        pullId: pullId
       }); 
 
     })
@@ -362,23 +365,29 @@ class EditRecipeVersionMain extends Component {
       this.forceUpdate();        
     } else {
       // editRecipeObject is valid, execute the 'POST' request
-      var usernameParameter = this.props.params.username; 
-      var recipeParameter = this.props.params.recipe; 
-      var originalRecipeObject = this.state.originalRecipeObject; 
-      var branchParameter = originalRecipeObject.branch; 
 
+      // check if editting pull request 
+      if (this.state.pullId) {
+        var parameters = {}; 
+        this.props.handlePullRequestEditSubmit(editRecipeObject); 
+      } else {
+        var usernameParameter = this.props.params.username; 
+        var recipeParameter = this.props.params.recipe; 
+        var originalRecipeObject = this.state.originalRecipeObject; 
+        var branchParameter = originalRecipeObject.branch; 
 
-      axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/create-version`, {
-        previous: originalRecipeObject, 
-        changes: editRecipeObject
-      })
-      .then((result) => {
-        console.log(result); 
-        browserHistory.push(`/User/${usernameParameter}`);
-      })
-      .catch((error) => {
-        console.log(error); 
-      }) 
+        axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/create-version`, {
+          previous: originalRecipeObject, 
+          changes: editRecipeObject
+        })
+        .then((result) => {
+          console.log(result); 
+          browserHistory.push(`/User/${usernameParameter}`);
+        })
+        .catch((error) => {
+          console.log(error); 
+        }); 
+      }
     }
   }
 
