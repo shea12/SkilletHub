@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
-// import RecipeDescription from './RecipeDescription'
 import RecipeIngredients from '../Recipe/RecipeIngredients'; 
 import IngredientsTable from './IngredientsTable'; 
 import StepsTable from './StepsTable'; 
 import PullRequestControl from './PullRequestControl'; 
-// import ReadME from './ReadME'
-// import CookMe from '../CookRecipe/CookMeMain'
-// import VersionControl from '../VersionControl/VersionControlMain'
 
 //Bootstrap 
 import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
@@ -51,8 +47,8 @@ class PullRequestMain extends Component {
     var pullRecipeRoute = `/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`; 
 
     // Route for the recipe that the pull request is being submitted to
-    var sourceUsernameParameter = 'Gordon_Ramsay'; 
-    var sourceRecipeParameter = "57f808598fdf3f28e2fddee7"; 
+    var sourceUsernameParameter = this.props.params.sourceUser; 
+    var sourceRecipeParameter = this.props.params.sourceRecipe; 
     var sourceRecipeRoute = `/${sourceUsernameParameter}/${sourceRecipeParameter}`; 
 
     axios.all([this.getRecipe(pullRecipeRoute), this.getRecipe(sourceRecipeRoute)])
