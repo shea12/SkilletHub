@@ -14,6 +14,7 @@ module.exports = {
     }).then(result => {
       res.status(201).send();
     }).catch(error => {
+      console.log('Error: ', error);
       res.status(500).send(error);
     });
   },
@@ -35,6 +36,7 @@ module.exports = {
     }).then(result => {
       res.status(200).send(result);
     }).catch(error => {
+      console.log('Error: ', error);
       res.status(404).send(error);
     });
   },

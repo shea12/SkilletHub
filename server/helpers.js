@@ -50,7 +50,8 @@ module.exports = {
     if (prev.forkedFrom) {
       newVersion.forkedFrom = prev.forkedFrom
     }
-    if (changes.username !== prev.username) {
+
+    if (prev !== 'new' && username !== prev.username) {
       newVersion.forkedFrom = prev.username;
     }
     changes.username = username;
