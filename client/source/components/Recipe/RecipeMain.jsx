@@ -205,7 +205,9 @@ class RecipeMain extends Component {
       recipeObject.username = this.props.params.username; 
       recipeObject.recipe = this.props.params.recipe; 
       recipeObject.branch = this.state.selectedBranch; 
-      recipeObject.version = this.state.selectedVersion; 
+      recipeObject.version = this.state.selectedVersion;
+      recipeObject.sourceUser = this.state.recipe.forkedFrom; 
+      recipeObject.sourceRecipe = this.state.recipe.rootVersion;  
       this.props.handleRecipeVersionPull(recipeObject); 
     }
   }
