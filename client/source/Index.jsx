@@ -32,7 +32,9 @@ render((
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
-	  	<Route path="/Pull/:username/:recipe/:branch/:version" component={PullRequest} />
+	  	<Route path="/Pull/:username/:recipe/:branch/:version/:sourceUser/:sourceRecipe" component={PullRequest} />
+	  	<Route path="/EditPull/:targetUser/:pullId/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
+	  	<Route path="/Manage/:username/:pullId" component={ManagePullRequest} />
 	  	<Route path="/Manage/:username/:recipe/:branch/:version/:pullUser/:pullRecipe" component={ManagePullRequest} />
 	  </Route>
 	</Router>
