@@ -40,7 +40,9 @@ var placeholderProfile = {
     value: 'This is your basic recipe description'
   },
   ingredients: [], 
-  steps: []
+  steps: [],
+  branch: '',
+  _id: ''
  }, 
  followingList: [
   {
