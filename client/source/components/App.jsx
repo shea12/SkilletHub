@@ -172,6 +172,40 @@ class App extends React.Component {
     browserHistory.push(`/Manage/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${pullUserParameter}/${pullRecipeParameter}`);
   }
 
+  handlePullRequestResponse(event) {
+    event.preventDefault(); 
+    var response = event.target.id; 
+    if (response === 'approve') {
+      var status = 'merged'; 
+    } else if (response === 'deny') {
+      var status = 'closed'; 
+    }
+    var usernameParameter = event.target.dataset.username; 
+    var pullIdParameter = event.target.dataset.pullId; 
+    axios.put(`/${usernameParameter}/${pullIdParameter}/update-pull`, {
+      status: status
+    })
+    .then((result) => {
+      console.log('SUCCESSFULLY RESOLVED PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handlePullRequestEdit(event) {
+    event.preventDefault(); 
+    var usernameParameter = event.target.dataset.username;
+    browserHistory.push(`/User/${usernameParameter}`); 
+  }
+
+  handlePullRequestEdit(event) {
+    event.preventDefault(); 
+  }
+
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
@@ -376,7 +410,9 @@ class App extends React.Component {
       handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this),
       handleRecipeVersionPull: this.handleRecipeVersionPull.bind(this),
       handleCreatePullRequest: this.handleCreatePullRequest.bind(this),
-      handlePullRequestClick: this.handlePullRequestClick.bind(this)
+      handlePullRequestClick: this.handlePullRequestClick.bind(this),
+      handlePullRequestResponse: this.handlePullRequestResponse.bind(this), 
+      handlePullRequestEdit: this.handlePullRequestResponse.bind(this)
 	  })
 	}.bind(this))
     return (
