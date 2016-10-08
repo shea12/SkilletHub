@@ -24,6 +24,8 @@ class PullRequestMain extends Component {
     this.state = {
       pullRecipe: placeholders.recipeTemplate,
       sourceRecipe: placeholders.recipeTemplate,
+      pullRequestUsernameParameter: '', 
+      pullRequestIdParameter: '', 
       pullUser: {},
       sourceUser: {}, 
       allIngredients: [], 
@@ -40,30 +42,42 @@ class PullRequestMain extends Component {
     console.log('Pull request page is mounting!');
 
     // Route for the recipe that is being submitted as pull request
-    var usernameParameter = this.props.params.username; 
-    var recipeParameter = this.props.params.recipe; 
-    var branchParameter = this.props.params.branch;
-    var versionParameter = this.props.params.version;
+    // var usernameParameter = this.props.params.username; 
+    // var recipeParameter = this.props.params.recipe; 
+    // var branchParameter = this.props.params.branch;
+    // var versionParameter = this.props.params.version;
+    var pullRequestObject = this.props.pullRequestObject; 
+    var usernameParameter = pullRequestObject.targetUser; 
+    var recipeParameter = pullRequestObject.targetRootVersion; 
+    var branchParameter = pullRequestObject.targetBranch;
+    var versionParameter = pullRequestObject.targetVersion;
     var sourceRecipeRoute = `/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`; 
 
     // Route for the recipe that the pull request is being submitted to
-    var pullUsernameParameter = this.props.params.pullUser; 
-    var pullRecipeParameter = this.props.params.pullRecipe; 
-    var pullRecipeRoute = `/${pullUsernameParameter}/${pullRecipeParameter}`; 
+    var pullUsernameParameter = pullRequestObject.sendingUser; 
+    var pullRecipeParameter = pullRequestObject.sentRootVersion; 
+    var pullBranchParameter = pullRequestObject.sentBranch; 
+    var pullVersionParameter = pullRequestObject.sentVersion; 
+    var pullRecipeRoute = `/${pullUsernameParameter}/${pullRecipeParameter}/${pullBranchParameter}/${pullVersionParameter}`; 
 
     axios.all([this.getRecipe(sourceRecipeRoute), this.getRecipe(pullRecipeRoute)])
     .then(axios.spread((source, pull) => {
 
-      var pullRecipe = pull.data;
       var sourceRecipe = source.data; 
+      var pullRecipe = pull.data;
       var comparisonIngredients = this.markupIngredients(sourceRecipe.ingredients, pullRecipe.ingredients); 
       var comparisonSteps = this.markupStepsSimple(sourceRecipe.steps, pullRecipe.steps); 
 
+      console.log('SOURCE RECIPE'); 
+      console.log(sourceRecipe); 
+      console.log('PULL RECIPE'); 
+      console.log(pullRecipe); 
+
       this.setState({
-        pullRecipe: pullRecipe,
         sourceRecipe: sourceRecipe,
-        pullRecipeUser: pullUsernameParameter,
+        pullRecipe: pullRecipe,
         sourceRecipeUser: usernameParameter,
+        pullRecipeUser: pullUsernameParameter,
         comparisonIngredients: comparisonIngredients,
         comparisonSteps: comparisonSteps
       }); 
@@ -145,8 +159,10 @@ class PullRequestMain extends Component {
     return (
       <Grid >
         <PullRequestControl
-          username={this.state.sourceRecipeUser}
+          pullRequestObject={this.state.pullRequestObject}
           recipename={this.state.sourceRecipe.name.value}
+          pullRequestUsernameParameter={this.state.pullRequestUsernameParameter}
+          pullRequestIdParameter={this.state.pullRequestIdParameter}
           pullBranch={this.state.pullRecipe.branch}
           pullVersion={this.state.pullRecipe._id}
           sourceBranch={this.state.sourceRecipe.branch}
