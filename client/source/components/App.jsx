@@ -29,10 +29,11 @@ class App extends React.Component {
     this.state = {
       userID: null,
       token: null,
-      username: null, 
-      password: null,
+      username: 'Gordon_Ramsay', 
+      password: 'password',
       currentProfile: null,
-      loggedInUserProfile: true 
+      loggedInUserProfile: true,
+      pullRequestObject: {} 
   	}; 
   }
 
@@ -139,7 +140,9 @@ class App extends React.Component {
     var recipeParameter = recipeObject.recipe;
     var branchParameter = recipeObject.branch;
     var versionParameter = recipeObject.version; 
-    browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
+    var sourceUserParameter = recipeObject.sourceUser;
+    var sourceRecipeParameter = recipeObject.sourceRecipe;  
+    browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${sourceUserParameter}/${sourceRecipeParameter}`);
   }
 
   handleCreatePullRequest(pullRequestObject) {
@@ -161,15 +164,16 @@ class App extends React.Component {
 
   handlePullRequestClick(event){
     event.preventDefault(); 
-    console.log(event.target.dataset); 
-    var usernameParameter = event.target.dataset.username; 
-    var recipeParameter = event.target.dataset.recipe;
-    var branchParameter = event.target.dataset.branch;
-    var versionParameter = event.target.dataset.version; 
-    var pullUserParameter = event.target.dataset.pulluser; 
-    var pullRecipeParameter = event.target.dataset.pullrecipe; 
-
-    browserHistory.push(`/Manage/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${pullUserParameter}/${pullRecipeParameter}`);
+    var pullRequestObject = JSON.parse(event.target.dataset.pullrequest);
+    var usernameParameter = pullRequestObject.targetUser; 
+    var pullIdParameter = pullRequestObject._id; 
+    console.log(pullRequestObject);  
+    
+    this.setState({
+      pullRequestObject: pullRequestObject
+    }); 
+    // browserHistory.push(`/Manage/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${pullUserParameter}/${pullRecipeParameter}`);
+    browserHistory.push(`/Manage/${usernameParameter}/${pullIdParameter}`);
   }
 
   handlePullRequestResponse(event) {
@@ -180,8 +184,10 @@ class App extends React.Component {
     } else if (response === 'deny') {
       var status = 'closed'; 
     }
-    var usernameParameter = event.target.dataset.username; 
-    var pullIdParameter = event.target.dataset.pullId; 
+    var pullRequestObject = this.state.pullRequestObject; 
+    console.log(pullRequestObject); 
+    var usernameParameter = pullRequestObject.targetUser; 
+    var pullIdParameter = pullRequestObject._id; 
     axios.put(`/${usernameParameter}/${pullIdParameter}/update-pull`, {
       status: status
     })
@@ -197,14 +203,37 @@ class App extends React.Component {
 
   handlePullRequestEdit(event) {
     event.preventDefault(); 
-    var usernameParameter = event.target.dataset.username;
-    browserHistory.push(`/User/${usernameParameter}`); 
+    console.log('pull request edit'); 
+    var pullRequestObject = this.state.pullRequestObject; 
+    var usernameParameter = pullRequestObject.sendingUser; 
+    var recipeParameter = pullRequestObject.sentRootVersion;
+    var branchParameter = pullRequestObject.sentBranch;
+    var versionParameter = pullRequestObject.sentVersion; 
+    var pullIdParameter = pullRequestObject._id; 
+    var targetUserParameter = pullRequestObject.targetUser; 
+
+    browserHistory.push(`/EditPull/${targetUserParameter}/${pullIdParameter}/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
   }
 
-  handlePullRequestEdit(event) {
-    event.preventDefault(); 
+  handlePullRequestEditSubmit(editPullRequestObject) {
+    var status = 'merged'; 
+    var changes = editPullRequestObject; 
+    console.log(this.props.params);
+    var usernameParameter = this.props.params.targetUser; 
+    var pullIdParameter = this.props.params.pullId; 
+    axios.put(`/${usernameParameter}/${pullIdParameter}/update-pull`, {
+      status: status,
+      changes: changes
+    })
+    .then((result) => {
+      console.log('SUCCESSFULLY RESOLVED PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
   }
-
 
   handleNavigation(event) {
     event.preventDefault();
@@ -401,6 +430,7 @@ class App extends React.Component {
       userID: this.state.userID,
       username: this.state.username, 
       loggedInUserProfile: this.state.loggedInUserProfile, 
+      pullRequestObject: this.state.pullRequestObject, 
       handleSignUp: this.handleSignUp.bind(this),
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
@@ -412,7 +442,8 @@ class App extends React.Component {
       handleCreatePullRequest: this.handleCreatePullRequest.bind(this),
       handlePullRequestClick: this.handlePullRequestClick.bind(this),
       handlePullRequestResponse: this.handlePullRequestResponse.bind(this), 
-      handlePullRequestEdit: this.handlePullRequestResponse.bind(this)
+      handlePullRequestEdit: this.handlePullRequestEdit.bind(this),
+      handlePullRequestEditSubmit: this.handlePullRequestEditSubmit.bind(this)
 	  })
 	}.bind(this))
     return (
