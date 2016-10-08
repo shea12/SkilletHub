@@ -75,8 +75,7 @@ class PullRequestMain extends Component {
     return axios.get(route); 
   }
 
-  markupIngredients(pullIngredients, sourceIngredients) {
-
+  markupIngredients(sourceIngredients, pullIngredients) {
     var comparisonIngredients = []; 
     var addedIngredients = []; 
 
@@ -110,8 +109,7 @@ class PullRequestMain extends Component {
 
   }
 
-  markupStepsSimple(pullSteps, sourceSteps) {
-
+  markupStepsSimple(sourceSteps, pullSteps) {
     var comparisonSteps = []; 
     var addedSteps = []; 
     var index = 0; 
@@ -131,6 +129,7 @@ class PullRequestMain extends Component {
       index = i; 
     });
 
+    // Handles highlighting the added steps
     pullSteps.forEach((step, i) => {
       if (i > index) {
         step.added = true; 
@@ -141,26 +140,18 @@ class PullRequestMain extends Component {
     return comparisonSteps.concat(addedSteps); 
   }
 
-  createPullRequest(event) {
-    event.preventDefault(); 
-    var pullRequestObject = {};
-    pullRequestObject.targetUsername = this.state.sourceRecipeUser; 
-    pullRequestObject.sourceVersionId = this.state.sourceRecipe._id; 
-    pullRequestObject.targetVersionId = this.state.pullRecipe._id; 
-    this.props.handleCreatePullRequest(pullRequestObject); 
-  }
-
   render() {
     return (
       <Grid >
         <PullRequestControl
-          username={this.state.pullRecipe.username}
-          recipename={this.state.pullRecipe.name.value}
+          username={this.state.sourceRecipeUser}
+          recipename={this.state.sourceRecipe.name.value}
           pullBranch={this.state.pullRecipe.branch}
           pullVersion={this.state.pullRecipe._id}
           sourceBranch={this.state.sourceRecipe.branch}
           sourceVersion={this.state.sourceRecipe._id}
-          createPullRequest={this.createPullRequest.bind(this)}
+          handlePullRequestResponse={this.props.handlePullRequestResponse}
+          handlePullRequestEdit={this.props.handlePullRequestEdit}
         />
         <Row>
         <Row style={{margin: 10}}> 
@@ -169,21 +160,21 @@ class PullRequestMain extends Component {
         </Row> 
           <Col xs={6} md={6}>
             <h4> Your Recipe Ingredients</h4> 
-            <IngredientsTable ingredientList={this.state.comparisonIngredients}/>
+            <RecipeIngredients ingredientList={this.state.sourceRecipe.ingredients}/>
           </Col>
           <Col xs={6} md={6}>
-            <h4> Source Recipe Ingredients</h4> 
-            <RecipeIngredients ingredientList={this.state.sourceRecipe.ingredients}/>
+            <h4> Pull Request Recipe Ingredients</h4> 
+            <IngredientsTable ingredientList={this.state.comparisonIngredients}/>
           </Col> 
         </Row> 
         <Row>
           <Col xs={6} md={6}>
             <h4> Your Recipe Steps</h4> 
-            <StepsTable steps={this.state.comparisonSteps}/>
+            <StepsTable steps={this.state.sourceRecipe.steps}/>
           </Col>
           <Col xs={6} md={6}>
-            <h4> Source Recipe Steps</h4> 
-            <StepsTable steps={this.state.sourceRecipe.steps}/>
+            <h4> Pull Request Recipe Steps</h4> 
+            <StepsTable steps={this.state.comparisonSteps}/>
           </Col> 
         </Row> 
       </Grid> 

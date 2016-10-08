@@ -18,6 +18,7 @@ class PullRequestControl extends React.Component {
 
   handleEditPullRequest(event){
     event.preventDefault(); 
+
   }
 
   _renderPullRequestControl(){
@@ -76,15 +77,18 @@ class PullRequestControl extends React.Component {
           <Row> 
             <Col xs={4} md={4} style={{margin: 'auto'}}> 
               <h4> Approve Pull Request </h4> 
-              <Button bsStyle="success" onClick={this.handleApprovePullRequest.bind(this)}> Approve </Button>
+              <h6> This will automatically merge your recipe with the pull request, creating a new version of your recipe </h6>
+              <Button id="approve" data-username={this.props.username} data-pullId={this.props.pullId} bsStyle="success" style={{width: "100%"}} onClick={this.props.handlePullRequestResponse.bind(this)}> Approve </Button>
             </Col> 
             <Col xs={4} md={4} style={{margin: 'auto'}}> 
               <h4> Deny Pull Request </h4> 
-              <Button bsStyle="danger" onClick={this.handleDenyPullRequest.bind(this)}> Deny </Button>
+              <h6> This will cancel the pending pull request and will not change your original recipe </h6> 
+              <Button id="deny" data-username={this.props.username} data-pullId={this.props.pullId} bsStyle="danger" style={{width: "100%"}} onClick={this.props.handlePullRequestResponse.bind(this)}> Deny </Button>
             </Col> 
             <Col xs={4} md={4} style={{margin: 'auto'}}> 
               <h4> Edit Pull Request </h4> 
-              <Button bsStyle="warning" onClick={this.handleEditPullRequest.bind(this)}> Edit </Button>
+              <h6> This will allow you to edit the pull request and then automatically create a new version of your recipe </h6> 
+              <Button id="edit" data-username={this.props.username} data-pullId={this.props.pullId} bsStyle="warning" style={{width: "100%"}} onClick={this.props.handlePullRequestEdit.bind(this)}> Edit </Button>
             </Col> 
           </Row>
         </Well>
