@@ -21,7 +21,7 @@ module.exports = function(app, express) {
 
   /*** Users ***/
   app.get('/:username/profile', users.getProfile); //gets recipes
-  app.put('/:username/profile', users.updateProfile);
+  // app.put('/:username/profile', users.updateProfile);
 
   /*** Recipes ***/
   app.post('/:username/create-recipe', recipes.createRecipe);
@@ -39,5 +39,4 @@ module.exports = function(app, express) {
   app.get('/:username/:recipe/:branch/:version', versions.getVersion);
   app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);  
   app.post('/:username/:recipe/:branch/:version/fork', versions.forkVersion);
-
 };
