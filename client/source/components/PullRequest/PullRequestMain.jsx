@@ -3,6 +3,8 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 // import RecipeDescription from './RecipeDescription'
 import RecipeIngredients from '../Recipe/RecipeIngredients'; 
 import IngredientsTable from './IngredientsTable'; 
+import StepsTable from './StepsTable'; 
+import PullRequestControl from './PullRequestControl'; 
 // import ReadME from './ReadME'
 // import CookMe from '../CookRecipe/CookMeMain'
 // import VersionControl from '../VersionControl/VersionControlMain'
@@ -32,7 +34,9 @@ class PullRequestMain extends Component {
       recipeName: '',
       recipeDescription: '',
       recipeIngredients: [],
-      recipeReadME: []
+      recipeReadME: [],
+      comparisonIngredients: [],
+      comparisonSteps: []
     }; 
   }
 
@@ -53,17 +57,21 @@ class PullRequestMain extends Component {
 
     axios.all([this.getRecipe(pullRecipeRoute), this.getRecipe(sourceRecipeRoute)])
     .then(axios.spread((pull, source) => {
+
       var pullRecipe = pull.data;
       var sourceRecipe = source.data; 
-
-      console.log(this); 
+      var comparisonIngredients = this.markupIngredients(pullRecipe.ingredients, sourceRecipe.ingredients); 
+      var comparisonSteps = this.markupStepsSimple(pullRecipe.steps, sourceRecipe.steps); 
 
       this.setState({
         pullRecipe: pullRecipe,
-        sourceRecipe: sourceRecipe
+        sourceRecipe: sourceRecipe,
+        pullRecipeUser: usernameParameter,
+        sourceRecipeUser: sourceUsernameParameter,
+        comparisonIngredients: comparisonIngredients,
+        comparisonSteps: comparisonSteps
       }); 
 
-      this.markupIngredients(pullRecipe.ingredients, sourceRecipe.ingredients); 
 
     }));
   }
@@ -73,22 +81,24 @@ class PullRequestMain extends Component {
   }
 
   markupIngredients(pullIngredients, sourceIngredients) {
-    var pullIngredientsDisplay = []; 
-    var deletedIngredients = []; 
-    var addedIngredients = []; 
-    var editedIngredients = []; 
-    var originalIngredients = []; 
-    var sourceIngredients = sourceIngredients.slice(); 
-    var pullIngredients = pullIngredient.slice(); 
 
-    sourceIngredients.forEach((ingredient) => {
+    var comparisonIngredients = []; 
+    var addedIngredients = []; 
+
+    // Handles applying properties to the edited, unedited and deleted ingredients from original recipe 
+    sourceIngredients.forEach((ingredient, i) => {
       var pullIngredient = _.findWhere(pullIngredients, {name: ingredient.name}); 
-      console.log('CHECKING INGREDIENT', ingredient.name);
-      console.log(pullIngredient); 
       if (pullIngredient) {
-        originalIngredients.push(ingredient); 
+        if (ingredient.amount !== pullIngredient.amount || ingredient.unit !== pullIngredient.unit || ingredient.prep !== pullIngredient.prep) {
+          var comparisonIngredient = _.extend({}, pullIngredient); 
+          comparisonIngredient.edited = true; 
+        } else {
+          var comparisonIngredient = _.extend({}, ingredient); 
+        }
+        comparisonIngredients.push(comparisonIngredient); 
       } else {
-        deletedIngredients.push(ingredient); 
+        ingredient.deleted = true; 
+        comparisonIngredients.push(ingredient); 
       }
     }); 
 
@@ -99,32 +109,107 @@ class PullRequestMain extends Component {
         ingredient.added = true; 
         addedIngredients.push(ingredient); 
       }
-    })
+    }); 
 
-    console.log('originalIngredients');
-    console.log(originalIngredients);
-    console.log('deletedIngredients');
-    console.log(deletedIngredients);
-    console.log('addedIngredients');
-    console.log(addedIngredients);
+    return comparisonIngredients.concat(addedIngredients); 
 
   }
 
-  handleClick (event) {
-    console.log('Clicked on button!'); 
+  // markupSteps(pullSteps, sourceSteps) {
+
+  //   var comparisonSteps = []; 
+  //   var addedSteps = []; 
+
+  //   // Handles applying properties to the edited, unedited and deleted ingredients from original recipe 
+  //   sourceSteps.forEach((step, i) => {
+  //     var pullStep = _.findWhere(pullSteps, {position: step.position}); 
+  //     if (pullStep) {
+  //       if (step.description !== pullStep.description) {
+  //         var comparisonStep = _.extend({}, pullStep); 
+  //         comparisonStep.edited = true; 
+  //       } else {
+  //         var comparisonStep = _.extend({}, step); 
+  //       }
+  //       comparisonSteps.push(comparisonStep); 
+  //     } else {
+  //       ingredient.deleted = true; 
+  //       comparisonIngredients.push(ingredient); 
+  //     }
+  //   }); 
+
+  //   // Handles highlighting the added ingredients
+  //   pullIngredients.forEach((ingredient) => {
+  //     var pullIngredient = _.findWhere(sourceIngredients, {name: ingredient.name}); 
+  //     if (!pullIngredient) {
+  //       ingredient.added = true; 
+  //       addedIngredients.push(ingredient); 
+  //     }
+  //   }); 
+
+  //   return comparisonIngredients.concat(addedIngredients); 
+
+  // }
+
+  markupStepsSimple(pullSteps, sourceSteps) {
+
+    var comparisonSteps = []; 
+    var addedSteps = []; 
+    var index = 0; 
+
+    // Handles applying properties to the edited, unedited and deleted ingredients from original recipe 
+    sourceSteps.forEach((step, i) => {
+      var pullStep = _.findWhere(pullSteps, {position: step.position}); 
+      if (pullStep) {
+        if (step.description !== pullStep.description) {
+          var comparisonStep = _.extend({}, pullStep); 
+          comparisonStep.edited = true; 
+        } else {
+          var comparisonStep = _.extend({}, step); 
+        }
+        comparisonSteps.push(comparisonStep); 
+      } 
+      index = i; 
+    });
+
+    pullSteps.forEach((step, i) => {
+      if (i > index) {
+        step.added = true; 
+        addedSteps.push(step); 
+      }
+    }); 
+
+    return comparisonSteps.concat(addedSteps); 
+  }
+
+  createPullRequest(event) {
+    event.preventDefault(); 
+    var pullRequestObject = {};
+    pullRequestObject.targetUsername = this.state.sourceRecipeUser; 
+    pullRequestObject.sourceVersionId = this.state.pullRecipe._id; 
+    pullRequestObject.targetVersionId = this.state.sourceRecipe._id; 
+    this.props.handleCreatePullRequest(pullRequestObject); 
   }
 
   render() {
     return (
-      <Grid className="recipeMain">
+      <Grid >
+        <PullRequestControl
+          username={this.state.pullRecipe.username}
+          recipename={this.state.pullRecipe.name.value}
+          pullBranch={this.state.pullRecipe.branch}
+          pullVersion={this.state.pullRecipe._id}
+          sourceBranch={this.state.sourceRecipe.branch}
+          sourceVersion={this.state.sourceRecipe._id}
+          createPullRequest={this.createPullRequest.bind(this)}
+        />
+        <Row>
         <Row style={{margin: 10}}> 
           <h2 className="recipeHeader"> Comparing Changes </h2>
           <h4> Review the changes between the two recipes before creating the pull request </h4> 
         </Row> 
-        <Row>
           <Col xs={6} md={6}>
             <h4> Your Recipe Ingredients</h4> 
-            <IngredientsTable ingredientList={this.state.pullRecipe.ingredients}/>
+            <IngredientsTable ingredientList={this.state.comparisonIngredients}/>
           </Col>
           <Col xs={6} md={6}>
             <h4> Source Recipe Ingredients</h4> 
@@ -132,9 +217,14 @@ class PullRequestMain extends Component {
           </Col> 
         </Row> 
         <Row>
-          <Col xs={12} md={12}>
-            <h4> Merged Ingredients </h4> 
+          <Col xs={6} md={6}>
+            <h4> Your Recipe Steps</h4> 
+            <StepsTable steps={this.state.comparisonSteps}/>
           </Col>
+          <Col xs={6} md={6}>
+            <h4> Source Recipe Steps</h4> 
+            <StepsTable steps={this.state.sourceRecipe.steps}/>
+          </Col> 
         </Row> 
       </Grid> 
     );
