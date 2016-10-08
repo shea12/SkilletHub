@@ -17,6 +17,7 @@ export default ({pullRequest, username, handleUserClick, handlePullRequestClick}
               data-version={pullRequest.targetVersion}
               data-pulluser={pullRequest.sendingUser}
               data-pullrecipe={pullRequest.targetVersion}
+              data-pullrequest={JSON.stringify(pullRequest)}
               onClick={handlePullRequestClick.bind(this)}> 
                 Manage Pull Request 
             </Button> 
