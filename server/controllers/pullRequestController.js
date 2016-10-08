@@ -17,15 +17,30 @@ module.exports = {
   //   targetVersionId: _id of target version
   // }
   createPullRequest: (req, res) => {
-    return new PullRequest({
-      sendingUser: req.params.username,
-      targetUser: req.body.targetUsername,
-      sentVersion: req.body.sourceVersionId,
-      targetVersion: req.body.targetVersionId,
-      status: 'open',
-    }).save().then(pullRequest => {
+    let sentVer = Recipe.findOne({
+      _id: req.body.sourceVersionId
+    });
+    let rootVer = Recipe.findOne({
+      _id: req.body.targetVersionId
+    });
+
+    return Promise.all([sentVer, rootVer])
+    .spread((sentVersion, targetVersion) => {
+      return new PullRequest({
+        sendingUser: req.params.username,
+        targetUser: req.body.targetUsername,
+        sentVersion: req.body.sourceVersionId,
+        sentRootVersion: sentVersion.rootVersion || sentVersion._id,
+        sentBranch: sentVersion.branch,
+        targetVersion: req.body.targetVersionId,
+        targetRootVersion: targetVersion.rootVersion || targetVersion._id,
+        targetBranch: targetVersion.branch,
+        status: 'open'
+      }).save();
+    }).then(pullRequest => {
       res.status(201).send(pullRequest);
     }).catch(error => {
+      console.log('Error: ', error);
       res.status(500).send(error);
     });
   },
@@ -110,6 +125,7 @@ module.exports = {
       return versionRequest.end();
 
     }).catch(error => {
+      console.log('Error: ', error);
       res.status(500).send();
     });
 
@@ -136,6 +152,7 @@ module.exports = {
       };
       res.status(200).send(pullRequests);
     }).catch(error => {
+      console.log('Error: ', error);
       res.status(404).send(error);
     });
   }

@@ -120,7 +120,11 @@ let pullRequestSchema = new Schema({
   sendingUser: String,
   targetUser: String,
   sentVersion: Schema.Types.ObjectId,
+  sentRootVersion: Schema.Types.ObjectId,
+  sentBranch: String,
   targetVersion: Schema.Types.ObjectId,
+  targetRootVersion: Schema.Types.ObjectId,
+  targetBranch: String,
   status: String,
   createdAt: { type: Date, default: Date.now },
   resolvedAt: Date
