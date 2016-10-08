@@ -75,12 +75,8 @@ class PullRequestMain extends Component {
     return axios.get(route); 
   }
 
-<<<<<<< e37cfa65ff9d6df5e198fd2617609936deda809b
-  markupIngredients(sourceIngredients, pullIngredients) {
-=======
-  markupIngredients(pullIngredients, sourceIngredients) {
 
->>>>>>> Implement ManagePullRequest compnents to allow users to manage their pull requests via approve, deny or edit controls.
+  markupIngredients(sourceIngredients, pullIngredients) {
     var comparisonIngredients = []; 
     var addedIngredients = []; 
 
