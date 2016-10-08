@@ -142,7 +142,6 @@ class App extends React.Component {
     browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
   }
 
-<<<<<<< e197200e1420bf53a0c6120e8ee2032497482905
   handleCreatePullRequest(pullRequestObject) {
     var usernameParameter = this.state.username; 
     axios.post(`/${usernameParameter}/create-pull`, {
@@ -207,8 +206,6 @@ class App extends React.Component {
   }
 
 
-=======
->>>>>>> Implement routes for Pull Request functionality
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
