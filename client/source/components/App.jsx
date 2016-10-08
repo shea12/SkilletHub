@@ -144,6 +144,36 @@ class App extends React.Component {
     browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
   }
 
+  handleCreatePullRequest(pullRequestObject) {
+    var usernameParameter = this.state.username; 
+    axios.post(`/${usernameParameter}/create-pull`, {
+      targetUsername: pullRequestObject.targetUsername,
+      sourceVersionId: pullRequestObject.sourceVersionId,
+      targetVersionId: pullRequestObject.targetVersionId
+    })
+    .then((result) => {
+      console.log('SUCCESSFUL PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`);
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handlePullRequestClick(event){
+    event.preventDefault(); 
+    console.log(event.target.dataset); 
+    var usernameParameter = event.target.dataset.username; 
+    var recipeParameter = event.target.dataset.recipe;
+    var branchParameter = event.target.dataset.branch;
+    var versionParameter = event.target.dataset.version; 
+    var pullUserParameter = event.target.dataset.pulluser; 
+    var pullRecipeParameter = event.target.dataset.pullrecipe; 
+
+    browserHistory.push(`/Manage/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${pullUserParameter}/${pullRecipeParameter}`);
+  }
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
@@ -356,7 +386,9 @@ class App extends React.Component {
       handleRecipeForkClick: this.handleRecipeForkClick.bind(this),
       handleRecipeVersionFork: this.handleRecipeVersionFork.bind(this),
       handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this),
-      handleRecipeVersionPull: this.handleRecipeVersionPull.bind(this)
+      handleRecipeVersionPull: this.handleRecipeVersionPull.bind(this),
+      handleCreatePullRequest: this.handleCreatePullRequest.bind(this),
+      handlePullRequestClick: this.handlePullRequestClick.bind(this)
 	  })
 	}.bind(this))
     return (
