@@ -75,55 +75,58 @@ module.exports = {
       });
       return Promise.all([source, target]);
     }).spread((sourceRecipe, targetRecipe) => {
+      if (req.body.status !== 'closed') {
 
-      let deleteFields = obj => {
-        let fields = ['_id', 'rootVersion', 'previousVersion', 'deleted', 'branch', 'username', 'createdAt'];
-        fields.forEach(field => {
-          delete obj[field];
-        });
-        return obj;
-      };
-      
-      let postData = {
-        previous: targetRecipe
-      };
+        let deleteFields = obj => {
+          let fields = ['_id', 'rootVersion', 'previousVersion', 'deleted', 'branch', 'username', 'createdAt'];
+          fields.forEach(field => {
+            delete obj[field];
+          });
+          return obj;
+        };
+        
+        let postData = {
+          previous: targetRecipe
+        };
 
-      if (req.body.hasOwnProperty('changes')) {
-        deleteFields(req.body.changes);
-        postData.changes = req.body.changes;
-      } else {
-        sourceRecipe = sourceRecipe.toObject();
-        deleteFields(sourceRecipe);
-        postData.changes = sourceRecipe;
-      }
-      postData = JSON.stringify(postData);
-
-      let options = {
-        host: 'localhost',
-        port: '3000',
-        path: `/${targetRecipe.username}/${targetRecipe.rootVersion || targetRecipe._id}/${targetRecipe.branch}/create-version`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(postData)
+        if (req.body.hasOwnProperty('changes')) {
+          deleteFields(req.body.changes);
+          postData.changes = req.body.changes;
+        } else {
+          sourceRecipe = sourceRecipe.toObject();
+          deleteFields(sourceRecipe);
+          postData.changes = sourceRecipe;
         }
-      };
+        postData = JSON.stringify(postData);
 
-      let data;
-      let versionRequest = http.request(options, (response) => {
-        response.setEncoding('utf8');
-        response.on('data', (chunk) => {
-          data = chunk;
+        let options = {
+          host: 'localhost',
+          port: '3000',
+          path: `/${targetRecipe.username}/${targetRecipe.rootVersion || targetRecipe._id}/${targetRecipe.branch}/create-version`,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData)
+          }
+        };
+
+        let data;
+        let versionRequest = http.request(options, (response) => {
+          response.setEncoding('utf8');
+          response.on('data', (chunk) => {
+            data = chunk;
+          });
+          response.on('end', () => {
+            res.status(201).send(data);
+          });
         });
-        response.on('end', () => {
-          res.status(201).send(data);
-        });
-      });
 
-      // write the request parameters
-      versionRequest.write(postData);
-      return versionRequest.end();
-
+        // write the request parameters
+        versionRequest.write(postData);
+        return versionRequest.end();
+      } else {
+        res.status(200).send();
+      }
     }).catch(error => {
       console.log('Error: ', error);
       res.status(500).send();
