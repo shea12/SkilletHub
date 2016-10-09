@@ -19,8 +19,7 @@ class CookMeMain extends Component {
       },
       stepsArray: [],
       username: ''
-    }; 
-
+    };
   }
 
   componentWillMount() {
@@ -35,9 +34,10 @@ class CookMeMain extends Component {
         if (recipe.steps[i].time === null) {
           recipe.steps[i].time = '-';
         }
+        var joinedIngreds = recipe.steps[i].ingredients.join(', ');
         stepsArray.push({
           stepDescription: recipe.steps[i].description,  //string
-          ingredients: recipe.steps[i].ingredients,      //array of strings
+          ingredients: joinedIngreds,                    //joined array
           time: recipe.steps[i].time,                    //int
           position: recipe.steps[i].position             //int
         });
@@ -56,24 +56,34 @@ class CookMeMain extends Component {
 
   render() {
     return (
-      <Grid className='cookMeMain' fluid={true}>
+      <Grid className='cookMeMain' fluid={true} style={{padding: '0'}}>
 
-        <div className='jumbotron' style={{'backgroundImage': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")'}}>
+        <div className='jumbotron' style={{'backgroundImage': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")', borderRadius: '0'}}>
           <div className='container-fluid'>
-            <h1 style={{textAlign: 'center', color: '#0AF7E8'}}>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
+            <h1 style={{textAlign: 'center', color: 'white'}}>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
           </div>
         </div>
 
-        <div className="row" style={{margin: '0 auto'}}>
+        <div className="row" style={{margin: '0 auto', width: '980px'}}>
           {this.state.stepsArray.map((step, index) => (
-            <div className="col-md-12" style={{padding: '10px', margin: '0 auto', marginBottom: '10px', borderRadius: '6px'}}>
+            <div className="col-md-12" style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '10px', marginBottom: '30px', borderRadius: '6px', height: '240px', width: '940px'}}>
               
-              <div className="col-md-1" style={{backgroundColor: '#DDF7BC', marginRight: '20px', height: '80px', borderRadius: '6px'}}>
-                  {step.time} minutes
+              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '120px'}}>
+                <div className="col-md-1" style={{borderRadius: '6px', height: '60px', fontSize: '40px', marginTop: '10px', textAlign: 'center'}}>
+                  {step.position}
+                </div>
+                <div className="col-md-10" style={{borderRadius: '6px', height: '100px', marginTop: '20px', marginLeft: '20px', width: '88.499999995%'}}>
+                  {step.stepDescription}
+                </div>
               </div>
-              <div className="col-md-6" style={{borderRadius: '6px', backgroundColor: '#F7F7BC', height: '80px'}}>
-                {step.stepDescription}
+              <div className="col-md-1" style={{border: '1px solid rgba(128, 128, 128, 0.2)', height: '220px', borderRadius: '6px', float: 'right', width: '14.499999995%'}}>
+                {step.time} minutes <br/> Issues
               </div>
+
+              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', height: '80px', borderRadius: '6px', marginTop: '20px'}}>
+                Ingredients: {step.ingredients}
+              </div>
+
             </div>
           ))}
         </div>

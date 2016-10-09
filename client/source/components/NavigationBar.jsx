@@ -86,7 +86,6 @@ class NavigationBar extends React.Component {
               <NavItem title={'/Create'}> Create Recipe </NavItem>
               <NavItem title={'/Edit'}> Edit Recipe </NavItem>
               <NavItem title={'/Pull'}> Pull Request </NavItem>
-
             </Nav>
             <Nav pullRight>
               <Navbar.Form>
