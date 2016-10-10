@@ -84,5 +84,110 @@ module.exports = {
       console.log('ERROR: ', error);
       res.status(404).send(error);
     });
+  }, 
+
+  explore: (req, res) => {
+    let lengthOfResults = {};
+    let byForks = Recipe.find({
+      rootVersion: null,
+      previousVersion: null
+    }).sort({
+      forkCount: 'desc'
+    });
+    let byDate = Recipe.find().sort({
+      createdAt: 'desc'
+    });
+    let byRandom = Recipe.find({
+      rootVersion: null,
+      previousVersion: null
+    });
+
+    return Promise.all([byForks, byDate, byRandom])
+    .spread((byFork, byDate, byRandom) => {
+      let getLatest = (recipes) => {
+        return recipes.map(currentRecipe => {
+          return UserRecipe.findOne({
+            username: currentRecipe.username
+          }).then(userRecipesCollection => {
+            // console.log('userRecipesCollection.recipes: ', userRecipesCollection.recipes);
+            let recipe = _.find(userRecipesCollection.recipes, recipe => {
+              return recipe.rootRecipeId.equals(currentRecipe.rootVersion || currentRecipe._id);
+            });
+            let version = _.find(recipe.branches, currentBranch => {
+              return currentBranch.name === 'master';
+            });
+
+            return helpers.retrieveVersion(version.mostRecentVersionId);
+          });
+        });
+      };
+
+      //by fork
+      let topTenForked = byFork.slice(0, 10);
+      let fullTopTenForked = getLatest(topTenForked);
+      lengthOfResults.forks = fullTopTenForked.length;
+
+      //by date
+      let uniqueVersionIds = {};
+      let topTenByDate = [];
+      byDate.forEach(recipe => {
+        if (topTenByDate.length < 10 && !uniqueVersionIds[recipe.rootVersion || recipe._id]) {
+          uniqueVersionIds[recipe.rootVersion || recipe._id] = true;
+          topTenByDate.push(recipe);
+        }
+      });
+      let fullTopTenByDate = getLatest(topTenByDate);
+      lengthOfResults.dates = fullTopTenByDate.length;
+
+      //by random
+      let topTenByRandom = [];
+      for (let i = 0; i < 10; i++) {
+        if (byRandom.length > 0) {
+          topTenByRandom.push(byRandom.splice(Math.floor(Math.random(byRandom.length)), 1)[0]);
+        }
+      }
+      let fullTopTenByRandom = getLatest(topTenByRandom);
+      lengthOfResults.random = fullTopTenByDate.length;
+
+      let results = fullTopTenForked.concat(fullTopTenByDate, fullTopTenByRandom);
+      // console.log('top ten by forks');
+      // topTenForked.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+      // console.log('top ten by dates');
+      // topTenByDate.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+      // console.log('top ten by random');
+      // topTenByRandom.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+
+      return Promise.all(results);
+
+    }).spread((...results) => {
+      let exploreRecipes = {
+        byForks: results.slice(0, lengthOfResults.forks),
+        byDates: results.slice(lengthOfResults.forks, lengthOfResults.forks + lengthOfResults.dates),
+        byRandom: results.slice(lengthOfResults.forks + lengthOfResults.dates),
+      };
+      // console.log('top ten by forks');
+      // exploreRecipes.byForks.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+      // console.log('top ten by dates');
+      // exploreRecipes.byDates.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+      // console.log('top ten by random');
+      // exploreRecipes.byRandom.forEach(recipe => {
+      //   console.log(recipe._id);
+      // });
+
+      res.status(200).send(exploreRecipes);
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send(error);
+    })
   }
 };

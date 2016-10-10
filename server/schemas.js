@@ -10,6 +10,7 @@ let recipeSchema = new Schema({
   branch: String,            
   username: String,                         //Creator of recipe
   forkedFrom: String,                       //Creator of recipe forked from
+  forkCount: Number,
   name: {                                   //Recipe Title / Name
     changed: Boolean,
     value: String
