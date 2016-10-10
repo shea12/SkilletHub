@@ -34,7 +34,8 @@ module.exports = {
         previousVersion: null,
         deleted: false,
         branch: 'master',
-        username: username
+        username: username,
+        forkCount: 0
       };
     //New branch or version
     } else {
