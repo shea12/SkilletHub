@@ -112,8 +112,19 @@ module.exports = {
   //   username: 'username of person making the fork'
   // }
   forkVersion: (req, res) => {
-    return helpers.retrieveVersion(req.params.version)
-    .then(version => {
+    let retrieve = helpers.retrieveVersion(req.params.version);
+    let updateForkCount = Recipe.findOne({
+      _id: req.params.recipe
+    }).then(rootRecipe => {
+      return Recipe.update({
+        _id: req.params.recipe        
+      }, {
+        forkCount: rootRecipe.forkCount + 1
+      });
+    });
+
+    return Promise.all([retrieve, updateForkCount])
+    .spread((version, updated) => {
       let forkedProps = {
         username: req.body.username,
         branch: 'master',
@@ -122,8 +133,7 @@ module.exports = {
       return helpers.makeVersion(version, forkedProps, req.body.username);
     }).then(forkedVersion => {
       return helpers.addUserRecipesCollection(req.body.username, forkedVersion);
-    })
-    .then(userRecipesCollectionResults => {
+    }).then(userRecipesCollectionResults => {
       res.status(201).send(userRecipesCollectionResults);
     })
     .catch(error => {

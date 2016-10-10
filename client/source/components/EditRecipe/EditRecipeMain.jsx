@@ -406,6 +406,25 @@ class EditRecipeMain extends Component {
       var originalRecipeObject = this.state.originalRecipeObject; 
       var branchParameter = originalRecipeObject.branch; 
 
+      // console.log('EDIT RECIPE OBJECT'); 
+      // console.log(editRecipeObject); 
+
+      editRecipeObject.steps.forEach((step) => {
+        delete step.added; 
+        delete step.deleted; 
+        delete step.edited;
+        delete step.unitsMenu; 
+        delete step.validationState;  
+      }); 
+
+      editRecipeObject.ingredients.forEach((ingredient) => {
+        delete ingredient.added; 
+        delete ingredient.deleted; 
+        delete ingredient.edited; 
+      }); 
+
+      // console.log('EDIT CLEANED RECIPE OBJECT'); 
+      // console.log(editRecipeObject); 
 
       axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/create-version`, {
         previous: originalRecipeObject, 

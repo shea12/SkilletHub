@@ -7,6 +7,7 @@ let search = require(`${__dirname}/controllers/searchController.js`);
 
 module.exports = function(app, express) {
   /*** Search ***/
+  app.get('/explore', search.explore);
   app.get('/search/:string', search.search);
 
   /*** Sign up / Sign in / Logout ***/

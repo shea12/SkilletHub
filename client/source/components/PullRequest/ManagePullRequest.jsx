@@ -42,10 +42,6 @@ class PullRequestMain extends Component {
     console.log('Pull request page is mounting!');
 
     // Route for the recipe that is being submitted as pull request
-    // var usernameParameter = this.props.params.username; 
-    // var recipeParameter = this.props.params.recipe; 
-    // var branchParameter = this.props.params.branch;
-    // var versionParameter = this.props.params.version;
     var pullRequestObject = this.props.pullRequestObject; 
     var usernameParameter = pullRequestObject.targetUser; 
     var recipeParameter = pullRequestObject.targetRootVersion; 

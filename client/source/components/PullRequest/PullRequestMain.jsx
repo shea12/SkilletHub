@@ -68,7 +68,6 @@ class PullRequestMain extends Component {
         comparisonSteps: comparisonSteps
       }); 
 
-
     }));
   }
 
@@ -110,41 +109,6 @@ class PullRequestMain extends Component {
     return comparisonIngredients.concat(addedIngredients); 
 
   }
-
-  // markupSteps(pullSteps, sourceSteps) {
-
-  //   var comparisonSteps = []; 
-  //   var addedSteps = []; 
-
-  //   // Handles applying properties to the edited, unedited and deleted ingredients from original recipe 
-  //   sourceSteps.forEach((step, i) => {
-  //     var pullStep = _.findWhere(pullSteps, {position: step.position}); 
-  //     if (pullStep) {
-  //       if (step.description !== pullStep.description) {
-  //         var comparisonStep = _.extend({}, pullStep); 
-  //         comparisonStep.edited = true; 
-  //       } else {
-  //         var comparisonStep = _.extend({}, step); 
-  //       }
-  //       comparisonSteps.push(comparisonStep); 
-  //     } else {
-  //       ingredient.deleted = true; 
-  //       comparisonIngredients.push(ingredient); 
-  //     }
-  //   }); 
-
-  //   // Handles highlighting the added ingredients
-  //   pullIngredients.forEach((ingredient) => {
-  //     var pullIngredient = _.findWhere(sourceIngredients, {name: ingredient.name}); 
-  //     if (!pullIngredient) {
-  //       ingredient.added = true; 
-  //       addedIngredients.push(ingredient); 
-  //     }
-  //   }); 
-
-  //   return comparisonIngredients.concat(addedIngredients); 
-
-  // }
 
   markupStepsSimple(pullSteps, sourceSteps) {
 
@@ -228,90 +192,3 @@ class PullRequestMain extends Component {
 }
 
 export default PullRequestMain;
-            // <IngredientsTable ingredientList={this.state.allIngredients}/>
-
-
-  // reconcileIngredients(sourceIngredients, pullIngredients) {
-  //   var allIngredients = []; 
-  //   var sourceIngredientsNames = []; 
-  //   sourceIngredients.forEach((ingredient) => {
-  //     allIngredients.push(ingredient); 
-  //     sourceIngredientsNames.push(ingredient.name); 
-  //   }); 
-
-  //   // Determine deleted ingredient
-  //   var deletedIngredients = pullIngredients
-  //   .filter((ingredient) => {
-  //     if (!ingredient.changed) {
-  //       return ingredient; 
-  //     }
-  //   }); 
-  //   // .map(ingredient => ingredient.name); 
-  //   // console.log('DELETED INGREDIENTS'); 
-  //   // console.log(deletedIngredients); 
-
-  //   // Add deleted property to ingredient 
-  //   deletedIngredients.forEach((ingredient) => {
-  //     // console.log(ingredient); 
-  //     var deletedIngredient = _.findWhere(allIngredients, {name: ingredient.name}); 
-  //     // console.log('FIND WHERE RESULT:'); 
-  //     // console.log(deletedIngredient); 
-  //     if (deletedIngredient) {
-  //       deletedIngredient.deleted = true; 
-  //       deletedIngredient.validation = 'error'; 
-  //       // console.log(deletedIngredient); 
-  //     }
-  //   }); 
-
-  //   // console.log('ALl INGREDIENTS'); 
-  //   // console.log(allIngredients); 
-
-  //   /////// 
-  //   // NEW ADDED INGREDIENTS 
-  //   ///// 
-  //   var addedIngredients = []; 
-  //   var editedIngredients = []; 
-
-  //   pullIngredients.forEach((ingredient) => {
-  //     if (ingredient.changed && sourceIngredientsNames.indexOf(ingredient.name) === -1) {
-  //       addedIngredients.push(ingredient); 
-  //     } else if (ingredient.changed) {
-  //       editedIngredients.push(ingredient); 
-  //     }
-  //   });
-
-  //   addedIngredients.forEach((ingredient) => {
-  //       ingredient.added = true; 
-  //       ingredient.validation = 'success'; 
-  //       allIngredients.push(ingredient); 
-  //   }); 
-
-
-  //   editedIngredients.forEach((ingredient) => {
-  //     var changedIngredient = _.findWhere(allIngredients, {name: ingredient.name}); 
-  //     console.log('FOUND MATCHING EDITED INGREDIENT'); 
-  //     console.log(changedIngredient); 
-  //     if (changedIngredient) {
-  //       var previousValue = changedIngredient.amount; 
-  //       changedIngredient.edited = true; 
-  //       changedIngredient.amount = ingredient.amount; 
-  //       changedIngredient.unit = changedIngredient.unit; 
-  //       changedIngredient.previousValue = previousValue; 
-  //     }
-  //     console.log(changedIngredient); 
-  //   }); 
-
-
-  //   console.log('ADDED INGREDIENTS!'); 
-  //   console.log(addedIngredients); 
-
-  //   console.log('CHANGED INGREDIENTS'); 
-  //   console.log(editedIngredients); 
-
-  //   console.log(allIngredients); 
-
-  //   return allIngredients; 
-
-  //   // Resolve modified ingredients 
-  // }
-

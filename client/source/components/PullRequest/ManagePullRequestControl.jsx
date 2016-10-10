@@ -8,19 +8,6 @@ class PullRequestControl extends React.Component {
 
   }
 
-  // handleApprovePullRequest(event){
-  //   event.preventDefault(); 
-  // }
-
-  // handleDenyPullRequest(event){
-  //   event.preventDefault(); 
-  // }
-
-  // handleEditPullRequest(event){
-  //   event.preventDefault(); 
-
-  // }
-
   _renderPullRequestControl(){
     if (this.props.username) {
       return (
