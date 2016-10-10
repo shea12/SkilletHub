@@ -12,14 +12,34 @@ module.exports = {
   // body: {
   //   username: person who created the issue
   //   type: ingredient / step ,
-  //   position: position of ingredient or step
+  //   position: position of ingredient or step,
+  //   data: comment text
   // }
   // params: {
   //   username: owner of the recipe,
   //   recipe: root recipe id
   // }
   createIssue: (req, res) => {
-
+    return new Issue({
+      owner: req.params.username,
+      rootVersion: req.params.recipe,
+      issueCreator: req.body.username,
+      type: req.body.type,
+      position: req.body.position,
+      status: 'open'
+    }).save().then(issue => {
+      return new Comment({
+        username: req.body.username,
+        issue: issue._id,
+        position: 1,
+        data: req.body.data,
+      });
+    }).then(() => {
+      res.status(201).send();
+    }).catch(error => {
+      console.log('ERROR: ', error);
+      res.status(500).send(error);
+    });
   },
 
   // description: Updates the status of an issue
