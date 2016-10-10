@@ -60,7 +60,34 @@ module.exports = {
   //   recipe: root recipe id
   // }
   getIssues: (req, res) => {
+    let results;
+    return Issue.find({
+      owner: req.params.username,
+      rootVersion: req.params.recipe
+    }).then(issues => {
+      results = issues;
+      let comments = issues.map(issue => {
+        return Comment.find({
+          issue: issue._id
+        }).sort({
+          position: 'asc'
+        });
+      });
 
+      return Promise.all(comments);
+    }).spread((...comments) => {
+      comments.forEach(commentGroup => {
+        _.find(results, result => {
+          return result._id === commentGroup[0].issue;
+        }).comments = commentGroup;
+      });
+
+      console.log('results: ', results);
+      res.status(200).send(results);
+    }).catch(error => {
+      console.log('ERROR: ', error);
+      res.status(404).send(error);
+    })
   },
 
   // description: Adds a comment to an issue
