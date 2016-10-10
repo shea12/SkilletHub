@@ -65,7 +65,7 @@ class NavigationBar extends React.Component {
       )
     } else {
       return (
-        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5, height: '30px'}}>Log Out</Button>  
+        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5, height: '30px', paddingTop: '4px'}}>Log Out</Button>  
       )
     }
   }
@@ -85,13 +85,14 @@ class NavigationBar extends React.Component {
 
             <Nav pullLeft>
               <Navbar.Form>
-                <FormControl type='text' placeholder='Search' style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center', marginTop: '4px'}}/>
+                <FormControl type='text' placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
+                <Button type="submit" style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
               </Navbar.Form>
             </Nav>
 
             <Nav onClick={this.props.handleNavigation.bind(this)}>
-              <NavItem title={'/User'}> Profile </NavItem>
-              <NavItem title={'/Create'}> Create Recipe </NavItem>
+              <NavItem title={'/User'} style={{marginTop: '4px'}}> Profile </NavItem>
+              <NavItem title={'/Create'} style={{marginTop: '4px'}}> Create Recipe </NavItem>
             </Nav>
 
             <Nav pullRight>
@@ -114,8 +115,8 @@ export default NavigationBar;
 
 /*
 
-              <NavItem title={'/Recipe'} style={{fontSize: '10px'}}> Recipe </NavItem>
-              <NavItem title={'/Edit'} style={{fontSize: '10px'}}> Edit Recipe </NavItem>
-              <NavItem title={'/Pull'} style={{fontSize: '10px'}}> Pull Request </NavItem>
+<NavItem title={'/Recipe'} style={{fontSize: '10px'}}> Recipe </NavItem>
+<NavItem title={'/Edit'} style={{fontSize: '10px'}}> Edit Recipe </NavItem>
+<NavItem title={'/Pull'} style={{fontSize: '10px'}}> Pull Request </NavItem>
 
 */
