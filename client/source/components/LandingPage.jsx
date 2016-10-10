@@ -1,26 +1,38 @@
 import React from 'react';
+import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel } from 'react-bootstrap';
 
 class LandingPage extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Enter username', 
-      password: ''
+      username: '', 
+      password: '',
+      firstname: '',
+      lastname: '',
+      email: ''
     }; 
   }
 
   handleSubmit (event) {
-    console.log(event); 
+    event.preventDefault();
+    console.log(event);
     console.log(this.state.username, this.state.password);
+    var user = this.state;
+    this.props.handleSignUp(user);
   }
 
   handleChange (event) {
-    var inputType = event.target.className; 
-    if (inputType === 'usernameInput') {
+    var inputType = event.target.id; 
+    if (inputType === 'username') {
       this.setState({username: event.target.value}); 
-    } else {
+    } else if (inputType === 'password') {
       this.setState({password: event.target.value}); 
+    } else if (inputType === 'firstname') {
+      this.setState({firstname: event.target.value}); 
+    } else if (inputType === 'lastname') {
+      this.setState({lastname: event.target.value}); 
+    } else if (inputType === 'email') {
+      this.setState({email: event.target.value}); 
     }
   }
 
@@ -28,15 +40,27 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-        <div className='signUpPage'>
-        <h1 className='signUpPage'>Welcome to SkilletHub</h1>
-        <h1 className='signUpPage'> Sign Up </h1>
-        <form className="signupForm" onSubmit={this.handleSubmit.bind(this)} method="post">
-          <input type="text" onChange={this.handleChange.bind(this)} value={this.state.username} className="usernameInput" name="username"/>
-          <input type="password" onChange={this.handleChange.bind(this)} value={this.state.password} className="passwordInput" name="password"/>
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
+        <Jumbotron style={{
+         'backgroundImage': 'url(\"http://67.media.tumblr.com/426d4abee7ca7c24c0414edbe35f8ddb/tumblr_nlwab73eK91s4468do1_1280.jpg\")',
+         'backgroundSize': 'cover',
+         'height': 940
+        }}> 
+          <Row className="show-grid">
+            <Col xs={4} xsOffset={7} md={4} mdOffset={8}> 
+            <form onSubmit={this.handleSubmit.bind(this)} style={{height: '280px', width: '280px', borderRadius: '10px', border: '2px solid gray'}}>
+              <FormGroup style={{padding: '10px', height: '280px', textAlign: 'center'}}>
+                <ControlLabel style={{marginBottom: '10px', fontSize: '20px', color: 'white'}}> Sign Up For SkilletHub </ControlLabel>
+                <FormControl type="text" id="username" placeholder='Username' onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <FormControl type="password" id="password" placeholder='Password' onChange={this.handleChange.bind(this)} value={this.state.password} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <FormControl type="text" id="firstname" placeholder='First Name' onChange={this.handleChange.bind(this)} value={this.state.firstname} style={{margin: '0 auto', width: '100px', textAlign: 'center', display: 'inline-block', marginBottom: '5px', marginRight: '10px'}}/>
+                <FormControl type="text" id="lastname" placeholder='Last Name' onChange={this.handleChange.bind(this)} value={this.state.lastname} style={{margin: '0 auto', width: '100px', textAlign: 'center', display: 'inline-block', marginBottom: '5px'}}/>
+                <FormControl type="text" id="email" placeholder='Email Address' onChange={this.handleChange.bind(this)} value={this.state.email} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
+                <Button type="submit" style={{width: '210px', margin: '0 auto', marginTop: '10px'}} bsSize="large" block>Sign Up</Button>  
+              </FormGroup>
+            </form>
+            </Col>
+          </Row>
+        </Jumbotron>
     );
   }
 }

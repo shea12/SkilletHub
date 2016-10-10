@@ -1,63 +1,279 @@
 import React, { Component } from 'react';
-import RecipeDescription from './RecipeDescription.jsx'
-import IngredientList from './IngredientList.jsx'
-import ReadME from './ReadME.jsx'
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import RecipeDescription from './RecipeDescription';
+import RecipeIngredients from './RecipeIngredients';
+import ReadME from './ReadME';
+import CookMe from '../CookRecipe/CookMeMain';
+import RecipeStats from './RecipeStats'; 
+import VersionControl from './RecipeVersionControl'; 
 
+//Bootstrap 
+import { Grid, Row, Col, Table, Button, Form, FormGroup, FormControl, ControlLabel, Well } from 'react-bootstrap';
+
+// Placeholder recipe data 
+import placeholders from '../../../../placeholders'
+import meatloafRecipe from '../../../../meatloafRecipe'
+
+// Axios 
+var axios = require('axios'); 
 
 class RecipeMain extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      recipe: {},
-      user: {},
+      recipe: placeholders.recipeTemplate,
+      // user: {},
+      username: '', 
+      recipeIngredients: [],
+      recipeSteps: [],
+      selectedBranch: '', 
+      branchVersions: [],
+      recipeBranches: [], 
+      createBranch: ''
     }; 
   }
 
   componentWillMount() {
-    console.log('Main recipe page is mounting!'); 
-    // TODO: Implement request that loads the recipe data for a given recipe to this components state. 
-      --> // Main Server 
+    // console.log('Main recipe page is mounting!'); 
+    // console.log('PARAMS RECIPE PAGE: ', this.props.params); 
+    // var usernameParameter = this.props.params.username; 
+    var usernameParameter = this.props.params.username; 
+    // console.log('USERNAME PARAMETER:', usernameParameter); 
+
+    var recipeParameter = this.props.params.recipe; 
+    // console.log('RECIPE PARAMETER:', recipeParameter); 
+
+    axios.get(`/${usernameParameter}/${recipeParameter}`)
+    .then((result)=> {
+      // console.log(result.data); 
+      // console.log(Object.keys(result.data)); 
+      var recipe = result.data; 
+      console.log('RECIPE: ', recipe); 
+      // console.log('DESCRIPTION:', recipe.description.value); 
+      
+      this.setState({
+        recipe: recipe,
+        username: usernameParameter, 
+        recipeIngredients: recipe.ingredients, 
+        recipeSteps: recipe.steps,
+        recipeBranches: recipe.branches,
+        selectedBranch: recipe.branch,
+        selectedVersion: recipe._id
+      }); 
+
+      var branch = recipe.branch; 
+      this.requestVersionData(branch); 
+
+    })
+    .catch((error)=> {
+      console.log('Axios error: ', error); 
+    }); 
   }
 
-  handleChange (event) {
-    var inputType = event.target.data; 
-    if (inputType === 'fork') {
-      console.log('Forking recipe'); 
-      // TODO: Implement routing (react || server)
+  requestVersionData(branch) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branch}/versions`)
+    .then((result) => {
+      console.log('REQUESTED VERSIONS!'); 
+      console.log(result.data); 
+      var branchVersions = result.data; 
+      console.log(branchVersions); 
+      this.setState({
+        branchVersions: branchVersions
+      }); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  requestSelectedVersion(event) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    var branchParameter = this.state.selectedBranch;
+    var versionParemeter = event.target.value; 
+    axios.get(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParemeter}`)
+    .then((result) => {
+      console.log(result.data); 
+      console.log(Object.keys(result.data)); 
+      var recipe = result.data; 
+
+      console.log('NAME: ', recipe.name.value); 
+      console.log('DESCRIPTION:', recipe.description.value); 
+      
+      this.setState({
+        recipe: recipe,
+        username: usernameParameter, 
+        recipeIngredients: recipe.ingredients, 
+        recipeSteps: recipe.steps,
+        recipeBranches: recipe.branches,
+        selectedVersion: recipe._id
+      });
+
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleBranchSelect(event) {
+    event.preventDefault(); 
+    console.log('SELECTED BRANCH!'); 
+    var branch = event.target.value; 
+    console.log('BRANCH IS:', branch); 
+    this.setState({
+      selectedBranch: branch
+    }); 
+    this.requestVersionData(branch); 
+  }
+
+  handleVersionSelect(event) {
+    event.preventDefault(); 
+    console.log('SELECTED VERSION!'); 
+    var version = event.target.value; 
+    console.log('VERSION IS:', version); 
+    this.requestSelectedVersion(event); 
+  }
+
+  // handleChange (event) {
+  //   var inputType = event.target.id; 
+  //   if (inputType === 'createBranch') {
+  //     this.setState({createBranch: event.target.value}); 
+  //   }
+  // }
+
+  handleCreateBranch(event) {
+    event.preventDefault(); 
+    var branch = this.state.createBranch;
+    this.requestCreateBranch(branch); 
+  }
+
+  requestCreateBranch(branch) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    var selectedVersion = this.state.selectedVersion
+    console.log('ATTEMPTING TO CREATE BRANCH!'); 
+    console.log(branch); 
+
+    axios.post(`/${usernameParameter}/${recipeParameter}/${branch}`, {
+      versionId: selectedVersion
+    })
+    .then((result) => {
+      console.log('CREATED NEW BRANCH'); 
+      console.log(result); 
+      browserHistory.push(`/Recipe/${usernameParameter}/${recipeParameter}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleClick(event) {
+    event.preventDefault(); 
+    var buttonType = event.target.id; 
+
+    // Fork the selected recipe 
+    if (buttonType === 'fork') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeVersionFork(recipeObject); 
     }
-    if (inputType === 'cook') {
-      console.log('Cooking recipe'); 
-      // TODO: Implement routing (react || server)
-    }  
 
+    if (buttonType === 'cook') {
+      console.log('Cooking recipe'); 
+      var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
+      console.log('NAVIGATING TO:', route); 
+      browserHistory.push(`${route}`); 
+    }
+
+    if (buttonType === 'edit') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeVersionEdit(recipeObject); 
+    }
+
+    if (buttonType === 'pull') {
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username; 
+      recipeObject.recipe = this.props.params.recipe; 
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion;
+      recipeObject.sourceUser = this.state.recipe.forkedFrom; 
+      recipeObject.sourceRecipe = this.state.recipe.rootVersion;  
+      this.props.handleRecipeVersionPull(recipeObject); 
+    }
   }
 
-  // TODO: Implement conditional render to display forked from. 
-  // TODO: Implement conditional render to display context sensitive buttons (fork/cook) depending on recipe owner 
+  _renderCreateBranch(){
+    var branch = this.state.selectedBranch; 
+    if (branch === 'create branch') {
+      return (
+        <form onSubmit={this.handleCreateBranch.bind(this)}> 
+          <FormGroup>
+            <ControlLabel>New Branch</ControlLabel>
+              <FormControl type="text" id='createBranch' value={this.state.createBranch} onChange={this.handleChange.bind(this)} />
+          </FormGroup>
+          <Button type='submit' style={{display: 'none'}}>
+            submit
+          </Button>
+        </form> 
+      )
+    } else {
+      return (
+        <FormGroup>
+          <ControlLabel>Version</ControlLabel>
+          <FormControl componentClass="select" id="unit" onChange={this.handleVersionSelect.bind(this)} >
+            {this.state.branchVersions.map((version, i)=> (
+              <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
+            ))}
+          </FormControl>
+        </FormGroup>
+      )
+    }
+  }
 
   render() {
     return (
-      <div className="recipeMain">
-          <h2 className="recipeHeader">{user.name} / {recipe.name}</h2>
-        <div>
-          <RecipeDescription recipeDescription={this.state.recipe.description} />
-        </div> 
-
-        <div>
-          <button onClick={this.handleClick.bind(this)} type="submit">Fork</button>
-          <button onClick={this.handleClick.bind(this)} type="submit">Cook</button>
-        </div>
-
-        <div>
-            <IngredientList ingredientList={this.state.recipe.ingredientList}/>
-        </div>
-
-        <div>
-            <ReadME readME={this.state.recipe.readME}/>
-        </div>
-
-      </div>
+      <Grid className="recipeMain">
+        <Row style={{margin: 10}}> 
+          <h3 className="recipeHeader"> {this.state.username} / {this.state.recipe.name.value}</h3>
+        </Row> 
+        <Row>
+          <Col xs={6} md={6}>
+            <Well>
+              <img style={{maxWidth: '350px', maxHeight: '350px', display: 'block', margin: 'auto'}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
+            </Well>
+          </Col>
+          <Col xs={6} md={6}>
+              <RecipeDescription style={{height: '350px'}} recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
+          </Col> 
+        </Row> 
+        <RecipeStats branches={this.state.recipeBranches}/> 
+        <VersionControl 
+          selectedBranch={this.state.selectedBranch}
+          branchVersions={this.state.branchVersions}
+          recipeBranches={this.state.recipeBranches}
+          handleCreateBranch={this.handleCreateBranch.bind(this)}
+          handleVersionSelect={this.handleVersionSelect.bind(this)}
+          handleBranchSelect={this.handleBranchSelect.bind(this)}
+          handleClick={this.handleClick.bind(this)}
+          loggedInUserProfile={this.props.loggedInUserProfile}
+        />
+        <Row> 
+          <Well> 
+            <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
+          </Well>
+        </Row>
+        <ReadME readME={this.state.recipeSteps}/>
+      </Grid> 
     );
   }
 }

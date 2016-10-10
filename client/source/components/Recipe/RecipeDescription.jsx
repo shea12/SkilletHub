@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
+import { Grid, Row, Col, Table, Button, Well } from 'react-bootstrap';
 
-export default ({recipeDescription}) => {
+export default ({recipeDescription, handleClick}) => {
   return (
-      <div>
-        <span className="title">{recipeDescription.name}</span>
-        <img style={{maxWidth: '150px', maxHeight: '150px'}} src={recipe.image} alt="http://sharing.kshb.com/sharekgtv/photo/2014/08/15/instant_ramen_noodles_1408131512923_7390899_ver1.0_640_480.jpg"/>
-        <div> 
-          <span> yield: {recipeDescription.serves} </span>
-          <span> active time: {recipeDescription.activeTime} </span>
-          <span> total time: {recipeDescription.totalTime} </span>
-          <p> {recipeDescription.description} </p> 
+        <div>
+        <Row style={{borderBottom: "4px solid rgba(128,128,128, 0.2)", height: '80%', textAlign: "center", marginBottom: 10}}> 
+          <Col xs={3} md={3}> 
+            <h4> serves </h4> 
+            <h4> {recipeDescription.servings.value} </h4> 
+          </Col>
+          <Col xs={1} md={1}> 
+            <h1 style={{color: 'rgba(128,128,128, 0.2)'}}> / </h1> 
+          </Col>
+          <Col xs={3} md={3}> 
+            <h4> cook time </h4> 
+            <h4> {recipeDescription.cookTime.value} </h4> 
+          </Col>
+          <Col xs={1} md={1}> 
+            <h1 style={{color: 'rgba(128,128,128, 0.2)'}}> / </h1> 
+          </Col>
+          <Col xs={3} md={3}> 
+            <h4> skill level </h4> 
+            <h4> {recipeDescription.skillLevel.value} </h4> 
+          </Col>
+        </Row> 
+        <Row> 
+          <p> {recipeDescription.description.value || `A basic ${recipeDescription.name} recipe`} </p> 
+        </Row>
         </div>
-      </div>
   ); 
 }
