@@ -51,7 +51,17 @@ module.exports = {
   //   recipe: root recipe id
   // }
   updateStatus: (req, res) => {
-
+    return Issue.update({
+      owner: req.params.username,
+      rootVersion: req.params.recipe
+    }, {
+      status: req.body.status
+    }).then(() => {
+      res.status(200).send();
+    }).catch(error => {
+      console.log('ERROR: ', error);
+      res.status(500).send();
+    });
   },
 
   // description: Gets all issues for a recipe
