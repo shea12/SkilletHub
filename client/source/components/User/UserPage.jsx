@@ -49,27 +49,6 @@ class UserProfile extends React.Component {
     // TODO: Remove this to user a user's actual picture. 
     var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
-    // axios.get(`/${usernameParameter}/profile`)
-    // .then((results) => {
-    //   console.log('USER PROFILE RESULTS DATA'); 
-    //   console.log(results.data);
-
-    //   this.setState({
-    //     username: usernameParameter, 
-    //     userID: this.props.userID,
-    //     userProfile: results.data,
-    //     image: userImage, 
-    //     recipeList: results.data.recipes,
-    //   });
-
-    // })
-    // .catch((error) => {
-    //   console.log(error); 
-    // }); 
-
-    /////////
-    // PROPER SPREAD WAY TO REQUEST SERVER -> Requires response from server for no pull requests. 
-    //////
     axios.all([this.getUser(usernameParameter), this.getPullRequests(usernameParameter)])
     .then(axios.spread((user, pullRequests) => {
 
