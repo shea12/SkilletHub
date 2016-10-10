@@ -73,26 +73,35 @@ class NavigationBar extends React.Component {
   render() {
     return (
         <Navbar style={{'marginBottom': '2px', height: '40px'}}>
+
           <Navbar.Header>
             <Navbar.Brand>
               <a>SkilletHub</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
+
           <Navbar.Collapse>
+
+            <Nav pullLeft>
+              <Navbar.Form>
+                <FormControl type='text' placeholder='Search' style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center', marginTop: '4px'}}/>
+              </Navbar.Form>
+            </Nav>
+
             <Nav onClick={this.props.handleNavigation.bind(this)}>
               <NavItem title={'/User'}> Profile </NavItem>
-              <NavItem title={'/Recipe'}> Recipe </NavItem>
               <NavItem title={'/Create'}> Create Recipe </NavItem>
-              <NavItem title={'/Edit'}> Edit Recipe </NavItem>
-              <NavItem title={'/Pull'}> Pull Request </NavItem>
             </Nav>
+
             <Nav pullRight>
               <Navbar.Form>
                 {this._renderAuthentication()}
               </Navbar.Form>
             </Nav>
+
           </Navbar.Collapse>
+
         </Navbar>
     ); 
   }
@@ -101,3 +110,12 @@ class NavigationBar extends React.Component {
 export default NavigationBar; 
 
 
+
+
+/*
+
+              <NavItem title={'/Recipe'} style={{fontSize: '10px'}}> Recipe </NavItem>
+              <NavItem title={'/Edit'} style={{fontSize: '10px'}}> Edit Recipe </NavItem>
+              <NavItem title={'/Pull'} style={{fontSize: '10px'}}> Pull Request </NavItem>
+
+*/
