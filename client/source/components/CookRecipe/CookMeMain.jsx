@@ -64,26 +64,31 @@ class CookMeMain extends Component {
           </div>
         </div>
 
-        <div className="row" style={{margin: '0 auto', width: '980px'}}>
+        <div className="row" style={{margin: '0 auto', width: '980px'}} >
           {this.state.stepsArray.map((step, index) => (
-            <div className="col-md-12" style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '10px', marginBottom: '30px', borderRadius: '6px', height: '240px', width: '940px'}}>
+            <div className="col-md-12" style={{backgroundColor: 'green', padding: '10px', marginBottom: '40px', borderRadius: '6px', height: '240px', width: '940px'}}>
               
               <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '140px'}}>
                 <div className="col-md-1" style={{borderRadius: '6px', height: '60px', fontSize: '40px', marginTop: '10px', textAlign: 'center'}}>
                   {step.position}
                 </div>
+
                 <div className="col-md-10" style={{borderRadius: '6px', height: '120px', marginTop: '20px', marginLeft: '20px', width: '88.499999995%', fontSize: '16px'}}>
                   {step.stepDescription}
                 </div>
               </div>
-              <div className="col-md-1" style={{height: '220px', borderRadius: '6px', float: 'right', width: '14.499999995%', padding: '0px'}}>
 
-                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '105px', borderRadius: '6px', width: '100%', margin: '0 auto'}}>
+              <div className="col-md-1" style={{height: '220px', borderRadius: '6px', float: 'right', width: '14.499999995%', padding: '0px'}}>
+                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '60px', borderRadius: '6px', width: '100%', margin: '0 auto', textAlign: 'center'}}>
                 {step.time} Minutes
                 </div> 
 
-                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '105px', borderRadius: '6px', width: '100%', margin: '0 auto', marginTop: '10px'}}>
-                Issues
+                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '60px', borderRadius: '6px', width: '100%', margin: '0 auto', marginTop: '20px', textAlign: 'center'}}>
+                # Issues
+                </div>
+
+                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '60px', borderRadius: '6px', width: '100%', margin: '0 auto', marginTop: '20px', textAlign: 'center'}}>
+                Begin!
                 </div>
               </div>
 
