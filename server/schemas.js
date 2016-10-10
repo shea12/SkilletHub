@@ -66,12 +66,7 @@ let recipeSchema = new Schema({
   //   position: Number,
   //   tagId: Schema.Types.ObjectId
   // }],
-  issues: Schema.Types.Mixed
-  // [{
-  //   changed: Boolean,
-  //   position: Number,
-  //   issueId: Schema.Types.ObjectId
-  // }]
+  issues: [Schema.Types.ObjectId]
 });
 
 let userRecipeSchema = new Schema({
@@ -98,10 +93,28 @@ let tagSchema = new Schema({
 }); 
 
 let issueSchema = new Schema({
-  username: String,                     //User who left issue
-  description: String,                  //Description of the problem / issue
-  step: Number                          //Optional: Step in the recipe that had issue
+  owner: String,
+  issueCreator: String,
+  rootVersion: Schema.Types.ObjectId,
+  type: String,
+  position: Number,
+  status: String,
+  createdAt: {
+    type: Date, 
+    default: Date.now
+  }
 }); 
+
+let commentSchema = new Schema({
+  username: String,
+  issue: Schema.Types.ObjectId,
+  commentNumber: Number,
+  data: String,
+  createdAt: {
+    type: Date, 
+    default: Date.now
+  }
+});
 
 let userSchema = new Schema({
   username: String,                     // Username 
@@ -137,6 +150,7 @@ module.exports = {
   Dependency: mongoose.model('Dependency', dependencySchema),
   Tag: mongoose.model('Tag', tagSchema),
   Issue: mongoose.model('Issue', issueSchema),
+  Comment: mongoose.model('Comment', commentSchema),
   User: mongoose.model('User', userSchema),
   PullRequest: mongoose.model('PullRequest', pullRequestSchema)
 };
