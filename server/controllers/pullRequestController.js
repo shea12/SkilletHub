@@ -67,9 +67,7 @@ module.exports = {
         _id: req.params.pullId
       });
     }).then(pullRequest => {
-      let source = Recipe.findOne({
-        _id: pullRequest.sentVersion
-      });
+      let source = helpers.retrieveVersion(pullRequest.sentVersion);
       let target = Recipe.findOne({
         _id: pullRequest.targetVersion
       });
@@ -93,7 +91,6 @@ module.exports = {
           deleteFields(req.body.changes);
           postData.changes = req.body.changes;
         } else {
-          sourceRecipe = sourceRecipe.toObject();
           deleteFields(sourceRecipe);
           postData.changes = sourceRecipe;
         }
