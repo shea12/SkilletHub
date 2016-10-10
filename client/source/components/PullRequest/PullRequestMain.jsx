@@ -111,40 +111,6 @@ class PullRequestMain extends Component {
 
   }
 
-  // markupSteps(pullSteps, sourceSteps) {
-
-  //   var comparisonSteps = []; 
-  //   var addedSteps = []; 
-
-  //   // Handles applying properties to the edited, unedited and deleted ingredients from original recipe 
-  //   sourceSteps.forEach((step, i) => {
-  //     var pullStep = _.findWhere(pullSteps, {position: step.position}); 
-  //     if (pullStep) {
-  //       if (step.description !== pullStep.description) {
-  //         var comparisonStep = _.extend({}, pullStep); 
-  //         comparisonStep.edited = true; 
-  //       } else {
-  //         var comparisonStep = _.extend({}, step); 
-  //       }
-  //       comparisonSteps.push(comparisonStep); 
-  //     } else {
-  //       ingredient.deleted = true; 
-  //       comparisonIngredients.push(ingredient); 
-  //     }
-  //   }); 
-
-  //   // Handles highlighting the added ingredients
-  //   pullIngredients.forEach((ingredient) => {
-  //     var pullIngredient = _.findWhere(sourceIngredients, {name: ingredient.name}); 
-  //     if (!pullIngredient) {
-  //       ingredient.added = true; 
-  //       addedIngredients.push(ingredient); 
-  //     }
-  //   }); 
-
-  //   return comparisonIngredients.concat(addedIngredients); 
-  // }
-
   markupStepsSimple(pullSteps, sourceSteps) {
 
     var comparisonSteps = []; 
