@@ -33,7 +33,7 @@ module.exports = {
         issue: issue._id,
         position: 1,
         data: req.body.data,
-      });
+      }).save();
     }).then(() => {
       res.status(201).send();
     }).catch(error => {
@@ -72,6 +72,20 @@ module.exports = {
   //   issue: id of the issue the comment belongs to
   // }
   createComment: (req, res) => {
-
+    return Issue.findOne({
+      _id: req.params.issue
+    }).then(issue => {
+      return new Comment({
+        username: req.params.username,
+        issue: req.params.issue,
+        position: issue.position + 1,
+        data: req.body.data,
+      }).save();
+    }).then(() => {
+      res.status(201).send();
+    }).catch(error => {
+      console.log('ERROR: ', error);
+      res.status(500).send();
+    });
   }
 };
