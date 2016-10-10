@@ -85,7 +85,6 @@ class PullRequestMain extends Component {
     return axios.get(route); 
   }
 
-
   markupIngredients(sourceIngredients, pullIngredients) {
     var comparisonIngredients = []; 
     var addedIngredients = []; 
