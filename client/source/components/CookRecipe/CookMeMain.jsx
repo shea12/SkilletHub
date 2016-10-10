@@ -31,7 +31,7 @@ class CookMeMain extends Component {
 
       var stepsArray = [];
       for (var i = 0; i < recipe.steps.length; i++) {
-        if (recipe.steps[i].time === null) {
+        if (!recipe.steps[i].time) {
           recipe.steps[i].time = '-';
         }
         var joinedIngreds = recipe.steps[i].ingredients.join(', ');
@@ -68,19 +68,26 @@ class CookMeMain extends Component {
           {this.state.stepsArray.map((step, index) => (
             <div className="col-md-12" style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '10px', marginBottom: '30px', borderRadius: '6px', height: '240px', width: '940px'}}>
               
-              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '120px'}}>
+              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '140px'}}>
                 <div className="col-md-1" style={{borderRadius: '6px', height: '60px', fontSize: '40px', marginTop: '10px', textAlign: 'center'}}>
                   {step.position}
                 </div>
-                <div className="col-md-10" style={{borderRadius: '6px', height: '100px', marginTop: '20px', marginLeft: '20px', width: '88.499999995%'}}>
+                <div className="col-md-10" style={{borderRadius: '6px', height: '120px', marginTop: '20px', marginLeft: '20px', width: '88.499999995%', fontSize: '16px'}}>
                   {step.stepDescription}
                 </div>
               </div>
-              <div className="col-md-1" style={{border: '1px solid rgba(128, 128, 128, 0.2)', height: '220px', borderRadius: '6px', float: 'right', width: '14.499999995%'}}>
-                {step.time} minutes <br/> Issues
+              <div className="col-md-1" style={{height: '220px', borderRadius: '6px', float: 'right', width: '14.499999995%', padding: '0px'}}>
+
+                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '105px', borderRadius: '6px', width: '100%', margin: '0 auto'}}>
+                {step.time} Minutes
+                </div> 
+
+                <div style={{border: '1px solid rgba(128, 128, 128, 0.2)', padding: '20px', height: '105px', borderRadius: '6px', width: '100%', margin: '0 auto', marginTop: '10px'}}>
+                Issues
+                </div>
               </div>
 
-              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', height: '80px', borderRadius: '6px', marginTop: '20px'}}>
+              <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', height: '60px', borderRadius: '6px', marginTop: '20px', padding: '20px', fontSize: '16px'}}>
                 Ingredients: {step.ingredients}
               </div>
 
