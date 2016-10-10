@@ -84,5 +84,11 @@ module.exports = {
       console.log('ERROR: ', error);
       res.status(404).send(error);
     });
+  }, 
+
+  explore: (req, res) => {
+
+
+    //return most recent, most forked, most random
   }
 };
