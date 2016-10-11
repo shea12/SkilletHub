@@ -29,7 +29,7 @@ render((
 	  	<Route path="/Recipe" component={RecipeMain} />
 	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
 	  	<Route path="/Cookme/:username/:recipe" component={CookMeMain} />
-	  	<Route path="/Search" component={SearchResultsMain} />
+	  	<Route path="/Search/:search" component={SearchResultsMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />

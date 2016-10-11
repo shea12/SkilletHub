@@ -11,19 +11,28 @@ class SearchResultsMain extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      searchTerm: ''
+    };
   }
 
   componentWillMount() {
     console.log('searchResults main mounting!');
     //make axios request to search endpoint with user entered search terms
     // axios.get()
+    this.setState({searchTerm: this.props.params.search});
   }
 
 
   render() {
     return (
-      <div>SearchResultsMain</div>
+      <Grid className='SearchResultsMain'> 
+        <Row> 
+          <h1> Search Results for: {this.state.searchTerm} </h1>
+        </Row>
+      </Grid>
     );
   }
 }
+
+export default SearchResultsMain;
