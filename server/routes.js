@@ -4,8 +4,15 @@ let branches = require(`${__dirname}/controllers/branchesController.js`);
 let versions = require(`${__dirname}/controllers/versionsController.js`);
 let pullRequests = require(`${__dirname}/controllers/pullRequestController.js`);
 let search = require(`${__dirname}/controllers/searchController.js`);
+let issues = require(`${__dirname}/controllers/issuesController.js`);
 
 module.exports = function(app, express) {
+  /*** Issues ***/
+  app.get('/:username/:recipe/get-issues', issues.getIssues);
+  app.post('/:username/:recipe/create-issue', issues.createIssue);
+  app.post('/:username/:issue/create-comment', issues.createComment);
+  app.put('/:username/:recipe/update-status', issues.updateStatus);
+
   /*** Search ***/
   app.get('/explore', search.explore);
   app.get('/search/:string', search.search);
