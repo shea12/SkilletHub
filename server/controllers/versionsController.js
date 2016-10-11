@@ -35,6 +35,19 @@ module.exports = {
       let branch = recipe.branches[branchLocation];
       branch.mostRecentVersionId = newVersion._id;
 
+      helpers.createBatchNotification({
+        recipes: {
+          $elemMatch: {
+            username: req.params.username,
+            recipeId: recipe.rootRecipeId
+          }
+        }
+      },{
+        username: req.params.username,
+        recipeId: branch.mostRecentVersionId,
+        text: `A new version was released for ${recipe.name}.`
+      });
+
       return UserRecipe.update({
         username: userRecipe.username
       }, userRecipe);
