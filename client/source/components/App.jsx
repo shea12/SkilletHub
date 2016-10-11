@@ -37,22 +37,28 @@ class App extends React.Component {
   	}; 
   }
 
-  handleSignUp(user){
+  handleSignUp(user) {
     // console.log('Attempting sign up!'); 
     // console.log('User info: ', user.username); 
     this.signUpUser(user).bind(this); 
   }
 
-  handleLoginUser(user){
+  handleLoginUser(user) {
     // console.log('In App.jsx, attempting login!'); 
     // console.log('User info: ', user.username); 
     this.loginUser(user); 
   }
 
-  handleLogOutUser(user){
+  handleLogOutUser(user) {
     // console.log('In App.jsx, attempting logout!'); 
     // console.log('User info: ', user.username); 
     this.logOutUser(user); 
+  }
+
+  handleRecipeSearch(searchTerms) {
+    console.log('In App handleRecipeSearch, routing to /Search with: ', searchTerms);
+    searchTerms = searchTerms.toString();
+    browserHistory.push(`/Search/${searchTerms}`);
   }
   
   handleUserClick(event) {
@@ -453,7 +459,8 @@ class App extends React.Component {
           username={this.state.username} 
           handleLogOutUser={this.handleLogOutUser.bind(this)} 
           handleLoginUser={this.handleLoginUser.bind(this)} 
-          handleNavigation={this.handleNavigation.bind(this)} />
+          handleNavigation={this.handleNavigation.bind(this)} 
+          handleRecipeSearch={this.handleRecipeSearch.bind(this)} />
     		{ children }
     	</div>
     ); 
