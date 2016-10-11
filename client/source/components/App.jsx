@@ -33,7 +33,8 @@ class App extends React.Component {
       password: 'password',
       currentProfile: null,
       loggedInUserProfile: true,
-      pullRequestObject: {} 
+      pullRequestObject: {},
+      issueObject: {} 
   	}; 
   }
 
@@ -242,6 +243,86 @@ class App extends React.Component {
     }); 
   }
 
+  handleViewIssuesClick(usernameParameter, recipeParameter) {
+    browserHistory.push(`/Issues/List/${usernameParameter}/${recipeParameter}`); 
+  }
+
+  handleViewSingleIssueClick(issueObject) {
+    this.setState({
+      issueObject: issueObject
+    }); 
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    browserHistory.push(`/Issues/Manage/${usernameParameter}/${recipeParameter}`); 
+  }
+
+  handleNewIssueClick(recipeObject) {
+    var usernameParameter = recipeObject.usernameParameter; 
+    var recipeParameter = recipeObject.recipeParameter; 
+    browserHistory.push(`/Issues/${usernameParameter}/${recipeParameter}`); 
+  }
+
+  handleNewIssueSubmit(issueObject) {
+    var usernameParameter = issueObject.usernameParameter; 
+    var recipeParameter = issueObject.recipeParameter; 
+    var username = this.state.username; 
+    var type = issueObject.type || null; 
+    var position = issueObject.position || null; 
+    axios.post(`/${usernameParameter}/${recipeParameter}/create-issue`, {
+      username: username,
+      title: issueObject.title, 
+      data: issueObject.data, 
+      type: type, 
+      position: position
+    })
+    .then((result) => {
+      console.log('Created new issue'); 
+      console.log(result); 
+      browserHistory.push(`/User/${username}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleIssueResponseSubmit(issueResponseObject) {
+    var usernameParameter = this.props.params.username; 
+    var recipeParameter = this.props.params.recipe; 
+    var issueParameter = this.state.issueObject._id; 
+
+    if (issueResponseObject.type === 'comment') {
+      axios.post(`/${usernameParameter}/${issueParameter}/create-comment`, {
+        data: issueResponseObject.data
+      })
+      .then((result) => {
+        console.log('Responded to issue'); 
+        console.log(result); 
+        this.setState({
+          issueObject: {}
+        }); 
+        browserHistory.push(`/Issues/${usernameParameter}/${recipeParameter}`); 
+      })
+      .catch((error) => {
+        console.log(error); 
+      }); 
+    } else {
+      axios.put(`/${usernameParameter}/${recipeParameter}/update-status`, {
+        status: issueResponseObject.type
+      })
+      .then((result) => {
+        console.log('Responded to issue'); 
+        console.log(result); 
+        this.setState({
+          issueObject: {}
+        }); 
+        browserHistory.push(`/Issues/${usernameParameter}/${recipeParameter}`); 
+      })
+      .catch((error) => {
+        console.log(error); 
+      }); 
+    }
+  }
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
@@ -438,6 +519,7 @@ class App extends React.Component {
       username: this.state.username, 
       loggedInUserProfile: this.state.loggedInUserProfile, 
       pullRequestObject: this.state.pullRequestObject, 
+      issueObject: this.state.issueObject, 
       handleSignUp: this.handleSignUp.bind(this),
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
@@ -450,7 +532,12 @@ class App extends React.Component {
       handlePullRequestClick: this.handlePullRequestClick.bind(this),
       handlePullRequestResponse: this.handlePullRequestResponse.bind(this), 
       handlePullRequestEdit: this.handlePullRequestEdit.bind(this),
-      handlePullRequestEditSubmit: this.handlePullRequestEditSubmit.bind(this)
+      handlePullRequestEditSubmit: this.handlePullRequestEditSubmit.bind(this),
+      handleNewIssueClick: this.handleNewIssueClick.bind(this),
+      handleNewIssueSubmit: this.handleNewIssueSubmit.bind(this),
+      handleViewIssuesClick: this.handleViewIssuesClick.bind(this),
+      handleViewSingleIssueClick: this.handleViewSingleIssueClick.bind(this),
+      handleIssueResponseSubmit: this.handleIssueResponseSubmit.bind(this)
 	  })
 	}.bind(this))
     return (
