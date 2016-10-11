@@ -105,6 +105,7 @@ class App extends React.Component {
     var branchParameter = event.target.dataset.branch;
     var versionParameter = event.target.dataset.version; 
     var loggedInUser = this.state.username; 
+    console.log(loggedInUser); 
     // console.log('FORK USER: ', forkUser); 
     axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/fork`, {
       username: loggedInUser

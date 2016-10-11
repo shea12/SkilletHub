@@ -15,6 +15,7 @@ import EditRecipeVersionMain from './components/EditRecipe/EditRecipeVersionMain
 import PullRequest from './components/PullRequest/PullRequestMain';
 import ManagePullRequest from './components/PullRequest/ManagePullRequest';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
+import ExploreMain from './components/Explore/ExploreMain'; 
 
 
 //TODO: Enter authentication 
@@ -36,6 +37,7 @@ render((
 	  	<Route path="/EditPull/:targetUser/:pullId/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
 	  	<Route path="/Manage/:username/:pullId" component={ManagePullRequest} />
 	  	<Route path="/Manage/:username/:recipe/:branch/:version/:pullUser/:pullRecipe" component={ManagePullRequest} />
+	  	<Route path="/Explore" component={ExploreMain} />
 	  </Route>
 	</Router>
 ), document.getElementById('app'));

@@ -82,11 +82,10 @@ class NavigationBar extends React.Component {
           <Navbar.Collapse>
             <Nav onClick={this.props.handleNavigation.bind(this)}>
               <NavItem title={'/User'}> Profile </NavItem>
-              <NavItem title={'/Recipe'}> Recipe </NavItem>
+              <NavItem title={'/Explore'}> Explore </NavItem>
               <NavItem title={'/Create'}> Create Recipe </NavItem>
-              <NavItem title={'/Edit'}> Edit Recipe </NavItem>
-              <NavItem title={'/Pull'}> Pull Request </NavItem>
-
+              <NavItem title={'/Edit'} disabled> Edit Recipe </NavItem>
+              <NavItem title={'/Pull'} disabled> Pull Request </NavItem>
             </Nav>
             <Nav pullRight>
               <Navbar.Form>
