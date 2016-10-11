@@ -20,8 +20,7 @@ class CookMeMain extends Component {
           value: ''
         }
       },
-      stepsArray: [],
-      username: ''
+      stepsArray: []
     };
   }
 
@@ -31,6 +30,7 @@ class CookMeMain extends Component {
     axios.get(`/${this.props.params.username}/${this.props.params.recipe}`)
     .then((result)=> {
       var recipe = result.data; 
+      console.log("recipe: ", recipe);
 
       var stepsArray = [];
       for (var i = 0; i < recipe.steps.length; i++) {
@@ -48,8 +48,7 @@ class CookMeMain extends Component {
 
       this.setState({
         recipe: recipe,
-        stepsArray: stepsArray,
-        username: this.props.params.username
+        stepsArray: stepsArray
       }); 
     })
     .catch((error) => {
@@ -63,7 +62,7 @@ class CookMeMain extends Component {
 
         <div className='jumbotron' style={{'backgroundImage': 'url("http://ce.unm.edu/assets/imgs/enrich/cooking-header")', borderRadius: '0'}}>
           <div className='container-fluid'>
-            <h1 style={{textAlign: 'center', color: 'white'}}>{this.state.username}, let's cook {this.state.recipe.name.value}!</h1>
+            <h1 style={{textAlign: 'center', color: 'white'}}>Let's cook {this.state.recipe.name.value}!</h1>
           </div>
         </div>
 
