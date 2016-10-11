@@ -20,7 +20,7 @@ module.exports = {
     }).catch(error => {
       console.log('error: ', error);
       res.status(500).send();
-    })
+    });
   },
 
   // description: Follows a user
@@ -35,9 +35,14 @@ module.exports = {
     let findUser = User.findOne({
       username: req.params.user
     });
+    let notifyUser = helpers.createNotification({
+      notificationOwner: req.params.user,
+      username: req.params.user,
+      text: `${req.params.username} started following you.`
+    });
 
-    return Promise.all([findFollow, findUser])
-    .spread((follow, user) => {
+    return Promise.all([findFollow, findUser, notifyUser])
+    .spread((follow, user, notification) => {
       let followers = user.followers;
       followers++;
       let updateFollowers = User.update({
@@ -86,12 +91,22 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   followRecipe: (req, res) => {
-    let findFollow = Follow.findOne({
-      username: req.params.username
-    });
+    return Recipe.findOne({
+      _id: req.params.recipe,
+      username: req.params.user
+    }).then(recipe => {
+      let findFollow = Follow.findOne({
+        username: req.params.username
+      });
+      let notifyUser = helpers.createNotification({
+        notificationOwner: req.params.user,
+        username: req.params.username,
+        recipeId: req.params.recipe,
+        text: `${req.params.username} followed your recipe ${recipe.name.value}.`
+      });
 
-    Promise.all([findFollow, helpers.updateRecipeFollowers(req.params.user, req.params.recipe, 1)])
-    .spread((follow, followerCountUpdate) => {
+      return Promise.all([findFollow, helpers.updateRecipeFollowers(req.params.user, req.params.recipe, 1)], notifyUser);
+    }).spread((follow, followerCountUpdate, notification) => {
       
       if (!follow) {
         return new Follow({
