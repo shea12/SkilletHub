@@ -9,7 +9,8 @@ class NavigationBar extends React.Component {
     super(props);
     this.state = {
       username: '', 
-      password: ''
+      password: '',
+      search: ''
     }; 
   }
 
@@ -31,19 +32,26 @@ class NavigationBar extends React.Component {
     this.setState({password: null});
   }
 
+  handleSearch (event) {
+    event.preventDefault();
+    console.log('Search clicked in nav');
+    this.props.handleRecipeSearch(this.state.search);
+  }
+
   handleChange (event) {
     var inputType = event.target.id; 
     if (inputType === 'username') {
       this.setState({username: event.target.value}); 
     } else if (inputType === 'password') {
       this.setState({password: event.target.value}); 
+    } else if (inputType === 'search') {
+      this.setState({search: event.target.value});
     }
   } 
 
   handleLogout(event){
     event.preventDefault();
     console.log('Attempting to logout!'); 
-    //11:45
     var user = this.state;
     this.props.handleLogOutUser(user);
   }
@@ -85,8 +93,8 @@ class NavigationBar extends React.Component {
 
             <Nav pullLeft>
               <Navbar.Form>
-                <FormControl type='text' placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
-                <Button type="submit" style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
+                <FormControl type='text' id='search' onChange={this.handleChange.bind(this)} placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
+                <Button type="submit" onSubmit={this.handleSearch.bind(this)} onClick={this.handleSearch.bind(this)} style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
               </Navbar.Form>
             </Nav>
 

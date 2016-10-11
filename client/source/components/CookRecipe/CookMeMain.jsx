@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 
+//Stylesheet
+// import '../../../deploy/styles.css'
+
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
@@ -66,7 +69,7 @@ class CookMeMain extends Component {
 
         <div className="row" style={{margin: '0 auto', width: '980px'}} >
           {this.state.stepsArray.map((step, index) => (
-            <div className="col-md-12" style={{backgroundColor: 'green', padding: '10px', marginBottom: '40px', borderRadius: '6px', height: '240px', width: '940px'}}>
+            <div className="col-md-12" style={{padding: '10px', marginBottom: '40px', borderRadius: '6px', height: '240px', width: '940px'}}>
               
               <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '140px'}}>
                 <div className="col-md-1" style={{borderRadius: '6px', height: '60px', fontSize: '40px', marginTop: '10px', textAlign: 'center'}}>
