@@ -35,6 +35,19 @@ module.exports = {
       let branch = recipe.branches[branchLocation];
       branch.mostRecentVersionId = newVersion._id;
 
+      helpers.createBatchNotification({
+        recipes: {
+          $elemMatch: {
+            username: req.params.username,
+            recipeId: recipe.rootRecipeId
+          }
+        }
+      },{
+        username: req.params.username,
+        recipeId: branch.mostRecentVersionId,
+        text: `A new version was released for ${recipe.name}.`
+      });
+
       return UserRecipe.update({
         username: userRecipe.username
       }, userRecipe);
@@ -125,6 +138,13 @@ module.exports = {
 
     return Promise.all([retrieve, updateForkCount])
     .spread((version, updated) => {
+      helpers.createNotification({
+        notificationOwner: req.params.username,
+        username: req.body.username,
+        recipeId: version._id,
+        text: `${req.body.username} forked your recipe ${version.name.value}`
+      });
+
       let forkedProps = {
         username: req.body.username,
         branch: 'master',

@@ -15,7 +15,8 @@ module.exports = {
       lastname: req.body.lastname,
       email: req.body.email,
       createdAt: req.body.createdAt,
-      token: req.body.token
+      token: req.body.token,
+      followers: 0
     }).save().then(function(result) {
       console.log('Saved user in db, result: ', result);
       res.status(200).send(result);

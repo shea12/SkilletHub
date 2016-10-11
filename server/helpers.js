@@ -4,6 +4,8 @@ let db = require(`${__dirname}/schemas.js`);
 let Recipe = db.Recipe;
 let UserRecipe = db.UserRecipe;
 let Dependency = db.Dependency;
+let Notification = db.Notification;
+let Follow = db.Follow;
 
 const fields = [
   '_id',
@@ -36,7 +38,8 @@ module.exports = {
         deleted: false,
         branch: 'master',
         username: username,
-        forkCount: 0
+        forkCount: 0,
+        followers: 0
       };
     //New branch or version
     } else {
@@ -55,6 +58,8 @@ module.exports = {
 
     if (prev !== 'new' && username !== prev.username) {
       newVersion.forkedFrom = prev.username;
+      newVersion.forkCount = 0;
+      newVersion.followers = 0;
     }
     changes.username = username;
     //build new version object
@@ -198,6 +203,41 @@ module.exports = {
         }, result);
       }
 
+    });
+  },
+
+  // description: update the amount of followers a recipe contains
+  updateRecipeFollowers: (username, recipeId, change) => {
+    return Recipe.findOne({
+      username: username,
+      _id: recipeId
+    }).then(recipe => {
+      let followers = recipe.followers;
+      if (!(change < 0 && followers < 1)) {
+        followers += change;
+      }
+      return Recipe.update({
+        username: username,
+        _id: recipeId
+      }, {
+        followers: followers
+      });
+    });
+  },
+
+  // description: creates a notification
+  createNotification: notification => {
+    return new Notification(notification).save();
+  },
+
+  // description: finds all followers, then creates a notification for each one
+  createBatchNotification: (search, notification) => {
+    return Follow.find(search).then(follows => {
+      let notifications = follows.map(follow => {
+        notification.notificationOwner = follow.username;
+        module.exports.createNotification(notification);
+      });
+      return Promise.all(notifications);
     });
   }
 };
