@@ -20,7 +20,8 @@ const fields = [
   'picture',                
   'ingredients',
   'steps',
-  'forkedFrom'
+  'forkedFrom',
+  'tags'
 ];
 
 module.exports = {
