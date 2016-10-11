@@ -7,7 +7,6 @@ import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 import App from './components/App';
 import LandingPage from './components/LandingPage';
 import User from './components/User/UserPage';
-import AltUser from './components/User/AltUserPage';
 import RecipeMain from './components/Recipe/RecipeMain'; 
 import CreateRecipeMain from './components/CreateRecipe/CreateRecipeMain'; 
 import EditRecipeMain from './components/EditRecipe/EditRecipeMain';
