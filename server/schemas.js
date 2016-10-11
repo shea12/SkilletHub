@@ -11,6 +11,7 @@ let recipeSchema = new Schema({
   username: String,                         //Creator of recipe
   forkedFrom: String,                       //Creator of recipe forked from
   forkCount: Number,
+  followers: Number,
   name: {                                   //Recipe Title / Name
     changed: Boolean,
     value: String
@@ -129,7 +130,8 @@ let userSchema = new Schema({
   },                    
   bio: String,                          // Optional: user can edit profile page
   picture: String,                      // Optional: url of hosted picture
-  token: String                         // Session token from AWS Cognito
+  token: String,                         // Session token from AWS Cognito
+  followers: Number
 }); 
 
 let pullRequestSchema = new Schema({
@@ -146,6 +148,22 @@ let pullRequestSchema = new Schema({
   resolvedAt: Date
 });
 
+let followSchema = new Schema({
+  username: String,
+  users: [Schema.Types.ObjectId],
+  recipes: [Schema.Types.ObjectId]
+});
+
+let notificationSchema = new Schema({
+  username: String,
+  category: String,
+  categoryId: String,
+  data: {
+    text: String,
+    versionId: Schema.Types.ObjectId
+  }
+});
+
 module.exports = {
   Recipe: mongoose.model('Recipe', recipeSchema),
   UserRecipe: mongoose.model('UserRecipe', userRecipeSchema),
@@ -154,5 +172,7 @@ module.exports = {
   Issue: mongoose.model('Issue', issueSchema),
   Comment: mongoose.model('Comment', commentSchema),
   User: mongoose.model('User', userSchema),
-  PullRequest: mongoose.model('PullRequest', pullRequestSchema)
+  PullRequest: mongoose.model('PullRequest', pullRequestSchema),
+  Follow: mongoose.model('Follow', followSchema),
+  Notification: mongoose.model('Notification', notificationSchema)
 };

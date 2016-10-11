@@ -1,7 +1,8 @@
 let helpers = require(`${__dirname}/../helpers.js`);
 let db = require(`${__dirname}/../schemas.js`);
-let UserRecipe = db.UserRecipe;
 let Recipe = db.Recipe;
+let Follow = db.Follow;
+let Notification = db.Notification;
 let _ = require('underscore');
 let Promise = require('bluebird')
 
