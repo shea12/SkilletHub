@@ -151,7 +151,10 @@ let pullRequestSchema = new Schema({
 let followSchema = new Schema({
   username: String,
   users: [String],
-  recipes: [Schema.Types.ObjectId]
+  recipes: [{
+    username: String,
+    recipeId: Schema.Types.ObjectId
+  }]
 });
 
 let notificationSchema = new Schema({
