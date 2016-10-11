@@ -26,12 +26,13 @@ module.exports = {
       issueCreator: req.body.username,
       type: req.body.type,
       position: req.body.position,
-      status: 'open'
+      status: 'open',
+      numOfComments: 1
     }).save().then(issue => {
       return new Comment({
         username: req.body.username,
         issue: issue._id,
-        position: 1,
+        commentNumber: 1,
         data: req.body.data,
       }).save();
     }).then(() => {
@@ -76,23 +77,27 @@ module.exports = {
       rootVersion: req.params.recipe
     }).then(issues => {
       results = issues;
+      results = results.map(result => {
+        return result.toObject();
+      });
+
       let comments = issues.map(issue => {
         return Comment.find({
           issue: issue._id
         }).sort({
-          position: 'asc'
+          commentNumber: 'asc'
         });
       });
 
       return Promise.all(comments);
     }).spread((...comments) => {
       comments.forEach(commentGroup => {
-        _.find(results, result => {
-          return result._id === commentGroup[0].issue;
-        }).comments = commentGroup;
+        let index = _.findIndex(results, result => {
+          return result._id.equals(commentGroup[0].issue);
+        });
+        results[index].comments = commentGroup;
       });
 
-      console.log('results: ', results);
       res.status(200).send(results);
     }).catch(error => {
       console.log('ERROR: ', error);
@@ -112,13 +117,21 @@ module.exports = {
     return Issue.findOne({
       _id: req.params.issue
     }).then(issue => {
-      return new Comment({
+      let addComment = new Comment({
         username: req.params.username,
         issue: req.params.issue,
-        position: issue.position + 1,
+        commentNumber: issue.numOfComments + 1,
         data: req.body.data,
       }).save();
-    }).then(() => {
+
+      let updateCommentCount = Issue.update({
+        _id: req.params.issue
+      }, {
+        numOfComments: issue.numOfComments + 1
+      });
+
+      return Promise.all([addComment, updateCommentCount]);
+    }).spread(() => {
       res.status(201).send();
     }).catch(error => {
       console.log('ERROR: ', error);
