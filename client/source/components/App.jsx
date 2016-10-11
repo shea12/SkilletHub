@@ -103,8 +103,23 @@ class App extends React.Component {
     browserHistory.push(`/Edit/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
   }
 
+  handleRecipeCookClick(event) {
+    // event.preventDefault();
+    if (typeof event.preventDefault === 'function') {
+      var usernameParameter = event.target.dataset.username; 
+      var recipeParameter = event.target.dataset.version;
+    } else {
+      var usernameParameter = event.username; 
+      var recipeParameter = event.version;
+    }
+    var route = '/CookMe/'+usernameParameter+'/'+recipeParameter;
+    console.log('NAVIGATING TO:', route); 
+    browserHistory.push(`${route}`); 
+  }
+
   handleRecipeForkClick(event) {
     event.preventDefault(); 
+    console.log('handleRecipeForkClick event: ', event);
     // console.log('CLICKED FORK IN APP!'); 
     // console.log(event.target.dataset); 
     var usernameParameter = event.target.dataset.username; 
@@ -524,6 +539,7 @@ class App extends React.Component {
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
       handleRecipeEditClick: this.handleRecipeEditClick.bind(this),
+      handleRecipeCookClick: this.handleRecipeCookClick.bind(this),
       handleRecipeForkClick: this.handleRecipeForkClick.bind(this),
       handleRecipeVersionFork: this.handleRecipeVersionFork.bind(this),
       handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this),

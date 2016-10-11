@@ -194,9 +194,15 @@ class RecipeMain extends Component {
 
     if (buttonType === 'cook') {
       console.log('Cooking recipe'); 
-      var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
-      console.log('NAVIGATING TO:', route); 
-      browserHistory.push(`${route}`); 
+      // var route = '/CookMe/'+this.state.username+'/'+this.props.params.recipe;
+      // console.log('NAVIGATING TO:', route); 
+      // browserHistory.push(`${route}`);
+      var recipeObject = {};
+      recipeObject.username = this.props.params.username;
+      recipeObject.recipe = this.props.params.recipe;
+      recipeObject.branch = this.state.selectedBranch; 
+      recipeObject.version = this.state.selectedVersion; 
+      this.props.handleRecipeCookClick(recipeObject);
     }
 
     if (buttonType === 'edit') {
