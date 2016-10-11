@@ -106,7 +106,26 @@ module.exports = {
   //   user: username of the person being followed
   // }
   unfollowUser: (req, res) => {
+    Follow.findOne({
+      username: req.params.username
+    }).then(follow => {
+      let userIndex = _.findIndex(follow.users, user => {
+        return user === req.params.user;
+      });
+      let users = follow.users;
+      users.splice(userIndex, 1);
 
+      return Follow.update({
+        username: req.params.username
+      }, {
+        users: users
+      });
+    }).then(() => {
+      res.status(200).send();
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send();
+    });
   },
 
   // description: Unfollows a Recipe
@@ -116,7 +135,26 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   unfollowRecipe: (req, res) => {
+    Follow.findOne({
+      username: req.params.username
+    }).then(follow => {
+      let recipeIndex = _.findIndex(follow.recipes, recipe => {
+        return recipe.username === req.params.user && recipe.recipeId.equals(req.params.recipe);
+      });
+      let recipes = follow.recipes;
+      recipes.splice(recipeIndex, 1);
 
+      return Follow.update({
+        username: req.params.username
+      }, {
+        recipes: recipes
+      });
+    }).then(() => {
+      res.status(200).send();
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send();
+    });
   }
 
 
