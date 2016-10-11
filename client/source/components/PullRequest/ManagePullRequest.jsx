@@ -3,7 +3,7 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import RecipeIngredients from '../Recipe/RecipeIngredients'; 
 import IngredientsTable from './IngredientsTable'; 
 import StepsTable from './StepsTable'; 
-import PullRequestControl from './PullRequestControl'; 
+import PullRequestControl from './ManagePullRequestControl'; 
 
 //Bootstrap 
 import { Grid, Row, Col, Table, Button } from 'react-bootstrap';
@@ -24,6 +24,8 @@ class PullRequestMain extends Component {
     this.state = {
       pullRecipe: placeholders.recipeTemplate,
       sourceRecipe: placeholders.recipeTemplate,
+      pullRequestUsernameParameter: '', 
+      pullRequestIdParameter: '', 
       pullUser: {},
       sourceUser: {}, 
       allIngredients: [], 
@@ -40,30 +42,38 @@ class PullRequestMain extends Component {
     console.log('Pull request page is mounting!');
 
     // Route for the recipe that is being submitted as pull request
-    var usernameParameter = this.props.params.username; 
-    var recipeParameter = this.props.params.recipe; 
-    var branchParameter = this.props.params.branch;
-    var versionParameter = this.props.params.version;
-    var pullRecipeRoute = `/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`; 
+    var pullRequestObject = this.props.pullRequestObject; 
+    var usernameParameter = pullRequestObject.targetUser; 
+    var recipeParameter = pullRequestObject.targetRootVersion; 
+    var branchParameter = pullRequestObject.targetBranch;
+    var versionParameter = pullRequestObject.targetVersion;
+    var sourceRecipeRoute = `/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`; 
 
     // Route for the recipe that the pull request is being submitted to
-    var sourceUsernameParameter = this.props.params.sourceUser; 
-    var sourceRecipeParameter = this.props.params.sourceRecipe; 
-    var sourceRecipeRoute = `/${sourceUsernameParameter}/${sourceRecipeParameter}`; 
+    var pullUsernameParameter = pullRequestObject.sendingUser; 
+    var pullRecipeParameter = pullRequestObject.sentRootVersion; 
+    var pullBranchParameter = pullRequestObject.sentBranch; 
+    var pullVersionParameter = pullRequestObject.sentVersion; 
+    var pullRecipeRoute = `/${pullUsernameParameter}/${pullRecipeParameter}/${pullBranchParameter}/${pullVersionParameter}`; 
 
-    axios.all([this.getRecipe(pullRecipeRoute), this.getRecipe(sourceRecipeRoute)])
-    .then(axios.spread((pull, source) => {
+    axios.all([this.getRecipe(sourceRecipeRoute), this.getRecipe(pullRecipeRoute)])
+    .then(axios.spread((source, pull) => {
 
-      var pullRecipe = pull.data;
       var sourceRecipe = source.data; 
-      var comparisonIngredients = this.markupIngredients(pullRecipe.ingredients, sourceRecipe.ingredients); 
-      var comparisonSteps = this.markupStepsSimple(pullRecipe.steps, sourceRecipe.steps); 
+      var pullRecipe = pull.data;
+      var comparisonIngredients = this.markupIngredients(sourceRecipe.ingredients, pullRecipe.ingredients); 
+      var comparisonSteps = this.markupStepsSimple(sourceRecipe.steps, pullRecipe.steps); 
+
+      console.log('SOURCE RECIPE'); 
+      console.log(sourceRecipe); 
+      console.log('PULL RECIPE'); 
+      console.log(pullRecipe); 
 
       this.setState({
-        pullRecipe: pullRecipe,
         sourceRecipe: sourceRecipe,
-        pullRecipeUser: usernameParameter,
-        sourceRecipeUser: sourceUsernameParameter,
+        pullRecipe: pullRecipe,
+        sourceRecipeUser: usernameParameter,
+        pullRecipeUser: pullUsernameParameter,
         comparisonIngredients: comparisonIngredients,
         comparisonSteps: comparisonSteps
       }); 
@@ -75,8 +85,7 @@ class PullRequestMain extends Component {
     return axios.get(route); 
   }
 
-  markupIngredients(pullIngredients, sourceIngredients) {
-
+  markupIngredients(sourceIngredients, pullIngredients) {
     var comparisonIngredients = []; 
     var addedIngredients = []; 
 
@@ -110,8 +119,7 @@ class PullRequestMain extends Component {
 
   }
 
-  markupStepsSimple(pullSteps, sourceSteps) {
-
+  markupStepsSimple(sourceSteps, pullSteps) {
     var comparisonSteps = []; 
     var addedSteps = []; 
     var index = 0; 
@@ -131,6 +139,7 @@ class PullRequestMain extends Component {
       index = i; 
     });
 
+    // Handles highlighting the added steps
     pullSteps.forEach((step, i) => {
       if (i > index) {
         step.added = true; 
@@ -141,26 +150,20 @@ class PullRequestMain extends Component {
     return comparisonSteps.concat(addedSteps); 
   }
 
-  createPullRequest(event) {
-    event.preventDefault(); 
-    var pullRequestObject = {};
-    pullRequestObject.targetUsername = this.state.sourceRecipeUser; 
-    pullRequestObject.sourceVersionId = this.state.pullRecipe._id; 
-    pullRequestObject.targetVersionId = this.state.sourceRecipe._id; 
-    this.props.handleCreatePullRequest(pullRequestObject); 
-  }
-
   render() {
     return (
       <Grid >
         <PullRequestControl
-          username={this.state.pullRecipe.username}
-          recipename={this.state.pullRecipe.name.value}
+          pullRequestObject={this.state.pullRequestObject}
+          recipename={this.state.sourceRecipe.name.value}
+          pullRequestUsernameParameter={this.state.pullRequestUsernameParameter}
+          pullRequestIdParameter={this.state.pullRequestIdParameter}
           pullBranch={this.state.pullRecipe.branch}
           pullVersion={this.state.pullRecipe._id}
           sourceBranch={this.state.sourceRecipe.branch}
           sourceVersion={this.state.sourceRecipe._id}
-          createPullRequest={this.createPullRequest.bind(this)}
+          handlePullRequestResponse={this.props.handlePullRequestResponse}
+          handlePullRequestEdit={this.props.handlePullRequestEdit}
         />
         <Row>
         <Row style={{margin: 10}}> 
@@ -169,21 +172,21 @@ class PullRequestMain extends Component {
         </Row> 
           <Col xs={6} md={6}>
             <h4> Your Recipe Ingredients</h4> 
-            <IngredientsTable ingredientList={this.state.comparisonIngredients}/>
+            <RecipeIngredients ingredientList={this.state.sourceRecipe.ingredients}/>
           </Col>
           <Col xs={6} md={6}>
-            <h4> Source Recipe Ingredients</h4> 
-            <RecipeIngredients ingredientList={this.state.sourceRecipe.ingredients}/>
+            <h4> Pull Request Recipe Ingredients</h4> 
+            <IngredientsTable ingredientList={this.state.comparisonIngredients}/>
           </Col> 
         </Row> 
         <Row>
           <Col xs={6} md={6}>
             <h4> Your Recipe Steps</h4> 
-            <StepsTable steps={this.state.comparisonSteps}/>
+            <StepsTable steps={this.state.sourceRecipe.steps}/>
           </Col>
           <Col xs={6} md={6}>
-            <h4> Source Recipe Steps</h4> 
-            <StepsTable steps={this.state.sourceRecipe.steps}/>
+            <h4> Pull Request Recipe Steps</h4> 
+            <StepsTable steps={this.state.comparisonSteps}/>
           </Col> 
         </Row> 
       </Grid> 

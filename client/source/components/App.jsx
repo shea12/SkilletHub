@@ -29,10 +29,11 @@ class App extends React.Component {
     this.state = {
       userID: null,
       token: null,
-      username: null, 
-      password: null,
+      username: 'Gordon_Ramsay', 
+      password: 'password',
       currentProfile: null,
-      loggedInUserProfile: true 
+      loggedInUserProfile: true,
+      pullRequestObject: {} 
   	}; 
   }
 
@@ -128,6 +129,106 @@ class App extends React.Component {
     })
     .then((result) => {
       browserHistory.push(`/User/${loggedInUser}`);
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handleRecipeVersionPull(recipeObject) {
+    var usernameParameter = recipeObject.username; 
+    var recipeParameter = recipeObject.recipe;
+    var branchParameter = recipeObject.branch;
+    var versionParameter = recipeObject.version; 
+    var sourceUserParameter = recipeObject.sourceUser;
+    var sourceRecipeParameter = recipeObject.sourceRecipe;  
+    browserHistory.push(`/Pull/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${sourceUserParameter}/${sourceRecipeParameter}`);
+  }
+
+  handleCreatePullRequest(pullRequestObject) {
+    var usernameParameter = this.state.username; 
+    axios.post(`/${usernameParameter}/create-pull`, {
+      targetUsername: pullRequestObject.targetUsername,
+      sourceVersionId: pullRequestObject.sourceVersionId,
+      targetVersionId: pullRequestObject.targetVersionId
+    })
+    .then((result) => {
+      console.log('SUCCESSFUL PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`);
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handlePullRequestClick(event){
+    event.preventDefault(); 
+    var pullRequestObject = JSON.parse(event.target.dataset.pullrequest);
+    var usernameParameter = pullRequestObject.targetUser; 
+    var pullIdParameter = pullRequestObject._id; 
+    console.log(pullRequestObject);  
+    
+    this.setState({
+      pullRequestObject: pullRequestObject
+    }); 
+    // browserHistory.push(`/Manage/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}/${pullUserParameter}/${pullRecipeParameter}`);
+    browserHistory.push(`/Manage/${usernameParameter}/${pullIdParameter}`);
+  }
+
+  handlePullRequestResponse(event) {
+    event.preventDefault(); 
+    var response = event.target.id; 
+    if (response === 'approve') {
+      var status = 'merged'; 
+    } else if (response === 'deny') {
+      var status = 'closed'; 
+    }
+    var pullRequestObject = this.state.pullRequestObject; 
+    console.log(pullRequestObject); 
+    var usernameParameter = pullRequestObject.targetUser; 
+    var pullIdParameter = pullRequestObject._id; 
+    axios.put(`/${usernameParameter}/${pullIdParameter}/update-pull`, {
+      status: status
+    })
+    .then((result) => {
+      console.log('SUCCESSFULLY RESOLVED PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+  handlePullRequestEdit(event) {
+    event.preventDefault(); 
+    console.log('pull request edit'); 
+    var pullRequestObject = this.state.pullRequestObject; 
+    var usernameParameter = pullRequestObject.sendingUser; 
+    var recipeParameter = pullRequestObject.sentRootVersion;
+    var branchParameter = pullRequestObject.sentBranch;
+    var versionParameter = pullRequestObject.sentVersion; 
+    var pullIdParameter = pullRequestObject._id; 
+    var targetUserParameter = pullRequestObject.targetUser; 
+
+    browserHistory.push(`/EditPull/${targetUserParameter}/${pullIdParameter}/${usernameParameter}/${recipeParameter}/${branchParameter}/${versionParameter}`);
+  }
+
+  handlePullRequestEditSubmit(editPullRequestObject) {
+    var status = 'merged'; 
+    var changes = editPullRequestObject; 
+    console.log(this.props.params);
+    var usernameParameter = this.props.params.targetUser; 
+    var pullIdParameter = this.props.params.pullId; 
+    axios.put(`/${usernameParameter}/${pullIdParameter}/update-pull`, {
+      status: status,
+      changes: changes
+    })
+    .then((result) => {
+      console.log('SUCCESSFULLY RESOLVED PULL REQUEST'); 
+      console.log(result); 
+      browserHistory.push(`/User/${usernameParameter}`); 
     })
     .catch((error) => {
       console.log(error); 
@@ -329,13 +430,20 @@ class App extends React.Component {
       userID: this.state.userID,
       username: this.state.username, 
       loggedInUserProfile: this.state.loggedInUserProfile, 
+      pullRequestObject: this.state.pullRequestObject, 
       handleSignUp: this.handleSignUp.bind(this),
       handleUserClick: this.handleUserClick.bind(this),
       handleRecipeViewClick: this.handleRecipeViewClick.bind(this), 
       handleRecipeEditClick: this.handleRecipeEditClick.bind(this),
       handleRecipeForkClick: this.handleRecipeForkClick.bind(this),
       handleRecipeVersionFork: this.handleRecipeVersionFork.bind(this),
-      handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this)
+      handleRecipeVersionEdit: this.handleRecipeVersionEdit.bind(this),
+      handleRecipeVersionPull: this.handleRecipeVersionPull.bind(this),
+      handleCreatePullRequest: this.handleCreatePullRequest.bind(this),
+      handlePullRequestClick: this.handlePullRequestClick.bind(this),
+      handlePullRequestResponse: this.handlePullRequestResponse.bind(this), 
+      handlePullRequestEdit: this.handlePullRequestEdit.bind(this),
+      handlePullRequestEditSubmit: this.handlePullRequestEditSubmit.bind(this)
 	  })
 	}.bind(this))
     return (

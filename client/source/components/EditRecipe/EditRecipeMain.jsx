@@ -34,7 +34,6 @@ class EditRecipeMain extends Component {
       deletedIngredients: [],
       steps: [],
       editRecipe: {},
-      // displayOutput: false,
       invalidSteps: [],
       showModal: false,
       originalRecipeObject: {}
@@ -189,12 +188,11 @@ class EditRecipeMain extends Component {
     // Determine current state of ingredients
     var ingredients = this.state.ingredients;
     var editIngredient = ingredient;
-    var position = editIngredient.position; 
+    var name = editIngredient.name; 
 
     ingredients.forEach((ingredient) => {
-      if (ingredient.position === position) {
+      if (ingredient.name === name) {
         ingredient.changed = editIngredient.changed; 
-        ingredient.name = editIngredient.name; 
         ingredient.amount = editIngredient.amount; 
         ingredient.unit = editIngredient.unit; 
         ingredient.prep = editIngredient.prep; 
@@ -408,6 +406,25 @@ class EditRecipeMain extends Component {
       var originalRecipeObject = this.state.originalRecipeObject; 
       var branchParameter = originalRecipeObject.branch; 
 
+      // console.log('EDIT RECIPE OBJECT'); 
+      // console.log(editRecipeObject); 
+
+      editRecipeObject.steps.forEach((step) => {
+        delete step.added; 
+        delete step.deleted; 
+        delete step.edited;
+        delete step.unitsMenu; 
+        delete step.validationState;  
+      }); 
+
+      editRecipeObject.ingredients.forEach((ingredient) => {
+        delete ingredient.added; 
+        delete ingredient.deleted; 
+        delete ingredient.edited; 
+      }); 
+
+      // console.log('EDIT CLEANED RECIPE OBJECT'); 
+      // console.log(editRecipeObject); 
 
       axios.post(`/${usernameParameter}/${recipeParameter}/${branchParameter}/create-version`, {
         previous: originalRecipeObject, 
@@ -480,6 +497,7 @@ class EditRecipeMain extends Component {
       <EditIngredients 
         ingredients={this.state.ingredients} 
         handleAddIngredient={this.handleAddIngredient.bind(this)} 
+        handleEditIngredient={this.handleEditIngredient.bind(this)}
         handleDeleteIngredient={this.handleDeleteIngredient.bind(this)} 
       />
       <EditSteps 

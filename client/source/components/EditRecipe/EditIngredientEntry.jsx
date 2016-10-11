@@ -83,6 +83,13 @@ class EditIngredientEntry extends React.Component {
 		this.setState({display: 'none'}); 
 	}
 
+	handleEdit(event){
+		event.preventDefault(); 
+		console.log('EDITING INGREDIENT'); 
+		var ingredient = this.state;
+		this.props.handleEditIngredient(ingredient); 
+	}
+
 	handleChange (event) {
 	  var inputType = event.target.id; 
 	  if (inputType === 'name') {
@@ -101,7 +108,7 @@ class EditIngredientEntry extends React.Component {
 	render() {
 		return (
 			<Row> 
-				<Form inline style={{display: this.state.display}}>
+				<Form inline style={{display: this.state.display}} onSubmit={this.handleEdit.bind(this)}>
 				<Col xs={2} md={2} style={{margin: 5}}>
 				  <FormGroup controlId="name">
 				    <FormControl type="text" disabled={this.state.disabled} value={this.state.name} onChange={this.handleChange.bind(this)} />
@@ -131,12 +138,17 @@ class EditIngredientEntry extends React.Component {
 				    <FormControl type="text" disabled={this.state.disabled} value={this.state.optional} onChange={this.handleChange.bind(this)}/>
 				  </FormGroup>
 				</Col> 
-				  <Button type="submit" style={{margin: 5}} onClick={this.handleClick.bind(this)}>
+				<Col xs={3} md={3} style={{margin: 5}}>
+				  <Button type="button" style={{margin: 5}} onClick={this.handleClick.bind(this)}>
 				    Edit
 				  </Button>
-				  <Button type="submit" style={{margin: 5}} onClick={this.handleDelete.bind(this)} disabled={this.state.disabled}>
+				  <Button type="submit" style={{margin: 5, display: 'none'}} disabled={this.state.disabled}>
+				    Commit
+				  </Button>
+				  <Button type="button" style={{margin: 5}} onClick={this.handleDelete.bind(this)} disabled={this.state.disabled}>
 				    Delete
 				  </Button>
+				  </Col> 
 				</Form>
 			</Row>
 		)

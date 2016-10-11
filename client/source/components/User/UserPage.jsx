@@ -1,10 +1,11 @@
 import React from 'react';
 import { browserHistory, Router, Route, IndexRoute, Link} from 'react-router';
 import RecipeListEntry from './RecipeListEntry'; 
-import FollowingListEntry from './FollowingListEntry'; 
+import FollowingListEntry from './FollowingListEntry';
+import PullRequestEntry from './PullRequestEntry';  
 
 //Bootstrap 
-import { Image, Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem } from 'react-bootstrap';
+import { Image, Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem, Badge } from 'react-bootstrap';
 
 // Server Requests
 var axios = require('axios');
@@ -20,6 +21,11 @@ var userProfileTemplate = {
   bio: ''
 }
 
+var pullRequestsTemplate = {
+  received: [],
+  sent: []
+}
+
 class UserProfile extends React.Component {
   constructor(props) {
     super(props); 
@@ -31,7 +37,8 @@ class UserProfile extends React.Component {
       loggedInUserProfile: true,   
       activeKey: 2,
       recipeList: [],
-      followingList: []
+      followingList: placeholders.followingList,
+      pullRequests: pullRequestsTemplate
     }; 
   }
 
@@ -42,18 +49,48 @@ class UserProfile extends React.Component {
     // TODO: Remove this to user a user's actual picture. 
     var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
+    axios.all([this.getUser(usernameParameter), this.getPullRequests(usernameParameter)])
+    .then(axios.spread((user, pullRequests) => {
+
+      console.log('USER PROFILE RESULTS DATA'); 
+      console.log(user.data); 
+
+      console.log('pullRequests DATA'); 
+      console.log(pullRequests); 
+
+      this.setState({
+        username: usernameParameter, 
+        userID: this.props.userID,
+        userProfile: user.data,
+        image: userImage, 
+        recipeList: user.data.recipes,
+        pullRequests: pullRequests.data
+      }); 
+
+    }))
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
+   componentWillReceiveProps(nextProps) {
+    var usernameParameter = nextProps.params.username; 
+    var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
+    // var otherUser = this.props.username !== username; 
+    // console.log('OTHER USER: ', otherUser); 
+
     axios.get(`/${usernameParameter}/profile`)
     .then((results) => {
-      // console.log('USER PROFILE RESULTS'); 
-      // console.log(results); 
-      console.log('USER PROFILE RESULTS DATA'); 
-      console.log(results.data); 
+      console.log('SUCCESSFULLY REQUESTED PROFILE'); 
+      console.log(results.data.recipes); 
       this.setState({
         username: usernameParameter, 
         userID: this.props.userID,
         userProfile: results.data,
         image: userImage, 
         recipeList: results.data.recipes,
+        loggedInUserProfile: this.props.loggedInUserProfile,
+        activeKey: 2
       }); 
     })
     .catch((error) => {
@@ -61,34 +98,31 @@ class UserProfile extends React.Component {
     }); 
   }
 
-   componentWillReceiveProps(nextProps) {
-      var usernameParameter = nextProps.params.username; 
-      var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
-      // var otherUser = this.props.username !== username; 
-      // console.log('OTHER USER: ', otherUser); 
+  getUser(usernameParameter) {
+    return axios.get(`/${usernameParameter}/profile`); 
+  }
 
-      axios.get(`/${usernameParameter}/profile`)
-      .then((results) => {
-        console.log('SUCCESSFULLY REQUESTED PROFILE'); 
-        console.log(results.data.recipes); 
-        this.setState({
-          username: usernameParameter, 
-          userID: this.props.userID,
-          userProfile: results.data,
-          image: userImage, 
-          recipeList: results.data.recipes,
-          loggedInUserProfile: this.props.loggedInUserProfile,
-          activeKey: 2
-        }); 
-      })
-      .catch((error) => {
-        console.log(error); 
-      }); 
-    }
+  getPullRequests(usernameParameter) {
+    return axios.get(`/${usernameParameter}/get-pulls`); 
+  }
 
   handleTabSelect(eventKey) {
     event.preventDefault(); 
     this.setState({activeKey: eventKey}); 
+  }
+
+  requestPullRequests(event) {
+    event.preventDefault(); 
+    console.log('requesting pull request data!'); 
+    var usernameParameter = this.props.params.username; 
+    axios.get(`/${usernameParameter}/get-pulls`)
+    .then((result) => {
+      console.log('successful request pull'); 
+      console.log(result); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
   }
 
   _renderActiveComponent(){
@@ -125,6 +159,18 @@ class UserProfile extends React.Component {
           />
         ))
       )
+    } else if (this.state.activeKey === 5) {
+      return (
+        this.state.pullRequests.received.map((pullRequest, i) => (
+           <PullRequestEntry 
+            key={'pullRequest' + i} 
+            pullRequest={pullRequest}
+            username={this.props.params.username}
+            handleUserClick={this.props.handleUserClick}
+            handlePullRequestClick={this.props.handlePullRequestClick}
+          />
+        ))
+      )
     }
   }
 
@@ -148,11 +194,14 @@ class UserProfile extends React.Component {
               <NavItem eventKey={1} disabled>Overview</NavItem>
               <NavItem eventKey={2} title="Recipes">Recipes</NavItem>
               <NavItem eventKey={3} title="Following">Following</NavItem>
-              <NavItem eventKey={4} disabled>Followers</NavItem>
-              <NavItem eventKey={5} disabled>Favorites</NavItem>
+              <NavItem eventKey={4} disabled> Followers </NavItem>
+              <NavItem eventKey={5} >Pull Requests <Badge> {this.state.pullRequests.received.length} </Badge></NavItem>
             </Nav>
             {this._renderActiveComponent()}
           </Col>
+        </Row> 
+        <Row>
+          <Button type="submit" onClick={this.requestPullRequests.bind(this)}> pulls </Button> 
         </Row> 
       </Grid> 
     );

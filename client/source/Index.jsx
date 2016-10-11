@@ -13,6 +13,7 @@ import CreateRecipeMain from './components/CreateRecipe/CreateRecipeMain';
 import EditRecipeMain from './components/EditRecipe/EditRecipeMain';
 import EditRecipeVersionMain from './components/EditRecipe/EditRecipeVersionMain';
 import PullRequest from './components/PullRequest/PullRequestMain';
+import ManagePullRequest from './components/PullRequest/ManagePullRequest';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
 
 
@@ -31,7 +32,10 @@ render((
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
-	  	<Route path="/Pull" component={PullRequest} />
+	  	<Route path="/Pull/:username/:recipe/:branch/:version/:sourceUser/:sourceRecipe" component={PullRequest} />
+	  	<Route path="/EditPull/:targetUser/:pullId/:username/:recipe/:branch/:version" component={EditRecipeVersionMain} />
+	  	<Route path="/Manage/:username/:pullId" component={ManagePullRequest} />
+	  	<Route path="/Manage/:username/:recipe/:branch/:version/:pullUser/:pullRecipe" component={ManagePullRequest} />
 	  </Route>
 	</Router>
 ), document.getElementById('app'));
