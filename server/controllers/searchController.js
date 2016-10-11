@@ -2,6 +2,7 @@ let db = require(`${__dirname}/../schemas.js`);
 let helpers = require(`${__dirname}/../helpers.js`);
 let Recipe = db.Recipe;
 let UserRecipe = db.UserRecipe;
+let Tag = db.Tag;
 let _ = require('underscore');
 let Promise = require('bluebird');
 
@@ -189,5 +190,14 @@ module.exports = {
       console.log('error: ', error);
       res.status(500).send(error);
     })
+  },
+
+  // description: Returns a list of tags
+  tags: (req, res) => {
+    Tag.find().then(tags => {
+      res.status(200).send(tags);
+    }).catch(error => {
+      console.log('error: ', error);
+    });
   }
 };
