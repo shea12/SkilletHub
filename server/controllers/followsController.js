@@ -85,9 +85,12 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   followRecipe: (req, res) => {
-    return Follow.findOne({
+    let findFollow = Follow.findOne({
       username: req.params.username
-    }).then(follow => {
+    });
+
+    Promise.all([findFollow, helpers.updateRecipeFollowers(req.params.user, req.params.recipe, 1)])
+    .spread((follow, followerCountUpdate) => {
       
       if (!follow) {
         return new Follow({
@@ -174,9 +177,12 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   unfollowRecipe: (req, res) => {
-    return Follow.findOne({
+    let findFollow = Follow.findOne({
       username: req.params.username
-    }).then(follow => {
+    });
+
+    Promise.all([findFollow, helpers.updateRecipeFollowers(req.params.user, req.params.recipe, -1)])
+    .spread((follow, followerCountUpdate) => {
       let recipeIndex = _.findIndex(follow.recipes, recipe => {
         return recipe.username === req.params.user && recipe.recipeId.equals(req.params.recipe);
       });
