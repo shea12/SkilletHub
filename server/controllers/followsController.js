@@ -30,22 +30,22 @@ module.exports = {
     return Follow.findOne({
       username: req.params.username
     }).then(follow => {
+
       if (!follow) {
         return new Follow({
           username: req.params.username,
           users: [req.params.user]
         }).save();
+
       } else {
         let users = follow.users;
-        console.log('users: ', users);
         users.push(req.params.user);
-        console.log('users: ', users);
 
         return Follow.update({
           username: req.params.username
         }, {
           users: users
-        })
+        });
       }
     }).then(() => {
       res.status(201).send();
@@ -62,7 +62,38 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   followRecipe: (req, res) => {
+    return Follow.findOne({
+      username: req.params.username
+    }).then(follow => {
+      
+      if (!follow) {
+        return new Follow({
+          username: req.params.username,
+          recipes: [{
+            username: req.params.user,
+            recipeId: req.params.recipe
+          }]
+        }).save();
 
+      } else {
+        let recipes = follow.recipes;
+        recipes.push({
+          username: req.params.user,
+          recipeId: req.params.recipe
+        });
+
+        return Follow.update({
+          username: req.params.username
+        }, {
+          recipes: recipes
+        });
+      }
+    }).then(() => {
+      res.status(201).send();
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send(error);
+    });
   },
 
   // description: Unfollows a user
@@ -83,4 +114,7 @@ module.exports = {
   unfollowRecipe: (req, res) => {
 
   }
+
+
+  /* DONT FORGEt FOLLOWER COUNT */
 };
