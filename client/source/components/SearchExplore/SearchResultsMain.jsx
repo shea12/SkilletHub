@@ -26,7 +26,6 @@ class SearchResultsMain extends Component {
     //  the spaces with + sign
     var searchTermPlus = searchTerm.replace(/\s+/g, '+').toLowerCase();
 
-
     //make axios request to search endpoint with user entered search terms
     axios.get(`/search/${searchTermPlus}`)
     .then((result) => {
