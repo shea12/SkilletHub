@@ -10,6 +10,14 @@ module.exports = {
   createRecipe: (req, res) => {
     helpers.makeVersion('new', req.body.recipeObject, req.params.username)
     .then(result => {
+      helpers.createBatchNotification({
+        users: req.params.username
+      },{
+        username: req.params.username,
+        recipeId: result._id,
+        text: `${req.params.username} created a new recipe called ${result.name.value}.`
+      });
+
       return helpers.addUserRecipesCollection(req.params.username, result);
     }).then(result => {
       res.status(201).send();
