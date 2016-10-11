@@ -150,7 +150,7 @@ let pullRequestSchema = new Schema({
 
 let followSchema = new Schema({
   username: String,
-  users: [Schema.Types.ObjectId],
+  users: [String],
   recipes: [Schema.Types.ObjectId]
 });
 
