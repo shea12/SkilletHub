@@ -35,7 +35,9 @@ module.exports = {
         return new Follow({
           username: req.params.username,
           users: [req.params.user]
-        }).save();
+        }).save().then(() => {
+          res.status(201).send();
+        });
 
       } else {
         let users = follow.users;
@@ -45,10 +47,10 @@ module.exports = {
           username: req.params.username
         }, {
           users: users
+        }).then(() => {
+          res.status(200).send();
         });
       }
-    }).then(() => {
-      res.status(201).send();
     }).catch(error => {
       console.log('error: ', error);
       res.status(500).send(error);
@@ -73,7 +75,9 @@ module.exports = {
             username: req.params.user,
             recipeId: req.params.recipe
           }]
-        }).save();
+        }).save().then(() => {
+          res.status(201).send();
+        });
 
       } else {
         let recipes = follow.recipes;
@@ -86,10 +90,10 @@ module.exports = {
           username: req.params.username
         }, {
           recipes: recipes
+        }).then(() => {
+          res.status(200).send();
         });
       }
-    }).then(() => {
-      res.status(201).send();
     }).catch(error => {
       console.log('error: ', error);
       res.status(500).send(error);
