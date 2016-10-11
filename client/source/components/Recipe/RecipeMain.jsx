@@ -210,6 +210,19 @@ class RecipeMain extends Component {
       recipeObject.sourceRecipe = this.state.recipe.rootVersion;  
       this.props.handleRecipeVersionPull(recipeObject); 
     }
+
+    if (buttonType === 'issue') {
+      var recipeObject = {};
+      recipeObject.usernameParameter = this.state.recipe.forkedFrom; 
+      recipeObject.recipeParameter = this.state.recipe.rootVersion;  
+      this.props.handleNewIssueClick(recipeObject); 
+    }
+
+    if (buttonType === 'issuesList') {
+      var usernameParameter = this.props.params.username; 
+      var recipeParameter = this.props.params.recipe; 
+      this.props.handleViewIssuesClick(usernameParameter, recipeParameter); 
+    }
   }
 
   _renderCreateBranch(){
