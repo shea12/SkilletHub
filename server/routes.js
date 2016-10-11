@@ -5,8 +5,16 @@ let versions = require(`${__dirname}/controllers/versionsController.js`);
 let pullRequests = require(`${__dirname}/controllers/pullRequestController.js`);
 let search = require(`${__dirname}/controllers/searchController.js`);
 let issues = require(`${__dirname}/controllers/issuesController.js`);
+let follows = require(`${__dirname}/controllers/followsController.js`);
 
 module.exports = function(app, express) {
+  /*** Following ***/
+  app.get('/:username/get-notifications', follows.getNotifications);
+  app.post('/:username/follow/:user', follows.followUser);  
+  app.post('/:username/follow/:user/:recipe', follows.followRecipe);  
+  app.delete('/:username/unfollow/:user', follows.unfollowUser);
+  app.delete('/:username/unfollow/:user/:recipe', follows.unfollowRecipe);
+
   /*** Issues ***/
   app.get('/:username/:recipe/get-issues', issues.getIssues);
   app.post('/:username/:recipe/create-issue', issues.createIssue);
