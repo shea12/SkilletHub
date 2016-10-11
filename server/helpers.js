@@ -4,6 +4,7 @@ let db = require(`${__dirname}/schemas.js`);
 let Recipe = db.Recipe;
 let UserRecipe = db.UserRecipe;
 let Dependency = db.Dependency;
+let Notification = db.Notification;
 
 const fields = [
   '_id',
@@ -221,5 +222,10 @@ module.exports = {
         followers: followers
       });
     });
+  },
+
+  // description: creates a notification
+  createNotification: notification => {
+    return new Notification(notification).save();
   }
 };

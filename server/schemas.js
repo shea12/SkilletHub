@@ -158,13 +158,10 @@ let followSchema = new Schema({
 });
 
 let notificationSchema = new Schema({
+  notificationOwner: String,
   username: String,
-  category: String,
-  categoryId: String,
-  data: {
-    text: String,
-    versionId: Schema.Types.ObjectId
-  }
+  recipeId: Schema.Types.ObjectId,
+  text: String
 });
 
 module.exports = {
