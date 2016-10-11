@@ -16,6 +16,7 @@ import PullRequest from './components/PullRequest/PullRequestMain';
 import ManagePullRequest from './components/PullRequest/ManagePullRequest';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
 import ExploreMain from './components/Explore/ExploreMain'; 
+import SearchResultsMain from './components/SearchExplore/SearchResultsMain'; 
 
 
 //TODO: Enter authentication 
@@ -29,6 +30,7 @@ render((
 	  	<Route path="/Recipe" component={RecipeMain} />
 	  	<Route path="/Recipe/:username/:recipe" component={RecipeMain} />
 	  	<Route path="/Cookme/:username/:recipe" component={CookMeMain} />
+	  	<Route path="/Search/:search" component={SearchResultsMain} />
 	  	<Route path="/Create" component={CreateRecipeMain} />
 	  	<Route path="/Edit" component={EditRecipeMain} />
 	  	<Route path="/Edit/:username/:recipe" component={EditRecipeMain} />

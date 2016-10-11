@@ -47,9 +47,9 @@ class LandingPage extends React.Component {
         }}> 
           <Row className="show-grid">
             <Col xs={4} xsOffset={7} md={4} mdOffset={8}> 
-            <form onSubmit={this.handleSubmit.bind(this)} style={{height: '280px', width: '280px', borderRadius: '10px', border: '2px solid gray'}}>
+            <form onSubmit={this.handleSubmit.bind(this)} style={{height: '280px', width: '280px', borderRadius: '10px', backgroundColor: '#fff'}}>
               <FormGroup style={{padding: '10px', height: '280px', textAlign: 'center'}}>
-                <ControlLabel style={{marginBottom: '10px', fontSize: '20px', color: 'white'}}> Sign Up For SkilletHub </ControlLabel>
+                <ControlLabel style={{marginBottom: '10px', fontSize: '20px'}}> Sign Up For SkilletHub </ControlLabel>
                 <FormControl type="text" id="username" placeholder='Username' onChange={this.handleChange.bind(this)} value={this.state.username} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
                 <FormControl type="password" id="password" placeholder='Password' onChange={this.handleChange.bind(this)} value={this.state.password} style={{margin: '0 auto', width: '210px', textAlign: 'center', marginBottom: '5px'}}/>
                 <FormControl type="text" id="firstname" placeholder='First Name' onChange={this.handleChange.bind(this)} value={this.state.firstname} style={{margin: '0 auto', width: '100px', textAlign: 'center', display: 'inline-block', marginBottom: '5px', marginRight: '10px'}}/>

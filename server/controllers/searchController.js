@@ -5,7 +5,7 @@ let UserRecipe = db.UserRecipe;
 let Tag = db.Tag;
 let _ = require('underscore');
 let Promise = require('bluebird');
-
+console.log('in search controller');
 module.exports = {
   // description: Returns a list of recipes by relevancy to a given search string
   // params: {
