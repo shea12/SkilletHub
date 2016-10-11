@@ -227,20 +227,11 @@ module.exports = {
 
   // description: creates a notification
   createNotification: notification => {
-    console.log('notification: ', notification);
     return new Notification(notification).save();
   },
 
-  // helpers.createBatchNotification({
-
-  // },{
-  //   username: ,
-  //   recipeId: ,
-  //   text: 
-  // });
   // description: finds all followers, then creates a notification for each one
   createBatchNotification: (search, notification) => {
-    console.log('ENTERING BATCH');
     return Follow.find(search).then(follows => {
       let notifications = follows.map(follow => {
         notification.notificationOwner = follow.username;
