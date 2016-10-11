@@ -5,6 +5,7 @@ let Recipe = db.Recipe;
 let UserRecipe = db.UserRecipe;
 let Dependency = db.Dependency;
 let Notification = db.Notification;
+let Follow = db.Follow;
 
 const fields = [
   '_id',
@@ -227,5 +228,23 @@ module.exports = {
   // description: creates a notification
   createNotification: notification => {
     return new Notification(notification).save();
+  },
+
+  // helpers.createBatchNotification({
+
+  // },{
+  //   username: ,
+  //   recipeId: ,
+  //   text: 
+  // });
+  // description: finds all followers, then creates a notification for each one
+  createBatchNotification: (search, notification) => {
+    return Follow.find(search).then(follows => {
+      let notifications = follows.map(follow => {
+        notification.notificationOwner = follow.username;
+        module.exports.createNotification(notification);
+      });
+      return Promise.all(notifications);
+    });
   }
 };
