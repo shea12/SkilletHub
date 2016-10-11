@@ -30,7 +30,8 @@ class RecipeMain extends Component {
       selectedBranch: '', 
       branchVersions: [],
       recipeBranches: [], 
-      createBranch: ''
+      createBranch: '',
+      ownRecipe: false
     }; 
   }
 
@@ -51,7 +52,13 @@ class RecipeMain extends Component {
       var recipe = result.data; 
       console.log('RECIPE: ', recipe); 
       // console.log('DESCRIPTION:', recipe.description.value); 
-      
+      if (this.props.username === recipe.forkedFrom || recipe.forkedFrom === undefined) {
+        console.log('OWN RECIPE: ', ownRecipe); 
+        var ownRecipe = true; 
+      } else {
+        ownRecipe = false; 
+      }
+
       this.setState({
         recipe: recipe,
         username: usernameParameter, 
@@ -59,7 +66,8 @@ class RecipeMain extends Component {
         recipeSteps: recipe.steps,
         recipeBranches: recipe.branches,
         selectedBranch: recipe.branch,
-        selectedVersion: recipe._id
+        selectedVersion: recipe._id, 
+        ownRecipe: ownRecipe
       }); 
 
       var branch = recipe.branch; 
@@ -271,6 +279,7 @@ class RecipeMain extends Component {
         </Row> 
         <RecipeStats branches={this.state.recipeBranches}/> 
         <VersionControl 
+          ownRecipe={this.state.ownRecipe}
           selectedBranch={this.state.selectedBranch}
           branchVersions={this.state.branchVersions}
           recipeBranches={this.state.recipeBranches}

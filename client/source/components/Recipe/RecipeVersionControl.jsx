@@ -50,7 +50,7 @@ class RecipeVersionControl extends React.Component {
   }
 
   _renderButtonGroup(){
-    if (this.props.loggedInUserProfile) {
+    if (this.props.loggedInUserProfile && this.props.ownRecipe) {
       return (
         <div style={{marginTop: 25, float: "right"}}> 
           <ButtonGroup style={{marginRight: 10}}>
@@ -61,10 +61,20 @@ class RecipeVersionControl extends React.Component {
           <Button id="cook" type="submit" bsStyle="success" onClick={this.props.handleClick.bind(this)}>cook recipe</Button>
         </div> 
       )
+    } else if (this.props.loggedInUserProfile) {
+      return (
+        <div style={{marginTop: 25, float: "right"}}> 
+          <ButtonGroup style={{marginRight: 10}}>
+            <Button id="issue" type="submit" onClick={this.props.handleClick.bind(this)}>new issue</Button>
+            <Button id="edit" type="submit" onClick={this.props.handleClick.bind(this)}>edit recipe</Button>
+            <Button id="pull" type="submit" onClick={this.props.handleClick.bind(this)}>create pull request</Button>
+          </ButtonGroup>
+          <Button id="cook" type="submit" bsStyle="success" onClick={this.props.handleClick.bind(this)}>cook recipe</Button>
+        </div> 
+      )
     } else {
       return (
         <ButtonGroup style={{marginTop: 25, float: "right"}}>
-          <Button id="issue" type="submit" onClick={this.props.handleClick.bind(this)}>new issue</Button>
           <Button id="fork" type="submit" bsStyle="success" onClick={this.props.handleClick.bind(this)}>fork recipe</Button>
         </ButtonGroup>
       )

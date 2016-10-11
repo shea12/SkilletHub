@@ -300,7 +300,7 @@ class App extends React.Component {
         this.setState({
           issueObject: {}
         }); 
-        browserHistory.push(`/Issues/${usernameParameter}/${recipeParameter}`); 
+        browserHistory.push(`/Issues/List/${usernameParameter}/${recipeParameter}`); 
       })
       .catch((error) => {
         console.log(error); 
@@ -315,7 +315,7 @@ class App extends React.Component {
         this.setState({
           issueObject: {}
         }); 
-        browserHistory.push(`/Issues/${usernameParameter}/${recipeParameter}`); 
+        browserHistory.push(`/Issues/List/${usernameParameter}/${recipeParameter}`); 
       })
       .catch((error) => {
         console.log(error); 
