@@ -2,6 +2,7 @@ let helpers = require(`${__dirname}/../helpers.js`);
 let db = require(`${__dirname}/../schemas.js`);
 let Recipe = db.Recipe;
 let Follow = db.Follow;
+let User = db.User;
 let Notification = db.Notification;
 let _ = require('underscore');
 let Promise = require('bluebird')
@@ -27,15 +28,31 @@ module.exports = {
   //   user: username of the person being followed
   // }
   followUser: (req, res) => {
-    return Follow.findOne({
+    let findFollow = Follow.findOne({
       username: req.params.username
-    }).then(follow => {
+    });
+    let findUser = User.findOne({
+      username: req.params.user
+    });
+
+    return Promise.all([findFollow, findUser])
+    .spread((follow, user) => {
+      let followers = user.followers;
+      followers++;
+      let updateFollowers = User.update({
+        username: req.params.user
+      }, {
+        followers: followers
+      });
 
       if (!follow) {
         return new Follow({
           username: req.params.username,
           users: [req.params.user]
-        }).save().then(() => {
+        }).save()
+        .then(() => {
+          return updateFollowers;
+        }).then(() => {
           res.status(201).send();
         });
 
@@ -48,9 +65,13 @@ module.exports = {
         }, {
           users: users
         }).then(() => {
+          return updateFollowers;
+        }).then(() => {
           res.status(200).send();
         });
       }
+
+
     }).catch(error => {
       console.log('error: ', error);
       res.status(500).send(error);
@@ -106,21 +127,39 @@ module.exports = {
   //   user: username of the person being followed
   // }
   unfollowUser: (req, res) => {
-    Follow.findOne({
+    let findFollow = Follow.findOne({
       username: req.params.username
-    }).then(follow => {
+    })
+    let findUser = User.findOne({
+      username: req.params.user
+    });
+
+    return Promise.all([findFollow, findUser])
+    .spread((follow, user) => {
+      let followers = user.followers;
+      if (followers > 0) {
+        followers--;
+      }
+      let updateFollowerCount = User.update({
+        username: req.params.user
+      }, {
+        followers: followers
+      });
+
       let userIndex = _.findIndex(follow.users, user => {
         return user === req.params.user;
       });
       let users = follow.users;
       users.splice(userIndex, 1);
 
-      return Follow.update({
+      let updateFollowers = Follow.update({
         username: req.params.username
       }, {
         users: users
       });
-    }).then(() => {
+
+      return Promise.all([updateFollowers, updateFollowerCount]);
+    }).spread(() => {
       res.status(200).send();
     }).catch(error => {
       console.log('error: ', error);
@@ -135,7 +174,7 @@ module.exports = {
   //   recipe: root recipe id of the recipe being followed
   // }
   unfollowRecipe: (req, res) => {
-    Follow.findOne({
+    return Follow.findOne({
       username: req.params.username
     }).then(follow => {
       let recipeIndex = _.findIndex(follow.recipes, recipe => {
@@ -156,7 +195,4 @@ module.exports = {
       res.status(500).send();
     });
   }
-
-
-  /* DONT FORGEt FOLLOWER COUNT */
 };
