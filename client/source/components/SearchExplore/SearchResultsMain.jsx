@@ -4,7 +4,6 @@ import SearchResultsList from './SearchResultsList';
 
 //Bootstrap 
 import { Image, Grid, Row, Col, Form, FormGroup, Badge, ProgressBar, Jumbotron, Carousel, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem } from 'react-bootstrap';
-const progressBarStyles = ['success', 'warning', 'danger']; 
 
 // Axios 
 var axios = require('axios'); 
@@ -24,9 +23,14 @@ class SearchResultsMain extends Component {
   }
 
   componentWillMount() {
-    console.log('searchResults main mounting!');
     this.getSearchResults();
   }
+
+  // componentWillUpdate() {
+  //   if (this.state.searchTerm !== this.props.params.search){
+  //     this.getSearchResults();
+  //   }
+  // }
 
   getSearchResults() {
     var username = this.props.username;
