@@ -65,8 +65,8 @@ class NavigationBar extends React.Component {
       return (
         <form onSubmit={this.handleSubmit.bind(this)}>
           <FormGroup  style={{paddingRight: '10px', paddingLeft: '10px'}}>
-            <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{width: '100px', marginRight: 5, height: '30px', textAlign: 'center'}}/>
-            <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{width: '100px', marginRight: 5, height: '30px', textAlign: 'center'}} />
+            <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}}/>
+            <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}} />
             <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5, height: '30px'}}>Log In</Button>  
           </FormGroup>
         </form> 
