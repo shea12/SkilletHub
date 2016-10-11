@@ -14,6 +14,7 @@ module.exports = function(app, express) {
   app.put('/:username/:recipe/update-status', issues.updateStatus);
 
   /*** Search ***/
+  app.get('/tags', search.tags);
   app.get('/explore', search.explore);
   app.get('/search/:string', search.search);
 
