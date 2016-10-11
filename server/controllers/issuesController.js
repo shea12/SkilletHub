@@ -13,6 +13,7 @@ module.exports = {
   //   username: person who created the issue
   //   type: ingredient / step ,
   //   position: position of ingredient or step,
+  //   title: title text,
   //   data: comment text
   // }
   // params: {
@@ -24,6 +25,7 @@ module.exports = {
       owner: req.params.username,
       rootVersion: req.params.recipe,
       issueCreator: req.body.username,
+      title: req.body.title,
       type: req.body.type,
       position: req.body.position,
       status: 'open',

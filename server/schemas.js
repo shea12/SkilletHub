@@ -99,6 +99,7 @@ let issueSchema = new Schema({
   type: String,
   position: Number,
   status: String,
+  title: String,
   numOfComments: Number,
   createdAt: {
     type: Date, 
