@@ -138,6 +138,13 @@ module.exports = {
 
     return Promise.all([retrieve, updateForkCount])
     .spread((version, updated) => {
+      helpers.createNotification({
+        notificationOwner: req.params.username,
+        username: req.body.username,
+        recipeId: version._id,
+        text: `${req.body.username} forked your recipe ${version.name.value}`
+      });
+
       let forkedProps = {
         username: req.body.username,
         branch: 'master',

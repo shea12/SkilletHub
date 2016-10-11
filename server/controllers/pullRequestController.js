@@ -26,6 +26,13 @@ module.exports = {
 
     return Promise.all([sentVer, rootVer])
     .spread((sentVersion, targetVersion) => {
+      helpers.createNotification({
+        notificationOwner: req.body.targetUsername,
+        username: req.params.username,
+        recipeId: req.body.targetVersionId,
+        text: `${req.params.username} sent you a pull request.`
+      });
+
       return new PullRequest({
         sendingUser: req.params.username,
         targetUser: req.body.targetUsername,
@@ -73,6 +80,19 @@ module.exports = {
       });
       return Promise.all([source, target]);
     }).spread((sourceRecipe, targetRecipe) => {
+
+      let notification = {
+        notificationOwner: sourceRecipe.username,
+        username: req.params.username,
+        recipeId: sourceRecipe._id,
+      };
+      if (req.body.status === 'closed') {
+        notification.text = `${req.params.username} rejected your pull request.`
+      } else {
+        notification.text = `${req.params.username} approved your pull request`
+      }
+      helpers.createNotification(notification);
+
       if (req.body.status !== 'closed') {
 
         let deleteFields = obj => {
