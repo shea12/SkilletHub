@@ -27,7 +27,32 @@ module.exports = {
   //   user: username of the person being followed
   // }
   followUser: (req, res) => {
+    return Follow.findOne({
+      username: req.params.username
+    }).then(follow => {
+      if (!follow) {
+        return new Follow({
+          username: req.params.username,
+          users: [req.params.user]
+        }).save();
+      } else {
+        let users = follow.users;
+        console.log('users: ', users);
+        users.push(req.params.user);
+        console.log('users: ', users);
 
+        return Follow.update({
+          username: req.params.username
+        }, {
+          users: users
+        })
+      }
+    }).then(() => {
+      res.status(201).send();
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send(error);
+    });
   },
 
   // description: Follows a recipe
