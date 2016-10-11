@@ -7,19 +7,20 @@ let Notification = db.Notification;
 let _ = require('underscore');
 let Promise = require('bluebird')
 
-// app.get('/:username/get-notifications', follows.getNotifications);
-// app.post('/:username/follow/:user', follows.followUser);  
-// app.post('/:username/follow/:user/:recipe', follows.followRecipe);  
-// app.delete('/:username/unfollow/:user', follows.unfollowUser);
-// app.delete('/:username/unfollow/:user/:recipe', follows.unfollowRecipe);
-
 module.exports = {
   // description: Returns a list of all notifications for a user
   // params: {
   //   username: username of owner of the notifications,
   // }
   getNotifications: (req, res) => {
-
+    return Notification.find({
+      username: req.params.username
+    }).then(notifications => {
+      res.status(200).send(notifications);
+    }).catch(error => {
+      console.log('error: ', error);
+      res.status(500).send();
+    })
   },
 
   // description: Follows a user
