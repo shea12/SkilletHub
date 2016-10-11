@@ -90,7 +90,6 @@ class NavigationBar extends React.Component {
           </Navbar.Header>
 
           <Navbar.Collapse>
-
             <Nav pullLeft>
               <Navbar.Form>
                 <FormControl type='text' id='search' onChange={this.handleChange.bind(this)} placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
@@ -101,6 +100,7 @@ class NavigationBar extends React.Component {
             <Nav onClick={this.props.handleNavigation.bind(this)}>
               <NavItem title={'/User'} style={{marginTop: '4px'}}> Profile </NavItem>
               <NavItem title={'/Create'} style={{marginTop: '4px'}}> Create Recipe </NavItem>
+              <NavItem title={'/Explore'} style={{marginTop: '4px'}}> Explore </NavItem>
             </Nav>
 
             <Nav pullRight>
