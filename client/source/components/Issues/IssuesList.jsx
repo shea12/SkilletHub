@@ -68,17 +68,17 @@ class IssuesList extends Component {
           return (
             <Row key={i} style={{borderBottom: "1px solid rgba(0,0,0, 0.2)"}}> 
               <Col xs={6} md={6} > 
-                <h4 onClick={this.handleClick.bind(this)} id={i}>{"issue.title"}</h4>
+                <h4 onClick={this.handleClick.bind(this)} id={i}>{issue.title}</h4>
                 <h6> issue #{issue._id.slice(0,6)} created {issue.createdAt.slice(0,10)}</h6> 
               </Col> 
               <Col xs={2} md={2}> 
                 <h5>{issue.issueCreator}</h5> 
               </Col> 
               <Col xs={2} md={2}> 
-                <h5>{issue.type}</h5> 
+                <h5>{issue.type || 'general'}</h5> 
               </Col> 
               <Col xs={2} md={2}> 
-                <h5>{issue.position}</h5> 
+                <h5>{issue.position || '-'}</h5> 
               </Col> 
             </Row>
             )
@@ -89,28 +89,3 @@ class IssuesList extends Component {
 }
 
 export default IssuesList; 
-
-
-// <Row height={50}> 
-//   <Col xs={6} md={6}> 
-//     <h2 id={pullRequest.sendingUser} onClick={handleUserClick.bind(this)}> sent from {pullRequest.sendingUser} </h2> 
-//     <h4 id={pullRequest.sendingUser}> pull request submitted at {pullRequest.createdAt} </h4>
-//   </Col> 
-//   <Col xs={4} md={4} style={{marginTop: 20}}> 
-//     <Button 
-//       data-username={username}
-//       data-recipe={pullRequest.targetVersion}
-//       data-branch={'master'}
-//       data-version={pullRequest.targetVersion}
-//       data-pulluser={pullRequest.sendingUser}
-//       data-pullrecipe={pullRequest.targetVersion}
-//       data-pullrequest={JSON.stringify(pullRequest)}
-//       onClick={handlePullRequestClick.bind(this)}> 
-//         Manage Pull Request 
-//     </Button> 
-//   </Col>
-//   <Col xs={2} md={2} style={{marginTop: 20}}> 
-//     <h4> status </h4> 
-//     <Badge>{pullRequest.status}</Badge>
-//   </Col>
-// </Row>
