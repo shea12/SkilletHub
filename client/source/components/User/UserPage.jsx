@@ -7,10 +7,25 @@ import NotificationsListEntry from './NotificationsListEntry';
 import PullRequestEntry from './PullRequestEntry';  
 
 //Bootstrap 
-import { Image, Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem, Badge } from 'react-bootstrap';
+import { Image, Grid, Row, Col, Form, FormGroup, FormControl, Button, Container, ControlLabel, DropdownButton, MenuItem, Nav, NavItem, Badge, Glyphicon } from 'react-bootstrap';
 
 // Server Requests
 var axios = require('axios');
+var _ = require('underscore'); 
+
+const month = [];
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders'
@@ -36,7 +51,8 @@ class UserProfile extends React.Component {
       username: '',
       userProfile: userProfileTemplate, 
       image: 'http://www.trbimg.com/img-53c59dde/turbine/la-dd-jacques-pepin-gordon-ramsay-20140715',
-      loggedInUserProfile: true,   
+      loggedInUserProfile: true,
+      followUser: false,    
       activeKey: 1,
       recipeList: [],
       notificationsList: [], 
@@ -55,13 +71,24 @@ class UserProfile extends React.Component {
     axios.all([this.getUser(usernameParameter), this.getNotifications(usernameParameter), this.getPullRequests(usernameParameter)])
     .then(axios.spread((user, notifications, pullRequests) => {
 
-      console.log('USER PROFILE RESULTS DATA'); 
-      console.log(user.data); 
+      // console.log('USER PROFILE RESULTS DATA'); 
+      // console.log(user.data); 
 
-      console.log('NOTIFICATIONS RESULTS DATA'); 
-      console.log(notifications.data); 
+      // console.log('NOTIFICATIONS RESULTS DATA'); 
+      // console.log(notifications.data); 
 
-      console.log('pullRequests DATA'); 
+      // console.log('pullRequests DATA'); 
+      // console.log(pullRequests.data); 
+
+      var pullRequests = pullRequests.data; 
+      var recipes = user.data.recipes; 
+      pullRequests.received.forEach((pullRequest) => {
+        var pullRequestMatch = _.findWhere(recipes, {rootRecipeId: pullRequest.targetRootVersion}); 
+        // console.log('PULL REQUEST MATCH: ', pullRequestMatch); 
+        pullRequest.originalName = pullRequestMatch.name; 
+      }); 
+
+      console.log('PULL REQUESTS MODIFIED'); 
       console.log(pullRequests); 
 
       this.setState({
@@ -72,7 +99,7 @@ class UserProfile extends React.Component {
         recipeList: user.data.recipes,
         notificationsList: notifications.data, 
         // followingList: following.data, 
-        pullRequests: pullRequests.data,
+        pullRequests: pullRequests,
         followers: user.data.followers
       }); 
 
@@ -176,9 +203,10 @@ class UserProfile extends React.Component {
         return (
           this.state.recipeList.map((recipe, i) => (
             <RecipeListEntry 
-              key={recipe.rootRecipeId} 
+              key={i + '' +recipe.rootRecipeId} 
               recipe={recipe} 
               username={this.state.username}
+              branches={recipe.branches.length || 0}
               buttonText={buttonText}
               handleForkedFromUserClick={this.props.handleUserClick} 
               handleRecipeViewClick={this.props.handleRecipeViewClick}
@@ -213,6 +241,7 @@ class UserProfile extends React.Component {
              <PullRequestEntry 
               key={'pullRequest' + i} 
               pullRequest={pullRequest}
+              month={month}
               username={this.props.params.username}
               handleUserClick={this.props.handleUserClick}
               handlePullRequestClick={this.props.handlePullRequestClick}
@@ -222,19 +251,34 @@ class UserProfile extends React.Component {
       }
     }
 
+  _renderJoinDate(createdAt) {
+    if (createdAt) {
+      var parseDate = createdAt.split('T')[0].split('-'); 
+      return (
+        <p><Glyphicon glyph="time" style={{marginRight: 5}}/>{`Joined on ${month[parseDate[1] - 1]} ${parseDate[2]}, ${parseDate[0]}`}</p>
+      )
+    }
+  }
+
   render() {
     return (
       <Grid> 
         <Row> 
           <Col xs={4} md={4}>
-            <img src={this.state.image} width={250} height={250} style={{borderRadius: 10}} />
-            <h3> {this.state.username} </h3>
-            <p> {this.state.userProfile.bio} </p> 
-            <p> {this.state.userProfile.email} </p>
-            <p> {this.state.userProfile.createdAt} </p>
+            <img src={this.state.image} width={250} height={250} style={{borderRadius: 10, marginTop: 15}} />
+            <h3 style={{color: 'gray'}}> {this.state.username} </h3>
+            <p style={{color: 'blue', borderBottom: "1px solid rgba(128,128,128, 0.2)"}}> {this.state.userProfile.bio || 'Add a bio'} </p> 
+            <p style={{color: 'blue'}}><Glyphicon glyph="envelope" style={{marginRight: 5}}/>{this.state.userProfile.email}</p>
+            {this._renderJoinDate(this.state.userProfile.createdAt)}
           </Col> 
           <Col xs={8} md={8}>
-            <UserStats recipeCount={this.state.recipeList.length} followers={this.state.followers} handleFollowUserClick={this.props.handleFollowUserClick}/>
+            <UserStats 
+              loggedInUserProfile={this.props.loggedInUserProfile} 
+              followUser={this.state.followUser}
+              recipeCount={this.state.recipeList.length} 
+              followers={this.state.followers} 
+              handleFollowUserClick={this.props.handleFollowUserClick}
+            />
             {this._renderNavigationBar()}
             {this._renderActiveComponent()}
           </Col>

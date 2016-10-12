@@ -9,7 +9,7 @@ export default ({user, text, handleUserClick}) => {
             <h2 > <Glyphicon glyph="certificate" bsSize="large"/> </h2> 
           </Col> 
           <Col xs={10} md={10} > 
-            <h4 id={user} onClick={handleUserClick.bind(this)}> {`@${user} ${text}`} </h4>  
+            <h4 id={user} style={{marginTop: 25}} onClick={handleUserClick.bind(this)}> <span style={{color: 'blue'}}>{user}</span> {text} </h4>  
           </Col>
         </Row>
     )
