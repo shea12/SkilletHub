@@ -269,38 +269,44 @@ class RecipeMain extends Component {
 
   render() {
     return (
-      <Grid className="recipeMain">
+      <Grid>
         <Row style={{margin: 10}}> 
-          <h3 className="recipeHeader"> {this.state.username} / {this.state.recipe.name.value}</h3>
+          <h3> {this.state.username} / {this.state.recipe.name.value}</h3>
         </Row> 
         <Row>
-          <Col xs={6} md={6}>
+          <Col xs={5} md={5}>
             <Well>
-              <img style={{maxWidth: '350px', maxHeight: '350px', display: 'block', margin: 'auto'}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
+              <img style={{height: 300, borderRadius: 10}} src={this.state.recipe.picture.value} alt={'picture of food'}/>
             </Well>
           </Col>
-          <Col xs={6} md={6}>
-              <RecipeDescription style={{height: '350px'}} recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
+          <Col xs={7} md={7}>
+              <RecipeDescription style={{height: 300}} recipeDescription={this.state.recipe} handleClick={this.handleClick.bind(this)}/>
           </Col> 
         </Row> 
-        <RecipeStats branches={this.state.recipeBranches}/> 
-        <VersionControl 
-          ownRecipe={this.state.ownRecipe}
-          selectedBranch={this.state.selectedBranch}
-          branchVersions={this.state.branchVersions}
-          recipeBranches={this.state.recipeBranches}
-          handleCreateBranch={this.handleCreateBranch.bind(this)}
-          handleVersionSelect={this.handleVersionSelect.bind(this)}
-          handleBranchSelect={this.handleBranchSelect.bind(this)}
-          handleClick={this.handleClick.bind(this)}
-          loggedInUserProfile={this.props.loggedInUserProfile}
-        />
+        <Row>
+          <RecipeStats branches={this.state.recipeBranches}/> 
+        </Row>
+        <Row> 
+          <VersionControl 
+            ownRecipe={this.state.ownRecipe}
+            selectedBranch={this.state.selectedBranch}
+            branchVersions={this.state.branchVersions}
+            recipeBranches={this.state.recipeBranches}
+            handleCreateBranch={this.handleCreateBranch.bind(this)}
+            handleVersionSelect={this.handleVersionSelect.bind(this)}
+            handleBranchSelect={this.handleBranchSelect.bind(this)}
+            handleClick={this.handleClick.bind(this)}
+            loggedInUserProfile={this.props.loggedInUserProfile}
+          />
+        </Row>
         <Row> 
           <Well> 
             <RecipeIngredients ingredientList={this.state.recipeIngredients}/>
           </Well>
         </Row>
-        <ReadME readME={this.state.recipeSteps}/>
+        <Row> 
+          <ReadME readME={this.state.recipeSteps}/>
+        </Row>
       </Grid> 
     );
   }

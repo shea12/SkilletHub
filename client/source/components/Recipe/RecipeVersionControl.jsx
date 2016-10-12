@@ -4,6 +4,20 @@ import { Grid, Row, Col, Table, Button, ButtonGroup, Form, FormGroup, FormContro
 // TODO: Confirm ingredient object structure, ensure that key refers to the proper value 
 // TODO: Add headers for the 'Ingredient', 'Quantity', 'Unit' and other fields. 
 
+const month = [];
+month[0] = "January";
+month[1] = "February";
+month[2] = "March";
+month[3] = "April";
+month[4] = "May";
+month[5] = "June";
+month[6] = "July";
+month[7] = "August";
+month[8] = "September";
+month[9] = "October";
+month[10] = "November";
+month[11] = "December";
+
 class RecipeVersionControl extends React.Component {
 
   constructor(props) {
@@ -18,6 +32,13 @@ class RecipeVersionControl extends React.Component {
     var inputType = event.target.id; 
     if (inputType === 'createBranch') {
       this.setState({createBranch: event.target.value}); 
+    }
+  }
+
+  parseDate(createdAt){
+    if (createdAt) {
+      var parseDate = createdAt.split('T')[0].split('-'); 
+      return `${month[parseDate[1] - 1]} ${parseDate[2]}, ${parseDate[0]}`; 
     }
   }
 
@@ -41,7 +62,7 @@ class RecipeVersionControl extends React.Component {
           <ControlLabel>Version</ControlLabel>
           <FormControl componentClass="select" id="unit" onChange={this.props.handleVersionSelect.bind(this)} >
             {this.props.branchVersions.map((version, i)=> (
-              <option key={'version' + i} value={version._id}>{version._id} : version {i}</option>
+              <option key={'version' + i} value={version._id}>v{this.props.branchVersions.length - 1 - i} : {this.parseDate(version.createdAt)}</option>
             ))}
           </FormControl>
         </FormGroup>
@@ -83,29 +104,31 @@ class RecipeVersionControl extends React.Component {
 
   render() {
     return (
-      <Row> 
-        <Col xs={3} md={3}> 
-        <FormGroup>
-          <ControlLabel>Branch</ControlLabel>
-          <FormControl componentClass="select" id="unit" onChange={this.props.handleBranchSelect.bind(this)} value={this.props.selectedBranch}>
-            <optgroup label='available branches'> 
-            {this.props.recipeBranches.map((branch, i)=> (
-              <option key={'branch' + i} value={branch.name}>{branch.name}</option>
-            ))}
-            </optgroup>
-            <optgroup label='new branch'>
-              <option key={'create branch'} value={'create branch'}> create branch </option> 
-            </optgroup>
-          </FormControl>
-        </FormGroup>
-        </Col> 
-        <Col xs={3} md={3}>
-          {this._renderCreateBranch()}
-        </Col>
-        <Col xs={6} md={6}>
-          {this._renderButtonGroup()}
-        </Col> 
-      </Row> 
+      <Grid> 
+        <Row> 
+          <Col xs={3} md={3}> 
+          <FormGroup>
+            <ControlLabel>Branch</ControlLabel>
+            <FormControl componentClass="select" id="unit" onChange={this.props.handleBranchSelect.bind(this)} value={this.props.selectedBranch}>
+              <optgroup label='available branches'> 
+              {this.props.recipeBranches.map((branch, i)=> (
+                <option key={'branch' + i} value={branch.name}>{branch.name}</option>
+              ))}
+              </optgroup>
+              <optgroup label='new branch'>
+                <option key={'create branch'} value={'create branch'}> create branch </option> 
+              </optgroup>
+            </FormControl>
+          </FormGroup>
+          </Col> 
+          <Col xs={3} md={3}>
+            {this._renderCreateBranch()}
+          </Col>
+          <Col xs={6} md={6}>
+            {this._renderButtonGroup()}
+          </Col> 
+        </Row> 
+      </Grid> 
     )
   }
 }
