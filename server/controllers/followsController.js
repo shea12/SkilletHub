@@ -8,6 +8,21 @@ let _ = require('underscore');
 let Promise = require('bluebird')
 
 module.exports = {
+  // description: Returns a list of all followed users
+  // params: {
+  //   username: username of the person following the users
+  // }
+  getFollowedUsers: (req ,res) => {
+    return Follow.findOne({
+      username: req.params.username
+    }).then(follows => {
+      res.status(200).send(follows.users);
+    }).catch(error => {
+      console.log('ERROR: ', error);
+      res.status(404).send();
+    });
+  },
+
   // description: Returns a list of all notifications for a user
   // params: {
   //   username: username of owner of the notifications,
