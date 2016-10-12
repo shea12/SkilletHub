@@ -36,6 +36,14 @@ module.exports = grunt => {
       }
     },
 
+    uglify: {
+      my_target: {
+        files: {
+          'client/deploy/bundle.min.js': 'client/deploy/bundle.js'
+        }
+      }
+    },
+
     watch: {
       babel: {
         files: ['client/source/**/*.jsx'],
@@ -49,5 +57,5 @@ module.exports = grunt => {
   });
 
   // grunt.registerTask('default', ['']);
-  grunt.registerTask('build', ['babel', 'browserify']);
+  grunt.registerTask('build', ['babel', 'browserify', 'htmlmin', 'uglify']);
 };
