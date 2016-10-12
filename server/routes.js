@@ -9,6 +9,7 @@ let follows = require(`${__dirname}/controllers/followsController.js`);
 
 module.exports = function(app, express) {
   /*** Following ***/
+  app.get('/:username/get-followed-users', follows.getFollowedUsers);
   app.get('/:username/get-notifications', follows.getNotifications);
   app.post('/:username/follow/:user', follows.followUser);  
   app.post('/:username/follow/:user/:recipe', follows.followRecipe);  
