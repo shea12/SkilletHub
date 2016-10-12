@@ -26,11 +26,9 @@ class SearchResultsMain extends Component {
     this.getSearchResults();
   }
 
-  // componentWillUpdate() {
-  //   if (this.state.searchTerm !== this.props.params.search){
-  //     this.getSearchResults();
-  //   }
-  // }
+  componentWillReceiveProps() {
+    this.getSearchResults();
+  }
 
   getSearchResults() {
     var username = this.props.username;
