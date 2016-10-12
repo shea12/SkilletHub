@@ -1,7 +1,9 @@
 import React from 'react';
 import { browserHistory, Router, Route, IndexRoute, Link} from 'react-router';
 import RecipeListEntry from './RecipeListEntry'; 
+import UserStats from './UserStats'; 
 import FollowingListEntry from './FollowingListEntry';
+import NotificationsListEntry from './NotificationsListEntry';  
 import PullRequestEntry from './PullRequestEntry';  
 
 //Bootstrap 
@@ -50,17 +52,14 @@ class UserProfile extends React.Component {
     // TODO: Remove this to user a user's actual picture. 
     var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
-    axios.all([this.getUser(usernameParameter), this.getNotifications(usernameParameter), this.getFollowing(usernameParameter), this.getPullRequests(usernameParameter)])
+    axios.all([this.getUser(usernameParameter), this.getNotifications(usernameParameter), this.getPullRequests(usernameParameter)])
     .then(axios.spread((user, notifications, pullRequests) => {
 
       console.log('USER PROFILE RESULTS DATA'); 
       console.log(user.data); 
 
-      console.log('USER PROFILE RESULTS DATA'); 
+      console.log('NOTIFICATIONS RESULTS DATA'); 
       console.log(notifications.data); 
-
-      console.log('USER PROFILE RESULTS DATA'); 
-      console.log(following.data); 
 
       console.log('pullRequests DATA'); 
       console.log(pullRequests); 
@@ -72,8 +71,9 @@ class UserProfile extends React.Component {
         image: userImage, 
         recipeList: user.data.recipes,
         notificationsList: notifications.data, 
-        followingList: following.data, 
-        pullRequests: pullRequests.data
+        // followingList: following.data, 
+        pullRequests: pullRequests.data,
+        followers: user.data.followers
       }); 
 
     }))
@@ -188,10 +188,11 @@ class UserProfile extends React.Component {
         )
       } else if (this.state.activeKey === 2 && this.state.notificationsList !== undefined) {
         return (
-          this.state.followingList.map((user, i) => (
+          this.state.notificationsList.map((notification, i) => (
              <NotificationsListEntry
-              key={'following' + i} 
-              user={user} 
+              key={'notification' + i} 
+              user={notification.text.split(' ')[0]} 
+              text={notification.text.split(' ').slice(1).join(' ')} 
               handleUserClick={this.props.handleUserClick}
             />
           ))
@@ -233,10 +234,7 @@ class UserProfile extends React.Component {
             <p> {this.state.userProfile.createdAt} </p>
           </Col> 
           <Col xs={8} md={8}>
-            <div style={{borderRadius: 5, background: 'rgba(128,128,128, 0.2)', border: 'solid 1px rgba(173,216,230, 0.7)', marginBottom: 10}}>
-              <h5 style={{marginLeft: 10}}> Get Cooking! </h5>
-              <h6 style={{marginLeft: 10}}> Click here to get started by creating a new recipe! </h6> 
-            </div> 
+            <UserStats recipeCount={this.state.recipeList.length} followers={this.state.followers} handleFollowUserClick={this.props.handleFollowUserClick}/>
             {this._renderNavigationBar()}
             {this._renderActiveComponent()}
           </Col>
