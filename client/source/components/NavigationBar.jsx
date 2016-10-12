@@ -93,14 +93,14 @@ class NavigationBar extends React.Component {
             <Nav pullLeft>
               <Navbar.Form>
                 <FormControl type='text' id='search' onChange={this.handleChange.bind(this)} placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
-                <Button type="submit" onSubmit={this.handleSearch.bind(this)} onClick={this.handleSearch.bind(this)} style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
+                <Button type="submit" onSubmit={this.handleSearch.bind(this)} onClick={this.handleSearch.bind(this)} onClick={this.props.handleNavigation.bind(this)} style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
               </Navbar.Form>
             </Nav>
 
-            <Nav onClick={this.props.handleNavigation.bind(this)}>
-              <NavItem title={'/User'} style={{marginTop: '4px'}}> Profile </NavItem>
-              <NavItem title={'/Create'} style={{marginTop: '4px'}}> Create Recipe </NavItem>
-              <NavItem title={'/Explore'} style={{marginTop: '4px'}}> Explore </NavItem>
+            <Nav>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/User'} style={{marginTop: '4px'}}> Profile </NavItem>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/Create'} style={{marginTop: '4px'}}> Create Recipe </NavItem>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/Explore'} style={{marginTop: '4px'}}> Explore </NavItem>
             </Nav>
 
             <Nav pullRight>

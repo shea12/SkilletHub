@@ -356,11 +356,10 @@ class App extends React.Component {
     event.preventDefault();
     var route = event.target.title; 
 
-    if (route === '/User' && this.state.username) {
+    if (route === '/User' && this.state.token) {
       this.setState({loggedInUserProfile: true}); 
       route = `/User/${this.state.username}/`; 
-    } else if (!this.state.username) {
-      console.log('not logged in');
+    } else if (!this.state.token) {
       alert('Please log in or sign up!');
       route = '/';
     }
