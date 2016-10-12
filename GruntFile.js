@@ -24,6 +24,24 @@ module.exports = grunt => {
       }
     },
 
+    htmlmin: {                                     // Task 
+      dist: {                                      // Target 
+        options: {                                 // Target options 
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {                                   // Dictionary of files 
+          'client/deploy/index.html': 'client/source/index.html',     // 'destination': 'source' 
+        }
+      },
+      dev: {                                       // Another target 
+        files: {
+          'dist/index.html': 'src/index.html',
+          'dist/contact.html': 'src/contact.html'
+        }
+      }
+    },
+
     watch: {
       babel: {
         files: ['client/source/**/*.jsx'],
