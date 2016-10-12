@@ -70,7 +70,6 @@ class CookMeMain extends Component {
           <PanelGroup accordion>
             {this.state.stepsArray.map((step, index) => (
               <Panel header={step.ingredients} eventKey={index} className="col-md-12" style={{padding: '10px', borderRadius: '6px', width: '940px', border: '0px', 'box-shadow': '0px', '-webkit-box-shadow': '0px'}}>
-
                 
                 <div className="col-md-10" style={{border: '1px solid rgba(128, 128, 128, 0.2)', borderRadius: '6px', height: '140px'}}>
                   <div className="col-md-1" style={{borderRadius: '6px', height: '60px', fontSize: '40px', marginTop: '10px', textAlign: 'center'}}>
