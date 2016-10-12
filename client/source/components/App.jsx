@@ -41,7 +41,7 @@ class App extends React.Component {
   handleSignUp(user) {
     // console.log('Attempting sign up!'); 
     // console.log('User info: ', user.username); 
-    this.signUpUser(user).bind(this); 
+    this.signUpUser(user);
   }
 
   handleLoginUser(user) {
