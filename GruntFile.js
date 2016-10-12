@@ -52,6 +52,14 @@ module.exports = grunt => {
       browserify: {
         files: ['client/compiled/**/*.js'],
         tasks: ['browserify']
+      },
+      htmlmin: {
+        files: ['client/source/index.html'],
+        tasks: ['htmlmin']
+      },
+      uglify: {
+        files: ['client/deploy/bundle.js'],
+        tasks: ['uglify']
       }
     },
   });
