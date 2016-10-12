@@ -33,12 +33,6 @@ module.exports = grunt => {
         files: {                                   // Dictionary of files 
           'client/deploy/index.html': 'client/source/index.html',     // 'destination': 'source' 
         }
-      },
-      dev: {                                       // Another target 
-        files: {
-          'dist/index.html': 'src/index.html',
-          'dist/contact.html': 'src/contact.html'
-        }
       }
     },
 
