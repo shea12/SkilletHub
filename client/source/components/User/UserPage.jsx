@@ -1,7 +1,9 @@
 import React from 'react';
 import { browserHistory, Router, Route, IndexRoute, Link} from 'react-router';
 import RecipeListEntry from './RecipeListEntry'; 
+import UserStats from './UserStats'; 
 import FollowingListEntry from './FollowingListEntry';
+import NotificationsListEntry from './NotificationsListEntry';  
 import PullRequestEntry from './PullRequestEntry';  
 
 //Bootstrap 
@@ -35,9 +37,10 @@ class UserProfile extends React.Component {
       userProfile: userProfileTemplate, 
       image: 'http://www.trbimg.com/img-53c59dde/turbine/la-dd-jacques-pepin-gordon-ramsay-20140715',
       loggedInUserProfile: true,   
-      activeKey: 2,
+      activeKey: 1,
       recipeList: [],
-      followingList: placeholders.followingList,
+      notificationsList: [], 
+      followingList: [],
       pullRequests: pullRequestsTemplate
     }; 
   }
@@ -49,11 +52,14 @@ class UserProfile extends React.Component {
     // TODO: Remove this to user a user's actual picture. 
     var userImage = placeholders.images[usernameParameter] || 'https://cdn4.iconfinder.com/data/icons/kitchenware-2/100/04-512.png';  
 
-    axios.all([this.getUser(usernameParameter), this.getPullRequests(usernameParameter)])
-    .then(axios.spread((user, pullRequests) => {
+    axios.all([this.getUser(usernameParameter), this.getNotifications(usernameParameter), this.getPullRequests(usernameParameter)])
+    .then(axios.spread((user, notifications, pullRequests) => {
 
       console.log('USER PROFILE RESULTS DATA'); 
       console.log(user.data); 
+
+      console.log('NOTIFICATIONS RESULTS DATA'); 
+      console.log(notifications.data); 
 
       console.log('pullRequests DATA'); 
       console.log(pullRequests); 
@@ -64,7 +70,10 @@ class UserProfile extends React.Component {
         userProfile: user.data,
         image: userImage, 
         recipeList: user.data.recipes,
-        pullRequests: pullRequests.data
+        notificationsList: notifications.data, 
+        // followingList: following.data, 
+        pullRequests: pullRequests.data,
+        followers: user.data.followers
       }); 
 
     }))
@@ -90,7 +99,7 @@ class UserProfile extends React.Component {
         image: userImage, 
         recipeList: results.data.recipes,
         loggedInUserProfile: this.props.loggedInUserProfile,
-        activeKey: 2
+        activeKey: 1
       }); 
     })
     .catch((error) => {
@@ -104,6 +113,14 @@ class UserProfile extends React.Component {
 
   getPullRequests(usernameParameter) {
     return axios.get(`/${usernameParameter}/get-pulls`); 
+  }
+
+  getNotifications(usernameParameter) {
+    return axios.get(`/${usernameParameter}/get-notifications`); 
+  }
+
+  getFollowing(usernameParameter) {
+    return axios.get(`/${usernameParameter}/get-followed-users`); 
   }
 
   handleTabSelect(eventKey) {
@@ -125,54 +142,85 @@ class UserProfile extends React.Component {
     }); 
   }
 
-  _renderActiveComponent(){
-    // Determine functionality for button in recipe view 
-      // If loading current user profile page -> cook 
+  _renderNavigationBar(){
     if (this.state.loggedInUserProfile) {
-      var buttonText = 'edit'; 
-      var handleButtonClick = this.props.handleRecipeEditClick; 
+      return (
+        <Nav bsStyle="tabs" justified activeKey={this.state.activeKey} onSelect={this.handleTabSelect.bind(this)} style={{marginTop: 20}}>
+          <NavItem eventKey={1} title="Recipes">Recipes</NavItem>
+          <NavItem eventKey={2} title="Notifications">Notifications</NavItem>
+          <NavItem eventKey={3} title="Following">Following</NavItem>
+          <NavItem eventKey={4} title="PullRequests">Pull Requests <Badge bsStyle="success">{this.state.pullRequests.received.length}</Badge></NavItem>
+        </Nav>
+      )
     } else {
-      var buttonText = 'fork'; 
-      var handleButtonClick = this.props.handleRecipeForkClick; 
-    }
-    if (this.state.activeKey === 2) {
       return (
-        this.state.recipeList.map((recipe, i) => (
-          <RecipeListEntry 
-            key={recipe.rootRecipeId} 
-            recipe={recipe} 
-            username={this.state.username}
-            buttonText={buttonText}
-            handleForkedFromUserClick={this.props.handleUserClick} 
-            handleRecipeViewClick={this.props.handleRecipeViewClick}
-            handleButtonClick={handleButtonClick}
-          />
-        ))
-      )
-    } else if (this.state.activeKey === 3) {
-      return (
-        this.state.followingList.map((user, i) => (
-           <FollowingListEntry 
-            key={'following' + i} 
-            user={user} 
-            handleUserClick={this.props.handleUserClick}
-          />
-        ))
-      )
-    } else if (this.state.activeKey === 5) {
-      return (
-        this.state.pullRequests.received.map((pullRequest, i) => (
-           <PullRequestEntry 
-            key={'pullRequest' + i} 
-            pullRequest={pullRequest}
-            username={this.props.params.username}
-            handleUserClick={this.props.handleUserClick}
-            handlePullRequestClick={this.props.handlePullRequestClick}
-          />
-        ))
+        <Nav bsStyle="tabs" justified activeKey={this.state.activeKey} onSelect={this.handleTabSelect.bind(this)} style={{marginTop: 20}}>
+          <NavItem eventKey={1} title="Recipes">Recipes</NavItem>
+          <NavItem eventKey={2} title="Notifications" disabled>Notifications</NavItem>
+          <NavItem eventKey={3} title="Following">Following</NavItem>
+          <NavItem eventKey={4} title="PullRequests" disabled>Pull Requests</NavItem>
+        </Nav>
       )
     }
   }
+
+  _renderActiveComponent(){
+      if (this.state.loggedInUserProfile) {
+        var buttonText = 'edit'; 
+        var handleButtonClick = this.props.handleRecipeEditClick; 
+      } else {
+        var buttonText = 'fork'; 
+        var handleButtonClick = this.props.handleRecipeForkClick; 
+      }
+      if (this.state.activeKey === 1 && this.state.recipeList !== undefined) {
+        return (
+          this.state.recipeList.map((recipe, i) => (
+            <RecipeListEntry 
+              key={recipe.rootRecipeId} 
+              recipe={recipe} 
+              username={this.state.username}
+              buttonText={buttonText}
+              handleForkedFromUserClick={this.props.handleUserClick} 
+              handleRecipeViewClick={this.props.handleRecipeViewClick}
+              handleButtonClick={handleButtonClick}
+            />
+          ))
+        )
+      } else if (this.state.activeKey === 2 && this.state.notificationsList !== undefined) {
+        return (
+          this.state.notificationsList.map((notification, i) => (
+             <NotificationsListEntry
+              key={'notification' + i} 
+              user={notification.text.split(' ')[0]} 
+              text={notification.text.split(' ').slice(1).join(' ')} 
+              handleUserClick={this.props.handleUserClick}
+            />
+          ))
+        )
+      } else if (this.state.activeKey === 3 && this.state.followingList !== undefined) {
+        return (
+          this.state.followingList.map((user, i) => (
+             <FollowingListEntry 
+              key={'following' + i} 
+              user={user} 
+              handleUserClick={this.props.handleUserClick}
+            />
+          ))
+        )
+      } else if (this.state.activeKey === 4 && this.state.pullRequests !== undefined) {
+        return (
+          this.state.pullRequests.received.map((pullRequest, i) => (
+             <PullRequestEntry 
+              key={'pullRequest' + i} 
+              pullRequest={pullRequest}
+              username={this.props.params.username}
+              handleUserClick={this.props.handleUserClick}
+              handlePullRequestClick={this.props.handlePullRequestClick}
+            />
+          ))
+        )
+      }
+    }
 
   render() {
     return (
@@ -186,22 +234,10 @@ class UserProfile extends React.Component {
             <p> {this.state.userProfile.createdAt} </p>
           </Col> 
           <Col xs={8} md={8}>
-            <div style={{borderRadius: 5, background: 'rgba(128,128,128, 0.2)', border: 'solid 1px rgba(173,216,230, 0.7)', marginBottom: 10}}>
-              <h5 style={{marginLeft: 10}}> Get Cooking! </h5>
-              <h6 style={{marginLeft: 10}}> Click here to get started by creating a new recipe! </h6> 
-            </div> 
-            <Nav bsStyle="tabs" justified activeKey={this.state.activeKey} onSelect={this.handleTabSelect.bind(this)} style={{marginTop: 20}}>
-              <NavItem eventKey={1} disabled>Overview</NavItem>
-              <NavItem eventKey={2} title="Recipes">Recipes</NavItem>
-              <NavItem eventKey={3} title="Following">Following</NavItem>
-              <NavItem eventKey={4} disabled> Followers </NavItem>
-              <NavItem eventKey={5} >Pull Requests <Badge> {this.state.pullRequests.received.length} </Badge></NavItem>
-            </Nav>
+            <UserStats recipeCount={this.state.recipeList.length} followers={this.state.followers} handleFollowUserClick={this.props.handleFollowUserClick}/>
+            {this._renderNavigationBar()}
             {this._renderActiveComponent()}
           </Col>
-        </Row> 
-        <Row>
-          <Button type="submit" onClick={this.requestPullRequests.bind(this)}> pulls </Button> 
         </Row> 
       </Grid> 
     );

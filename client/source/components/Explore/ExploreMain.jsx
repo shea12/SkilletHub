@@ -42,17 +42,17 @@ class ExploreMain extends Component {
           <Col xs={4} md={4}>
             <h4> The Cutting Edge </h4> 
             <p> Browse through Skillet Hub's newest recipes and stay up to date on the latest in taste-driven development. </p> 
-            <ExploreList name="newRecipes" recipeList={this.state.newRecipes} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
+            <ExploreList name="newRecipes" recipeList={this.state.newRecipes} handleUserClick={this.props.handleUserClick} handleRecipeCookClick={this.props.handleRecipeCookClick} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
           </Col>
           <Col xs={4} md={4}>
             <h4> The Unicorns </h4> 
             <p> The myths. The legends. The most popular recipes on Skillet Hub. </p> 
-            <ExploreList name="popularRecipes" recipeList={this.state.popularRecipes} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
+            <ExploreList name="popularRecipes" recipeList={this.state.popularRecipes} handleUserClick={this.props.handleUserClick} handleRecipeCookClick={this.props.handleRecipeCookClick} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
           </Col>
           <Col xs={4} md={4}>
             <h4> The Hot List </h4> 
             <p> These recipes are the currently trending topics in Skillet Hub's community. </p> 
-            <ExploreList name="trendingRecipes" recipeList={this.state.trendingRecipes} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
+            <ExploreList name="trendingRecipes" recipeList={this.state.trendingRecipes} handleUserClick={this.props.handleUserClick} handleRecipeCookClick={this.props.handleRecipeCookClick} handleRecipeForkClick={this.props.handleRecipeForkClick}/>
           </Col>
         </Row> 
       </Grid> 
