@@ -338,6 +338,20 @@ class App extends React.Component {
     }
   }
 
+  handleFollowUserClick(event) {
+    event.preventDefault();
+    var usernameParameter = this.state.username; 
+    var followUsernameParameter = this.props.params.username; 
+    axios.post(`/${usernameParameter}/follow/${followUsernameParameter}`)
+    .then((result) => {
+      console.log('Followed new user'); 
+      console.log(result); 
+    })
+    .catch((error) => {
+      console.log(error); 
+    }); 
+  }
+
   handleNavigation(event) {
     event.preventDefault();
     var route = event.target.title; 
@@ -553,7 +567,8 @@ class App extends React.Component {
       handleNewIssueSubmit: this.handleNewIssueSubmit.bind(this),
       handleViewIssuesClick: this.handleViewIssuesClick.bind(this),
       handleViewSingleIssueClick: this.handleViewSingleIssueClick.bind(this),
-      handleIssueResponseSubmit: this.handleIssueResponseSubmit.bind(this)
+      handleIssueResponseSubmit: this.handleIssueResponseSubmit.bind(this),
+      handleFollowUserClick: this.handleFollowUserClick.bind(this)
 	  })
 	}.bind(this))
     return (
