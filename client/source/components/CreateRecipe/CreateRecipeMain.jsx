@@ -193,7 +193,7 @@ class CreateRecipeMain extends Component {
     recipeObject.dependencies = []; 
     recipeObject.ingredients = this.state.ingredients; 
     recipeObject.steps = this.state.steps; 
-    recipeObject.tags = []; 
+    recipeObject.tags = this.state.tags; 
     recipeObject.issues = []; 
     // this.setState({ recipe: recipeObject }); 
 
