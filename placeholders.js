@@ -42,7 +42,8 @@ var placeholderProfile = {
   ingredients: [], 
   steps: [],
   branch: '',
-  _id: ''
+  _id: '',
+  forkedFrom: ''
  }, 
  followingList: [
   {

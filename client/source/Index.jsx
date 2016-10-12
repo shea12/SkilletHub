@@ -16,7 +16,9 @@ import ManagePullRequest from './components/PullRequest/ManagePullRequest';
 import CookMeMain from './components/CookRecipe/CookMeMain'; 
 import ExploreMain from './components/Explore/ExploreMain'; 
 import SearchResultsMain from './components/SearchExplore/SearchResultsMain'; 
-
+import IssuesMain from './components/Issues/IssuesMain'; 
+import IssuesList from './components/Issues/IssuesList'; 
+import IssuesManage from './components/Issues/IssuesManage'; 
 
 //TODO: Enter authentication 
 
@@ -39,6 +41,9 @@ render((
 	  	<Route path="/Manage/:username/:pullId" component={ManagePullRequest} />
 	  	<Route path="/Manage/:username/:recipe/:branch/:version/:pullUser/:pullRecipe" component={ManagePullRequest} />
 	  	<Route path="/Explore" component={ExploreMain} />
+	  	<Route path="/Issues/:username/:recipe" component={IssuesMain} /> 
+	  	<Route path="/Issues/List/:username/:recipe" component={IssuesList} /> 
+	  	<Route path="/Issues/Manage/:username/:recipe" component={IssuesManage} /> 
 	  </Route>
 	</Router>
 ), document.getElementById('app'));
