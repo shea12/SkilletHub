@@ -24,6 +24,26 @@ module.exports = grunt => {
       }
     },
 
+    htmlmin: {                                     // Task 
+      dist: {                                      // Target 
+        options: {                                 // Target options 
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {                                   // Dictionary of files 
+          'client/deploy/index.html': 'client/source/index.html',     // 'destination': 'source' 
+        }
+      }
+    },
+
+    uglify: {
+      my_target: {
+        files: {
+          'client/deploy/bundle.min.js': 'client/deploy/bundle.js'
+        }
+      }
+    },
+
     watch: {
       babel: {
         files: ['client/source/**/*.jsx'],
@@ -32,10 +52,18 @@ module.exports = grunt => {
       browserify: {
         files: ['client/compiled/**/*.js'],
         tasks: ['browserify']
+      },
+      htmlmin: {
+        files: ['client/source/index.html'],
+        tasks: ['htmlmin']
+      },
+      uglify: {
+        files: ['client/deploy/bundle.js'],
+        tasks: ['uglify']
       }
     },
   });
 
   // grunt.registerTask('default', ['']);
-  grunt.registerTask('build', ['babel', 'browserify']);
+  grunt.registerTask('build', ['babel', 'browserify', 'htmlmin', 'uglify']);
 };
