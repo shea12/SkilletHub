@@ -29,7 +29,7 @@ class App extends React.Component {
     this.state = {
       userID: null,
       token: null,
-      username: 'Gordon_Ramsay', 
+      username: 'testUser1', 
       password: 'password',
       currentProfile: null,
       loggedInUserProfile: true,
