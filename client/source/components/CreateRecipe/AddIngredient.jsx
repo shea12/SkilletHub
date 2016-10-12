@@ -100,7 +100,7 @@ class AddIngredient extends React.Component {
 			  </Col>
 			</Row>
 			<Row className="show-grid">
-			  <button style={{display: 'none'}} type="submit"onClick={this.handleClick.bind(this)}> Next Step </button> 
+			  <button style={{display: 'none'}} type="submit" onClick={this.handleClick.bind(this)}> Next Step </button> 
 			</Row>
 			</form>
 			</Grid>

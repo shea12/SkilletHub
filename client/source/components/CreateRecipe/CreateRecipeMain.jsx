@@ -3,7 +3,6 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import IngredientsForm from './IngredientsForm'
 import StepsForm from './StepsForm'
 
-
 //Bootstrap 
 import { Grid, Row, Col, FormGroup, FormControl, Button, Jumbotron, Carousel, Container, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap';
 
@@ -12,6 +11,7 @@ var axios = require('axios');
 
 // Placeholder recipe data 
 import placeholders from '../../../../placeholders';
+import tags from '../../../../tags';
 import meatloafRecipe from '../../../../meatloafRecipe';
 import wellingtonRecipe from '../../../../recipes/ramsayWellington';
 import nachosRecipe from '../../../../recipes/fieriNachos';
@@ -33,7 +33,8 @@ class CreateRecipeMain extends Component {
       ingredients: [],
       availableIngredients: [], 
       steps: [],
-      recipe: {}
+      recipe: {},
+      tags: []
     }; 
   }
 
@@ -64,6 +65,11 @@ class CreateRecipeMain extends Component {
     if (inputType === 'image'){
       this.setState({image: event.target.value}); 
     } 
+    if (inputType === 'tags'){
+      var tags = this.state.tags;
+      tags.push(event.target.value);
+      this.setState({ tags: tags });
+    } 
   }
 
   handleAddIngredient(ingredient) {
@@ -81,9 +87,7 @@ class CreateRecipeMain extends Component {
     var steps = this.state.steps;
     console.log(step);
     steps.push(step); 
-    this.setState({
-      steps: steps
-    }); 
+    this.setState({ steps: steps }); 
   }
 
   // handleClick (event) {
@@ -189,7 +193,7 @@ class CreateRecipeMain extends Component {
     recipeObject.dependencies = []; 
     recipeObject.ingredients = this.state.ingredients; 
     recipeObject.steps = this.state.steps; 
-    recipeObject.tags = []; 
+    recipeObject.tags = this.state.tags; 
     recipeObject.issues = []; 
     // this.setState({ recipe: recipeObject }); 
 
@@ -254,6 +258,64 @@ class CreateRecipeMain extends Component {
         </Col>
       </Row>
       <Row className="show-grid">
+        <Col xs={3} md={3} style={{padding: '20px'}}> 
+          <form>
+            <FormGroup>
+              <ControlLabel>Cuisine</ControlLabel>
+              <FormControl componentClass="select" id="tags" onChange={this.handleChange.bind(this)} >
+                {tags.map(function(tag, i) {
+                  if (tag.type === 'cuisine' || tag.type === 'none') { 
+                    return <option key={'tagDropdown' + i} value={tag.name}>{tag.name}</option> 
+                  }
+                })}
+              </FormControl>
+            </FormGroup>
+          </form>
+        </Col>
+        <Col xs={3} md={3} style={{padding: '20px'}}> 
+          <form>
+            <FormGroup>
+              <ControlLabel>Diet</ControlLabel>
+              <FormControl componentClass="select" id="tags" onChange={this.handleChange.bind(this)} >
+                {tags.map(function(tag, i) {
+                  if (tag.type === 'diet' || tag.type === 'none') { 
+                    return <option key={'tagDropdown' + i} value={tag.name}>{tag.name}</option> 
+                  }
+                })}
+              </FormControl>
+            </FormGroup>
+          </form>
+        </Col>
+        <Col xs={3} md={3} style={{padding: '20px'}}> 
+          <form>
+            <FormGroup>
+              <ControlLabel>Nutrition</ControlLabel>
+              <FormControl componentClass="select" id="tags" onChange={this.handleChange.bind(this)} >
+                {tags.map(function(tag, i) {
+                  if (tag.type === 'nutrition' || tag.type === 'none') { 
+                    return <option key={'tagDropdown' + i} value={tag.name}>{tag.name}</option> 
+                  }
+                })}
+              </FormControl>
+            </FormGroup>
+          </form>
+        </Col>
+        <Col xs={3} md={3} style={{padding: '20px'}}> 
+          <form>
+            <FormGroup>
+              <ControlLabel>Religious</ControlLabel>
+              <FormControl componentClass="select" id="tags" onChange={this.handleChange.bind(this)} >
+                {tags.map(function(tag, i) {
+                  if (tag.type === 'religious' || tag.type === 'none') { 
+                    return <option key={'tagDropdown' + i} value={tag.name}>{tag.name}</option> 
+                  }
+                })}
+              </FormControl>
+            </FormGroup>
+          </form>
+        </Col>
+      </Row>
+      <Row className="show-grid">
         <Col xs={12} md={12}> 
             <form>
               <FormGroup style={{padding: 5}}>
@@ -279,5 +341,15 @@ class CreateRecipeMain extends Component {
     );
   }
 }
+
+/*
+<FormControl componentClass="select" id="tags" onChange={this.handleChange.bind(this)} >
+  {tags.map((unit, i)=> (
+    <option key={'tagDropdown' + i + this.state.position} value={tag}>{tag}</option>
+  ))}
+</FormControl>
+*/
+
+
 
 export default CreateRecipeMain;
