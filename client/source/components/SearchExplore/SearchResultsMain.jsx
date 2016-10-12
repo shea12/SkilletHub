@@ -62,7 +62,7 @@ class SearchResultsMain extends Component {
           <h1> Search Results For: "{this.state.searchTerm}" </h1>
         </Row>
         <Row>
-          <SearchResultsList name="searchResults" recipeList={this.state.searchResultsArray} handleRecipeForkClick={this.props.handleRecipeForkClick} handleRecipeCookClick={this.props.handleRecipeCookClick}/>
+          <SearchResultsList name="searchResults" recipeList={this.state.searchResultsArray} handleUserClick={this.props.handleUserClick} handleRecipeForkClick={this.props.handleRecipeForkClick} handleRecipeCookClick={this.props.handleRecipeCookClick}/>
         </Row>
       </Grid>
     );
