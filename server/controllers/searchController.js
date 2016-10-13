@@ -5,7 +5,6 @@ let UserRecipe = db.UserRecipe;
 let Tag = db.Tag;
 let _ = require('underscore');
 let Promise = require('bluebird');
-console.log('in search controller');
 module.exports = {
   // description: Returns a list of recipes by relevancy to a given search string
   // params: {
@@ -151,18 +150,6 @@ module.exports = {
       lengthOfResults.random = fullTopTenByDate.length;
 
       let results = fullTopTenForked.concat(fullTopTenByDate, fullTopTenByRandom);
-      // console.log('top ten by forks');
-      // topTenForked.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
-      // console.log('top ten by dates');
-      // topTenByDate.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
-      // console.log('top ten by random');
-      // topTenByRandom.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
 
       return Promise.all(results);
 
@@ -172,18 +159,6 @@ module.exports = {
         byDates: results.slice(lengthOfResults.forks, lengthOfResults.forks + lengthOfResults.dates),
         byRandom: results.slice(lengthOfResults.forks + lengthOfResults.dates),
       };
-      // console.log('top ten by forks');
-      // exploreRecipes.byForks.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
-      // console.log('top ten by dates');
-      // exploreRecipes.byDates.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
-      // console.log('top ten by random');
-      // exploreRecipes.byRandom.forEach(recipe => {
-      //   console.log(recipe._id);
-      // });
 
       res.status(200).send(exploreRecipes);
     }).catch(error => {

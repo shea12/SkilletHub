@@ -39,22 +39,18 @@ module.exports = function(app, express) {
 
   /*** Users ***/
   app.get('/:username/profile', users.getProfile); //gets recipes
-  // app.put('/:username/profile', users.updateProfile);
 
   /*** Recipes ***/
   app.post('/:username/create-recipe', recipes.createRecipe);
   app.get('/:username/:recipe', recipes.getRecipe); 
-  app.delete('/:username/:recipe', recipes.deleteRecipe);
 
   /*** Branches ***/
   app.post('/:username/:recipe/:branch', branches.createBranch);
   app.get('/:username/:recipe/:branch', branches.getBranch);
-  app.delete('/:username/:recipe/:branch', branches.deleteBranch);
 
   /*** Versions ***/
   app.get('/:username/:recipe/:branch/versions', versions.getAllVersions);
   app.post('/:username/:recipe/:branch/create-version', versions.createVersion);
   app.get('/:username/:recipe/:branch/:version', versions.getVersion);
-  app.delete('/:username/:recipe/:branch/:version', versions.deleteVersion);  
   app.post('/:username/:recipe/:branch/:version/fork', versions.forkVersion);
 };

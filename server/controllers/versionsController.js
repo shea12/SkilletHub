@@ -115,11 +115,6 @@ module.exports = {
     });
   },
 
-  // description: removes versions with no downstream, makes others unavailable
-  deleteVersion: (req, res) => {
-
-  },
-
   // description: fork a version
   // body: {
   //   username: 'username of person making the fork'

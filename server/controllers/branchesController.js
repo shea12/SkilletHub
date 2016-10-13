@@ -62,10 +62,5 @@ module.exports = {
       console.log('Error: ', error);
       res.status(404).send(error);
     })
-  },
-
-  //removes versions with no downstream, makes rest unavailable
-  deleteBranch: (req, res) => {
-
   }
 };
