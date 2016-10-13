@@ -1,52 +1,38 @@
 # SkilletHub
 
-> Pithy project description
+> A webapp for collaboratively developing recipes, inspired by github. 
 
 ## Team
 
   - __Product Owner__: Caroline Shea
   - __Scrum Master__: Austin Riedel
   - __Development Team Members__: Justin Griffin
-
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Team](#team)
-1. [Contributing](#contributing)
-
-## Usage
-
-> Some usage instructions
-
+  
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
-
-## Development
+- node v6.4.0
+- express v4.14.0
 
 ### Installing Dependencies
 
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
 
-### Roadmap
+Transpile, concat, and minify with:
+```sh
+grunt build
+```
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+## Usage
 
+Start the server with
+```sh
+node server/server.js
+```
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+This project is no longer being maintained. Please fork the repo if you wish to add to this project.
