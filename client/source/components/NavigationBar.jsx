@@ -26,7 +26,6 @@ class NavigationBar extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault(); 
-    console.log(this.state.username, this.state.password);
     var user = this.state; 
     this.props.handleLoginUser(user);
     this.setState({password: null});
@@ -63,17 +62,26 @@ class NavigationBar extends React.Component {
   _renderAuthentication() {
     if (this.props.userID === null) {
       return (
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <FormGroup  style={{paddingRight: '10px', paddingLeft: '10px'}}>
-            <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}}/>
-            <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}} />
-            <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5, height: '30px'}}>Log In</Button>  
-          </FormGroup>
-        </form> 
+        <Nav pullRight>
+          <Navbar.Form>
+            <FormGroup  style={{paddingRight: '10px', paddingLeft: '10px'}}>
+              <FormControl type="text" placeholder='Username' id="username" onChange={this.handleChange.bind(this)} onFocus={this.handleFocus.bind(this)} value={this.state.username} style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}}/>
+              <FormControl type="password" placeholder='Password' id="password" onChange={this.handleChange.bind(this)} value={this.state.password} name="password" style={{width: '140px', marginRight: 5, height: '30px', textAlign: 'center'}} />
+              <Button type="submit" onSubmit={this.handleSubmit.bind(this)} onClick={this.handleSubmit.bind(this)} style={{margin: 5, height: '30px', paddingBottom: '4px'}}>Log In</Button>  
+            </FormGroup>
+          </Navbar.Form> 
+        </Nav>
       )
     } else {
       return (
-        <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5, height: '30px', paddingTop: '4px'}}>Log Out</Button>  
+        <Navbar.Form pullRight style={{padding: '0px'}}>
+          <FormGroup >
+            <FormControl type='text' id='search' onChange={this.handleChange.bind(this)} placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center'}}/>
+            <Button type="submit" onSubmit={this.handleSearch.bind(this)} onClick={this.handleSearch.bind(this)} style={{height: '30px', paddingBottom: '4px'}}>Search</Button>  
+          </FormGroup>
+
+          <Button type="submit" onSubmit={this.handleLogout.bind(this)} onClick={this.handleLogout.bind(this)} style={{margin: 5, height: '30px', paddingBottom: '4px', marginLeft: '20px'}}>Log Out</Button>
+        </Navbar.Form>
       )
     }
   }
@@ -90,24 +98,14 @@ class NavigationBar extends React.Component {
           </Navbar.Header>
 
           <Navbar.Collapse>
-            <Nav pullLeft>
-              <Navbar.Form>
-                <FormControl type='text' id='search' onChange={this.handleChange.bind(this)} placeholder='Search for Recipes' style={{width: '200px', height: '30px', textAlign: 'center', marginTop: '4px'}}/>
-                <Button type="submit" onSubmit={this.handleSearch.bind(this)} onClick={this.handleSearch.bind(this)} style={{height: '30px', marginTop: '4px', paddingTop: '4px'}}>Search</Button>  
-              </Navbar.Form>
+            
+            <Nav>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/User'}> Profile </NavItem>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/Create'}> Create Recipe </NavItem>
+              <NavItem onClick={this.props.handleNavigation.bind(this)} title={'/Explore'}> Explore </NavItem>
             </Nav>
 
-            <Nav onClick={this.props.handleNavigation.bind(this)}>
-              <NavItem title={'/User'} style={{marginTop: '4px'}}> Profile </NavItem>
-              <NavItem title={'/Create'} style={{marginTop: '4px'}}> Create Recipe </NavItem>
-              <NavItem title={'/Explore'} style={{marginTop: '4px'}}> Explore </NavItem>
-            </Nav>
-
-            <Nav pullRight>
-              <Navbar.Form>
-                {this._renderAuthentication()}
-              </Navbar.Form>
-            </Nav>
+            {this._renderAuthentication()}
 
           </Navbar.Collapse>
 

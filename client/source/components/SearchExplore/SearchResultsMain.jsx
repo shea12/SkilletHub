@@ -26,15 +26,13 @@ class SearchResultsMain extends Component {
     this.getSearchResults();
   }
 
-  // componentWillUpdate() {
-  //   if (this.state.searchTerm !== this.props.params.search){
-  //     this.getSearchResults();
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    var searchTerm = nextProps.params.search;
+    this.getSearchResults(searchTerm);
+  }
 
-  getSearchResults() {
-    var username = this.props.username;
-    var searchTerm = this.props.params.search;
+  getSearchResults(searchTerm) {
+    var searchTerm = searchTerm || this.props.params.search;
     //need to remove spaces from the seach string and replace
     //  the spaces with + sign
     var searchTermPlus = searchTerm.replace(/\s+/g, '+').toLowerCase();
@@ -46,8 +44,7 @@ class SearchResultsMain extends Component {
       console.log('results: ', result);
       this.setState({
         searchResultsArray: searchResultsArray,
-        searchTerm: searchTerm,
-        username: username
+        searchTerm: searchTerm
       });
     })
     .catch((error) => {

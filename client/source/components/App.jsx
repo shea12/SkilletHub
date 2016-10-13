@@ -41,7 +41,7 @@ class App extends React.Component {
   handleSignUp(user) {
     // console.log('Attempting sign up!'); 
     // console.log('User info: ', user.username); 
-    this.signUpUser(user).bind(this); 
+    this.signUpUser(user);
   }
 
   handleLoginUser(user) {
@@ -356,11 +356,10 @@ class App extends React.Component {
     event.preventDefault();
     var route = event.target.title; 
 
-    if (route === '/User' && this.state.username) {
+    if (route === '/User' && this.state.token) {
       this.setState({loggedInUserProfile: true}); 
       route = `/User/${this.state.username}/`; 
-    } else if (!this.state.username) {
-      console.log('not logged in');
+    } else if (!this.state.token) {
       alert('Please log in or sign up!');
       route = '/';
     }
