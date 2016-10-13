@@ -4,7 +4,6 @@ var httpMocks = require('node-mocks-http');
 var ctrl = require('../../../server/controllers/branchesController.js');
 var createBranch = ctrl.createBranch;
 var getBranch = ctrl.getBranch;
-var deleteBranch = ctrl.deleteBranch;
 var req, res;
 
 describe('branchesController.js', function() {
@@ -50,12 +49,6 @@ describe('branchesController.js', function() {
     });
     it('should return 404 when unsuccessful', function() {
 
-    });
-  });
-
-  describe('deleteBranch()', function() {
-    it('should be a function', function() {
-      expect(deleteBranch).to.be.a('function');
     });
   });
 });

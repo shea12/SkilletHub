@@ -6,7 +6,6 @@ var generateId = mongoose.Types.ObjectId;
 var ctrl = require('../../../server/controllers/versionsController.js');
 var createVersion = ctrl.createVersion;
 var getVersion = ctrl.getVersion;
-var deleteVersion = ctrl.getVersion;
 var getAllVersions = ctrl.getAllVersions;
 var req, res;
 var db = require(`${__dirname}/../../../server/schemas.js`);
@@ -26,51 +25,6 @@ describe('versionsController.js', function() {
       mongoose.connection.close();
     });
   });
-
-  // describe('createVersion()', function() {
-  //   beforeEach(function() {
-  //     req = httpMocks.createRequest({
-  //       method: 'POST',
-  //       url: '/user/recipe/branch/version',
-  //       body: {
-
-  //       }
-  //     });
-  //     res = httpMocks.createResponse();
-  //   });
-
-  //   it('should be a function', function() {
-  //     expect(createVersion).to.be.a('function');
-  //   });
-  // });
-
-  // describe('getVersion()', function() {
-  //   beforeEach(function() {
-  //     req = httpMocks.createRequest({
-  //       method: 'GET',
-  //       url: '/user/recipe/branch/version',
-  //     });
-  //     res = httpMocks.createResponse();
-  //   });
-
-  //   it('should be a function', function() {
-  //     expect(getVersion).to.be.a('function');
-  //   });
-  // });
-
-  // describe('deleteVersion()', function() {
-  //   beforeEach(function() {
-  //     req = httpMocks.createRequest({
-  //       method: 'DELETE',
-  //       url: '/user/recipe/branch/version',
-  //     });
-  //     res = httpMocks.createResponse();
-  //   });
-
-  //   it('should be a function', function() {
-  //     expect(deleteVersion).to.be.a('function');
-  //   });
-  // });
 
   describe('getAllVersions()', function() {
 
