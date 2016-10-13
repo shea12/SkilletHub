@@ -19,7 +19,7 @@ module.exports = {
       res.status(200).send(follows.users);
     }).catch(error => {
       console.log('ERROR: ', error);
-      res.status(404).send();
+      res.status(200).send([]);
     });
   },
 
@@ -52,7 +52,7 @@ module.exports = {
     });
     let notifyUser = helpers.createNotification({
       notificationOwner: req.params.user,
-      username: req.params.user,
+      username: req.params.username,
       text: `${req.params.username} started following you.`
     });
 
