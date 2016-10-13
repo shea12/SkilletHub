@@ -7,7 +7,6 @@ var Promise = require('bluebird');
 var generateId = mongoose.Types.ObjectId;
 var makeVersion = helpers.makeVersion;
 var retrieveVersion = helpers.retrieveVersion;
-var deleteDownstream = helpers.deleteDownstream;
 var addUserRecipesCollection = helpers.addUserRecipesCollection;
 
 var db = require(`${__dirname}/../../server/schemas.js`);
@@ -61,7 +60,6 @@ describe('helpers.js', function() {
       .then(function(result) {
         expect(result.rootVersion).to.be.null;
         expect(result.previousVersion).to.be.null;
-        expect(result.deleted).to.be.false;
         expect(result.branch).to.equal('master');
       });
     });
@@ -153,12 +151,6 @@ describe('helpers.js', function() {
     it('should be a function', function() {
       expect(retrieveVersion).to.be.a('function');
     });
-    it('should return a object', function() {
-      return insertVersions([rootVersion,version2,version3])
-      .then(function() {
-        expect(retrieveVersion(version3._id)).to.be.a('object');
-      });
-    }); 
     it('should return the correct recipe', function() {
       return insertVersions([rootVersion,version2,version3])
       .then(function() {
@@ -168,7 +160,6 @@ describe('helpers.js', function() {
         expect(result._id).to.not.be.undefined;
         expect(result.rootVersion.equals(rootVersion._id)).to.be.true;
         expect(result.previousVersion.equals(version2._id)).to.be.true;
-        expect(result.deleted).to.be.false;
         expect(result.branch).to.equal('master');
       });
     });
@@ -259,13 +250,6 @@ describe('helpers.js', function() {
         expect(result.ingredients[0].position).to.equal(1);
       });
     });
-  });
-
-  describe('deleteDownstream()', function() {
-    it('should be a function', function() {
-      expect(deleteDownstream).to.be.a('function');
-    });
-
   });
 
   describe('addUserRecipesCollection()', function() {

@@ -1,7 +1,8 @@
 let express = require('express');
 let app = express();
 let mongoose = require('mongoose');
-mongoose.connect('mongodb://deploy:asdfasdf42069@ds055626.mlab.com:55626/skillethub');
+let key = require(`${__dirname}/dbkey.js`);
+mongoose.connect(key);
 let port = process.env.PORT || 3000;
 let tags = require(`${__dirname}/tags.js`);
 let Tag = require(`${__dirname}/schemas.js`).Tag;

@@ -154,12 +154,6 @@ module.exports = {
       return built;
     });
   },
-  //from a particular point,
-  //for all version below it with no dependencies, delete them
-  //for everything else, set them to unavailable
-  deleteDownstream: (version) => {
-
-  },
 
   // description: adds a collection of a user's recipes
   // username: username of collection owner

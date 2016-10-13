@@ -7,6 +7,9 @@ let _ = require('underscore');
 module.exports = {
   // description: Makes a new recipe
   // body: { recipe changes }
+  // params: {
+  //   username: username of the recipe owner,
+  // }
   createRecipe: (req, res) => {
     helpers.makeVersion('new', req.body.recipeObject, req.params.username)
     .then(result => {
@@ -28,6 +31,10 @@ module.exports = {
   },
 
   // description: Gets latest version in master
+  // params: {
+  //   username: username of the recipe owner,
+  //   recipe: root recipe id
+  // }
   getRecipe: (req, res) => {
     let branch = 'master';
     UserRecipe.findOne({

@@ -91,12 +91,5 @@ describe('userController.js', function() {
         expect(res.statusCode).to.equal(200);
       });
     });
-    // it('should return a 404 when error', function() {
-    //   req.url = '/tosh/profile';
-    //   return getProfile(req, res)
-    //   .then(function() {
-    //     expect(res.statusCode).to.equal(404);
-    //   });
-    // });
   });
 });
