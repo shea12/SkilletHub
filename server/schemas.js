@@ -6,7 +6,6 @@ let recipeSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   rootVersion: Schema.Types.ObjectId,       //The root version of the recipe
   previousVersion: Schema.Types.ObjectId,   //The preceding version of the curent recipe
-  deleted: Boolean,                         //set to true when deleted, but cannot remove because of downstream branches
   branch: String,            
   username: String,                         //Creator of recipe
   forkedFrom: String,                       //Creator of recipe forked from
@@ -36,11 +35,6 @@ let recipeSchema = new Schema({
     changed: Boolean,
     value: String
   },                
-  dependencies: [{                          //Tools used for the recipe
-    changed: Boolean,
-    position: Number,
-    dependencyId: Schema.Types.ObjectId
-  }],
   ingredients: Schema.Types.Mixed,
   // ingredients: [{
   //   changed: Boolean,

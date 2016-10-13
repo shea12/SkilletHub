@@ -47,10 +47,5 @@ module.exports = {
       console.log('Error: ', error);
       res.status(404).send(error);
     });
-  },
-  
-  // description: Removes versions with no downstream, makes others unavailable
-  deleteRecipe: (req, res) => {
-
   }
 };
