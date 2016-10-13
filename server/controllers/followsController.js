@@ -29,7 +29,7 @@ module.exports = {
   // }
   getNotifications: (req, res) => {
     return Notification.find({
-      username: req.params.username
+      notificationOwner: req.params.username
     }).then(notifications => {
       res.status(200).send(notifications);
     }).catch(error => {
