@@ -9,6 +9,11 @@ module.exports = {
   // body: {
   //   versionId: { version object branched from }
   // }
+  // params: {
+  //   username: username of the person who owns the recipe,
+  //   recipe: root recipe id,
+  //   branch: name of the branch
+  // }
   createBranch: (req, res) => {
     let versionId;
     return Recipe.findOne({
@@ -45,6 +50,11 @@ module.exports = {
   },
 
   // description: gets the latest version in a branch
+  // params: {
+  //   username: recipe owner username,
+  //   recipe: root recipe id,
+  //   branch: name of the branch
+  // }
   getBranch: (req, res) => {
     UserRecipe.findOne({
       username: req.params.username

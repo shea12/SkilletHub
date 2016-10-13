@@ -60,6 +60,12 @@ module.exports = {
   },
 
   // description: gets a specific version
+  // params: {
+  //   username: recipe owner name,
+  //   recipe: root recipe id,
+  //   branch: branch name,
+  //   version: version id
+  // }
   getVersion: (req, res) => {
     return helpers.retrieveVersion(req.params.version)
     .then(result => {
@@ -71,6 +77,11 @@ module.exports = {
   },
   
   // description: Retrieve a list of all versions
+  // params: {
+  //   username: recipe owner name,
+  //   recipe: root recipe id,
+  //   branch: branch name,
+  // }
   getAllVersions: (req, res) => {
     let mostRecent;
     return UserRecipe.findOne({
@@ -118,6 +129,12 @@ module.exports = {
   // description: fork a version
   // body: {
   //   username: 'username of person making the fork'
+  // }
+  // params: {
+  //   username: recipe owner name,
+  //   recipe: root recipe id,
+  //   branch: branch name,
+  //   version: version id
   // }
   forkVersion: (req, res) => {
     let retrieve = helpers.retrieveVersion(req.params.version);
