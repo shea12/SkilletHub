@@ -21,7 +21,19 @@ module.exports = {
   //   recipe: root recipe id
   // }
   createIssue: (req, res) => {
-    return new Issue({
+    let notification = Recipe.findOne({
+      username: req.params.username,
+      _id: req.params.recipe
+    }).then(recipe => {
+      return helpers.createNotification({
+        notificationOwner: req.params.username,
+        username: req.body.username,
+        recipeId: req.params.recipe,
+        text: `${req.body.username} created a new issue ${req.body.title} for your recipe ${recipe.name.value}.`
+      });
+    });
+
+    let issue = new Issue({
       owner: req.params.username,
       rootVersion: req.params.recipe,
       issueCreator: req.body.username,
@@ -37,7 +49,10 @@ module.exports = {
         commentNumber: 1,
         data: req.body.data,
       }).save();
-    }).then(() => {
+    });
+
+    Promise.all([notification, issue])
+    .spread((notification, issue) => {
       res.status(201).send();
     }).catch(error => {
       console.log('ERROR: ', error);
@@ -54,12 +69,27 @@ module.exports = {
   //   recipe: root recipe id
   // }
   updateStatus: (req, res) => {
-    return Issue.update({
+    let issue = Issue.findOne({
+      owner: req.params.username,
+      rootVersion: req.params.recipe
+    }).then(issue => {
+      return helpers.createNotification({
+        notificationOwner: issue.issueCreator,
+        username: req.params.username,
+        recipeId: req.params.recipe,
+        text: `${req.params.username} ${req.body.status} your issue ${issue.title}.`
+      });
+    });
+
+    let update = Issue.update({
       owner: req.params.username,
       rootVersion: req.params.recipe
     }, {
       status: req.body.status
-    }).then(() => {
+    });
+
+    Promise.all([issue, update])
+    .spread((issue, update) => {
       res.status(200).send();
     }).catch(error => {
       console.log('ERROR: ', error);

@@ -2,7 +2,6 @@ let express = require('express');
 let app = express();
 let mongoose = require('mongoose');
 let key = require(`${__dirname}/dbkey.js`);
-console.log(key);
 mongoose.connect(key);
 let port = process.env.PORT || 3000;
 let tags = require(`${__dirname}/tags.js`);
